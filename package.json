@@ -1,6 +1,6 @@
 {
   "name": "global-input-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "global input react component",
   "main": "index.js",
   "scripts": {
