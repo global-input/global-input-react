@@ -52,13 +52,13 @@ displayApiCode(){
       );
 }
 displaySessionGroupCode(){
-      const codeData=JSON.stringify(this.connector.buildSessionGroupCodeData());      
+      const codeData=JSON.stringify(this.connector.buildSessionGroupCodeData());
       return(
          <QRCode value={codeData}/>
       );
 }
 displayAESCodeData(){
-      const codeData=JSON.stringify(this.connector.buildCodeAESCodeData());
+      const codeData=JSON.stringify(this.connector.buildCodeAESCodeData({},'LNJGw0x5lqnXpnVY8'));
       return(
          <QRCode value={codeData}/>
       );
