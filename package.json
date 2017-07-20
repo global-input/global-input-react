@@ -50,7 +50,7 @@
     "react": "~0.14.8 || ^15.0.0"
   },
   "dependencies": {
-    "global-input-message": "^1.1.16",
+    "global-input-message": "^1.1.19",
     "qrcode.react": "^0.7.1"
   }
 }
