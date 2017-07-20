@@ -102,7 +102,7 @@ export  class GlobalInputSender extends Component{
              this.connector.processCodeData(options,codedata);
    }
    onInputPermissionResult(message){
-     console.log("*******sender recenved the onInputPermissionResult****");
+     console.log("*******sender received the onInputPermissionResult****");
      var globalInputdata=message.metadata;
      globalInputdata.forEach(dataitem=>{
        if(!dataitem.value){
@@ -128,6 +128,8 @@ export  class GlobalInputSender extends Component{
       this.connector.sendInputMessage(message);
       this.setState(Object.assign({}, this.state,{globalInputdata}));
   }
+  
+
   render() {
     return null;
   }
