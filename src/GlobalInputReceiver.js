@@ -52,7 +52,7 @@ displayApiCode(){
       );
 }
 displaySessionGroupCode(){
-      const codeData=JSON.stringify(this.connector.buildSessionGroupCodeData());
+      const codeData=JSON.stringify(this.connector.buildSessionGroupCodeData());      
       return(
          <QRCode value={codeData}/>
       );
