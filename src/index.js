@@ -38,9 +38,13 @@ onInput(inputMessage){
 }
 displayInputCode(){
       const inputCodeData=JSON.stringify(this.connector.buildInputCodeData());
+      //
+      // return(
+      //   <QRCode value={inputCodeData}/>
+      // );
       return(
-        <QRCode value={inputCodeData}/>
-      );
+        <div/>
+      )
 }
 
 disconnectFromMessenger(){
