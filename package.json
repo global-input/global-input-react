@@ -47,11 +47,9 @@
     "react-test-renderer": "^15.6.1",
     "sinon": "^1.17.3"
   },
-  "peerDependencies": {
-    "react": "~0.14.8 || ^15.0.0"
-  },
   "dependencies": {
     "global-input-message": "^1.2.2",
-    "qrcode.react": "^0.7.1"
+    "qrcode.react": "^0.7.1",
+    "react": "~0.14.8 || ^15.0.0"
   }
 }
