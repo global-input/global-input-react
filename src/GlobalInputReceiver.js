@@ -40,25 +40,25 @@ onInput(inputMessage){
           this.connector.connect(options);
 }
 displayInputCode(){
-      const codedata=JSON.stringify(this.connector.buildInputCodeData());
+      const codedata=this.connector.buildInputCodeData();
       return(
          <QRCode value={codedata}/>
       );
 }
 displayApiCode(){
-      const codeData=JSON.stringify(this.connector.buildInputCodeData());
+      const codeData=this.connector.buildInputCodeData();
       return(
          <QRCode value={codeData}/>
       );
 }
 displaySessionGroupCode(){
-      const codeData=JSON.stringify(this.connector.buildSessionGroupCodeData());
+      const codeData=this.connector.buildSessionGroupCodeData();
       return(
          <QRCode value={codeData}/>
       );
 }
 displayAESCodeData(){
-      const codeData=JSON.stringify(this.connector.buildCodeAESCodeData({},'LNJGw0x5lqnXpnVY8'));
+      const codeData=this.connector.buildCodeAESCodeData({},'LNJGw0x5lqnXpnVY8');
       return(
          <QRCode value={codeData}/>
       );
