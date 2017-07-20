@@ -37,20 +37,21 @@
     "eslint": "^2.7.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.3",
+    "jest": "^20.0.4",
     "jsdom": "^8.1.0",
     "mocha": "^2.4.5",
     "nodemon": "^1.9.1",
-    "react-addons-test-utils": "^15.0.0",
     "react": "^15.0.0",
+    "react-addons-test-utils": "^15.0.0",
     "react-dom": "^15.0.0",
-    "sinon": "^1.17.3",
-    "jest": "^20.0.4"
+    "react-test-renderer": "^15.6.1",
+    "sinon": "^1.17.3"
   },
   "peerDependencies": {
     "react": "~0.14.8 || ^15.0.0"
   },
   "dependencies": {
-    "global-input-message": "^1.1.19",
+    "global-input-message": "^1.2.1",
     "qrcode.react": "^0.7.1"
   }
 }
