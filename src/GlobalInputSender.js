@@ -28,9 +28,14 @@ export  default class GlobalInputSender extends Component{
      processCodeData(codedata){
              var that=this;
              var options={
-                onInputPermissionResult:this.onInputPermissionResult.bind(this)
+                onInputPermissionResult:this.onInputPermissionResult.bind(this),
+                onSettings:this.onSettingsCodeData.bind(this)
              };
              this.connector.processCodeData(options,codedata);
+   }
+   onSettingsCodeData(codedata, next){
+          console.log("datadata received:"+JSON.stringify(codedata));
+          next();
    }
    onInputPermissionResult(message){
      console.log("*******sender received the onInputPermissionResult****");
@@ -41,8 +46,8 @@ export  default class GlobalInputSender extends Component{
        }
      });
      this.setState(Object.assign({}, this.state,{globalInputdata}));
-
    }
+
    setGlobalInputData(index, value){
        if(!this.state.globalInputdata){
             console.log("ignored:"+index+":"+value);

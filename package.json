@@ -41,15 +41,14 @@
     "jsdom": "^8.1.0",
     "mocha": "^2.4.5",
     "nodemon": "^1.9.1",
-    "react": "^15.0.0",
+    "react": "~0.14.8 || ^15.0.0|| ^16.0.0-alpha.12",
     "react-addons-test-utils": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-test-renderer": "^15.6.1",
     "sinon": "^1.17.3"
   },
   "dependencies": {
-    "global-input-message": "^1.2.7",
-    "qrcode.react": "^0.7.1",
-    "react": "~0.14.8 || ^15.0.0|| ^16.0.0-alpha.12"
+    "global-input-message": "^1.2.10",
+    "qrcode.react": "^0.7.1"
   }
 }

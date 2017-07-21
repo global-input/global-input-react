@@ -50,22 +50,19 @@ test("sender and receiver communication", function(done){
         }
       }
 
-      var onReceiverReady=function(done, registeredMessage,options){
-        done();
+      var onReceiverReady=function(next, registeredMessage,options){
+
         console.log("**********receiver is ready******");
         var codedata=receiver.connector.buildInputCodeData();
 
         const senderRenderer = renderer.create(
             <TestGlobalInputSender codedata={codedata} ref={(input) =>{sender=input}}/>
           );
-
+          next();
 
       }
       const receiverRenderer = renderer.create(
           <TestGlobalInputReceiver onRegistered={onReceiverReady} ref={(input) =>{receiver=input}}/>
       );
-
-
-
 
 });
