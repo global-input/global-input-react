@@ -50,6 +50,6 @@
   "dependencies": {
     "global-input-message": "^1.2.5",
     "qrcode.react": "^0.7.1",
-    "react": "~0.14.8 || ^15.0.0|| ^16.0.0"
+    "react": "~0.14.8 || ^15.0.0|| ^16.0.0-alpha.12"
   }
 }
