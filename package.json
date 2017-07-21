@@ -48,7 +48,7 @@
     "sinon": "^1.17.3"
   },
   "dependencies": {
-    "global-input-message": "^1.2.5",
+    "global-input-message": "^1.2.6",
     "qrcode.react": "^0.7.1",
     "react": "~0.14.8 || ^15.0.0|| ^16.0.0-alpha.12"
   }

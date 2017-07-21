@@ -58,7 +58,7 @@ displaySessionGroupCode(){
       );
 }
 displayAESCodeData(){
-      const codeData=this.connector.buildCodeAESCodeData({},'LNJGw0x5lqnXpnVY8');
+      const codeData=this.connector.buildCodeAESCodeData();
       return(
          <QRCode value={codeData}/>
       );
