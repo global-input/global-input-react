@@ -29,7 +29,7 @@ export  default class GlobalInputSender extends Component{
      componentWillUnmount(){
           this.disconnect();
     }
-     componentWillMount(){
+     componentDidMount(){
         const codedata=this.props.codedata;
         this.processCodeData(codedata);
       }
