@@ -9,6 +9,14 @@ import QRCode from "qrcode.react";
 
 export  default class GlobalInputSender extends Component{
 
+  getGlobalInputConfig(){
+    var config = {
+      options:{
+          onInputPermissionResult:this.onInputPermissionResult.bind(this)
+      }
+    };
+    return config;
+  }
      constructor(props){
         super(props);
        this.connector=createMessageConnector();
@@ -27,16 +35,14 @@ export  default class GlobalInputSender extends Component{
       }
      processCodeData(codedata){
              var that=this;
-             var options={
-                onInputPermissionResult:this.onInputPermissionResult.bind(this),
-                onSettings:this.onSettingsCodeData.bind(this)
-             };
+             var config=this.getGlobalInputConfig();
+             var options={};
+             if(config && config.options){
+                  options=config.options;
+             }
              this.connector.processCodeData(options,codedata);
    }
-   onSettingsCodeData(codedata, next){
-          console.log("datadata received:"+JSON.stringify(codedata));
-          next();
-   }
+
    onInputPermissionResult(message){
      console.log("*******sender received the onInputPermissionResult****");
      var globalInputdata=message.metadata;

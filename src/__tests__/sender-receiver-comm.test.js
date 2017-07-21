@@ -12,9 +12,9 @@ test("sender and receiver communication", function(done){
             return null;
           }
           getGlobalInputConfig(){
-            return {
-              url:"http://192.168.0.5:1337",
-              metadata:[
+            var config=super.getGlobalInputConfig();
+            config.options.url="http://192.168.0.5:1337";
+            config.metadata=[
                 {
                   name:"Content",
                   value:"dilshat",
@@ -32,11 +32,9 @@ test("sender and receiver communication", function(done){
                      console.log("**** Submit message received"+JSON.stringify(message));
                    }
                  }
-              ]
-            }
-          }
-
-
+              ];
+            return config;
+           }
       }
 
       class TestGlobalInputSender extends GlobalInputSender {

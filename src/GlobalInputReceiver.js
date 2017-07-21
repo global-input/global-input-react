@@ -6,20 +6,30 @@ import QRCode from "qrcode.react";
 
 export  default class GlobalInputReceiver extends Component {
   getGlobalInputConfig(){
-    return  {};
+    var config=  {
+      options:{
+          onInput:this.onInput.bind(this)
+      }
+    };
+    if(this.props.onRegistered){
+        config.options.onRegistered=this.props.onRegistered;
+    }
+    return config;
   }
-
+  constructor(props){
+    super(props);
+    this.connector=createMessageConnector();
+  }
 
 onInput(inputMessage){
     this.getGlobalInputConfig().metadata[inputMessage.data.index].onInput(inputMessage.data.value);
 }
   connectToMessenger(){
-          this.connector=createMessageConnector();
           var config=this.getGlobalInputConfig();
-          var options={onInput:this.onInput.bind(this)};
-          if(this.props.onRegistered){
-              options.onRegistered=this.props.onRegistered;
+          if(!config.options){
+            config.options={};
           }
+          var options=Object.assign({},config.options);
           if(config.metadata){
               options.metadata=config.metadata.map(function(m){
                   var metadata=Object.assign({},m);
@@ -29,14 +39,6 @@ onInput(inputMessage){
                   return metadata;
               });
           }
-          console.log("new metadata:"+options.metadata);
-          if(config.url){
-            options.url=config.url;
-          }
-          if(config.onInput){
-            options.onInput=config.onInput;
-          }
-
           this.connector.connect(options);
 }
 displayInputCode(){
