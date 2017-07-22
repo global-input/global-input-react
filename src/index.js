@@ -1,4 +1,5 @@
+import GlobalInputComponent from "./GlobalInputComponent";
 import GlobalInputReceiver from "./GlobalInputReceiver";
-import GlobalInputSender from "./GlobalInputSender";
 
-export {GlobalInputReceiver,GlobalInputSender};
+
+export {GlobalInputComponent,GlobalInputReceiver};

@@ -1,87 +1,34 @@
-import React, {Component} from 'react'
-
-import {createMessageConnector} from "global-input-message";
 import QRCode from "qrcode.react";
+import GlobalInputComponent from "./GlobalInputComponent";
 
-
-export  default class GlobalInputReceiver extends Component {
-  getGlobalInputConfig(){
-    var config=  {
-      options:{
-          onInput:this.onInput.bind(this)
-      }
-    };
-    if(this.props.onRegistered){
-        config.options.onRegistered=this.props.onRegistered;
-    }
-    return config;
+export  default class GlobalInputReceiver extends GlobalInputComponent {
+  displayInputCode(){
+        const codedata=this.connector.buildInputCodeData();
+        console.log("*****input code[["+codedata+"]]");
+        return(
+           <QRCode value={codedata}/>
+        );
   }
-  constructor(props){
-    super(props);
-    this.connector=createMessageConnector();
+  displayApiCode(){
+        const codeData=this.connector.buildInputCodeData();
+        console.log("*****api code[["+codeData+"]]");
+        return(
+           <QRCode value={codeData}/>
+        );
+  }
+  displaySessionGroupCode(){
+        const codeData=this.connector.buildSessionGroupCodeData();
+        console.log("*****sessionGroup code[["+codeData+"]]");
+        return(
+           <QRCode value={codeData}/>
+        );
+  }
+  displayAESCodeData(){
+        const codeData=this.connector.buildCodeAESCodeData();
+        console.log("*****CodeAES[["+codeData+"]]");
+        return(
+           <QRCode value={codeData}/>
+        );
   }
 
-onInput(inputMessage){
-    this.getGlobalInputConfig().metadata[inputMessage.data.index].onInput(inputMessage.data.value);
-}
-  connectToMessenger(){
-          var config=this.getGlobalInputConfig();
-          if(!config.options){
-            config.options={};
-          }
-          var options=Object.assign({},config.options);
-          if(config.metadata){
-              options.metadata=config.metadata.map(function(m){
-                  var metadata=Object.assign({},m);
-                  if(metadata.onInput){
-                      delete metadata.onInput
-                  }
-                  return metadata;
-              });
-          }
-          this.connector.connect(options);
-}
-displayInputCode(){
-      const codedata=this.connector.buildInputCodeData();
-      console.log("*****input code[["+codedata+"]]");
-      return(
-         <QRCode value={codedata}/>
-      );
-}
-displayApiCode(){
-      const codeData=this.connector.buildInputCodeData();
-      console.log("*****api code[["+codeData+"]]");
-      return(
-         <QRCode value={codeData}/>
-      );
-}
-displaySessionGroupCode(){
-      const codeData=this.connector.buildSessionGroupCodeData();
-      console.log("*****sessionGroup code[["+codeData+"]]");
-      return(
-         <QRCode value={codeData}/>
-      );
-}
-displayAESCodeData(){
-      const codeData=this.connector.buildCodeAESCodeData();
-      console.log("*****CodeAES[["+codeData+"]]");
-      return(
-         <QRCode value={codeData}/>
-      );
-}
-
-disconnectFromMessenger(){
-  this.connector.disconnect();
-}
-componentWillMount(){
-    this.connectToMessenger();
-}
-
-componentWillUnmount(){
-    this.disconnectFromMessenger();
-}
-
-  render() {
-    return null;
-  }
 }

@@ -1,4 +1,4 @@
-import {GlobalInputReceiver,GlobalInputSender} from "../index";
+import {GlobalInputComponent,GlobalInputReceiver} from "../index";
 import React, {Component} from 'react';
 
 import renderer from 'react-test-renderer';
@@ -37,7 +37,7 @@ test("sender and receiver communication", function(done){
            }
       }
 
-      class TestGlobalInputSender extends GlobalInputSender {
+      class TestGlobalInputSender extends GlobalInputComponent {
         render(){
           return (<div/>);
         }
