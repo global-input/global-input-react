@@ -43,7 +43,7 @@ onInput(inputMessage){
 }
 displayInputCode(){
       const codedata=this.connector.buildInputCodeData();
-      console.log("**codedata to be displayed:[["+codedata)+"]");
+      console.log("**codedata to be displayed:[["+codedata+"]]");
       return(
          <QRCode value={codedata}/>
       );
