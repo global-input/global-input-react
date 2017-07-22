@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import QRCode from "qrcode.react";
 import GlobalInputComponent from "./GlobalInputComponent";
 
