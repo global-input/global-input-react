@@ -9,13 +9,18 @@ export  default class GlobalInputComponent extends Component {
     var config=  {
       options:{
           onInput:this.onInput.bind(this),
-          onInputPermissionResult:this.onInputPermissionResult.bind(this)
+          onInputPermissionResult:this.onInputPermissionResult.bind(this),
+          onSettingsCodeData:this.onSettingsCodeData.bind(this)
       }
     };
     if(this.props && this.props.onRegistered){
         config.options.onRegistered=this.props.onRegistered;
     }
     return config;
+  }
+  onSettingsCodeData(codedata, next){
+    console.log("codedata is received:"+JSON.stringify(codata));
+    next();    
   }
   buildConnectionOptions(){
     var config=this.getGlobalInputConfig();
