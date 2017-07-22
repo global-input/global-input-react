@@ -19,8 +19,8 @@ export  default class GlobalInputComponent extends Component {
     return config;
   }
   onSettingsCodeData(codedata, next){
-    console.log("codedata is received:"+JSON.stringify(codata));
-    next();    
+    console.log("codedata is received:"+JSON.stringify(codedata));
+    next();
   }
   buildConnectionOptions(){
     var config=this.getGlobalInputConfig();
@@ -73,6 +73,7 @@ componentDidMount(){
     this.processCodeData(this.props.codedata);
   }
  }
+
 
   render() {
     return null;
