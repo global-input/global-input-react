@@ -20,11 +20,11 @@ export  default class GlobalInputComponent extends Component {
     return config;
   }
   onInputCodeData(codedata, next){
-    console.log("*input codedata is received:"+JSON.stringify(codedata));
+    console.log("default onInputCodeData is called:"+JSON.stringify(codedata));
     next();
   }
   onSettingsCodeData(codedata, next){
-    console.log("settings codedata is received:"+JSON.stringify(codedata));
+    console.log("default onSettingsCodeData is called:"+JSON.stringify(codedata));
     next();
   }
   buildConnectionOptions(){
