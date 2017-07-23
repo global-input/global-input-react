@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 
 import {createMessageConnector} from "global-input-message";
-import QRCode from "qrcode.react";
+
 
 
 export  default class GlobalInputComponent extends Component {
