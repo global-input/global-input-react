@@ -10,7 +10,8 @@ export  default class GlobalInputComponent extends Component {
       options:{
           onInput:this.onInput.bind(this),
           onInputPermissionResult:this.onInputPermissionResult.bind(this),
-          onSettingsCodeData:this.onSettingsCodeData.bind(this)
+          onSettingsCodeData:this.onSettingsCodeData.bind(this),
+          onInputCodeData:this.onInputCodeData.bind(this)
       }
     };
     if(this.props && this.props.onRegistered){
@@ -18,8 +19,12 @@ export  default class GlobalInputComponent extends Component {
     }
     return config;
   }
+  onInputCodeData(codedata, next){
+    console.log("input codedata is received:"+JSON.stringify(codedata));
+    next();
+  }
   onSettingsCodeData(codedata, next){
-    console.log("codedata is received:"+JSON.stringify(codedata));
+    console.log("settings codedata is received:"+JSON.stringify(codedata));
     next();
   }
   buildConnectionOptions(){
