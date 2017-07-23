@@ -20,7 +20,7 @@ export  default class GlobalInputComponent extends Component {
     return config;
   }
   onInputCodeData(codedata, next){
-    console.log("input codedata is received:"+JSON.stringify(codedata));
+    console.log("*input codedata is received:"+JSON.stringify(codedata));
     next();
   }
   onSettingsCodeData(codedata, next){
