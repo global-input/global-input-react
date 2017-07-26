@@ -17,30 +17,30 @@ npm publish
 
 
 
-webversion=`grep -A 0 -B 0 '"global-input-react":' ../global-input-web/package.json |  sed 's/"global-input-react": "^//g'  | sed 's/",//g' `
-mobileversion=`grep -A 0 -B 0 '"global-input-react":' ../globalInputMobile/package.json |  sed 's/"global-input-react": "^//g'  | sed 's/",//g' `
+#webversion=`grep -A 0 -B 0 '"global-input-react":' ../global-input-web/package.json |  sed 's/"global-input-react": "^//g'  | sed 's/",//g' `
+#mobileversion=`grep -A 0 -B 0 '"global-input-react":' ../globalInputMobile/package.json |  sed 's/"global-input-react": "^//g'  | sed 's/",//g' `
 
-echo $nextVersion
-echo $webversion
-echo $mobileversion
+#echo $nextVersion
+#echo $webversion
+#echo $mobileversion
 
-nextVersion=$(echo "$nextVersion" | sed -e "s/ //g")
-webversion=$(echo "$webversion" | sed -e "s/ //g")
+#nextVersion=$(echo "$nextVersion" | sed -e "s/ //g")
+#webversion=$(echo "$webversion" | sed -e "s/ //g")
 
-oldstring='\"global-input-react\": \"^'$webversion'\"'
-newstring='\"global-input-react\": \"^'$nextVersion'\"'
+#oldstring='\"global-input-react\": \"^'$webversion'\"'
+#newstring='\"global-input-react\": \"^'$nextVersion'\"'
 
 
-comandtoexecute='sed -i -e "s/'$oldstring'/'$newstring'/g" ../global-input-web/package.json'
-eval $comandtoexecute
+#comandtoexecute='sed -i -e "s/'$oldstring'/'$newstring'/g" ../global-input-web/package.json'
+#eval $comandtoexecute
 
-comandtoexecute='sed -i -e "s/'$oldstring'/'$newstring'/g" ../globalInputMobile/package.json'
-eval $comandtoexecute
+#comandtoexecute='sed -i -e "s/'$oldstring'/'$newstring'/g" ../globalInputMobile/package.json'
+#eval $comandtoexecute
 
-sleep 1
+#sleep 1
 
-cd ../global-input-web/
-yarn install
+#cd ../global-input-web/
+#yarn install
 
-cd ../globalInputMobile/
-yarn install
+#cd ../globalInputMobile/
+#yarn install
