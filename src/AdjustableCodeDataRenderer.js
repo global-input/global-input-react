@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CodeDataRenderer from "./CodeDataRenderer";
-import "./AdjustableCodeDataRenderer.css";
+
 
 
 export   default class AdjustableCodeDataRenderer extends Component {
