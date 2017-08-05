@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import  "./InputCodeRender.css";
+
 import AdjustableCodeDataRenderer from "./AdjustableCodeDataRenderer";
 import SendersConnected from "./SendersConnected";
 
