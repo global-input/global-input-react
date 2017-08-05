@@ -2,65 +2,92 @@ import {GlobalInputComponent} from "../index";
 import React, {Component} from 'react';
 
 import renderer from 'react-test-renderer';
+import {createMessageConnector} from "global-input-message";
+
 
 test("sender and receiver communication", function(done){
-      var receiver=null;
-      var sender=null;
-      var inputData="dilshat hewzulla";
+  var receiver=null;
+  var sender=null;
+  var inputData="dilshat hewzulla";
       class TestGlobalInputReceiver extends GlobalInputComponent {
           render(){
             return null;
           }
-          getGlobalInputConfig(){
-            var config=super.getGlobalInputConfig();
-            config.options.url="http://192.168.0.5:1337";
-            config.metadata=[
-                {
-                  name:"Content",
-                  value:"dilshat",
-                  onInput:function(message){
-                      expect(message).toBe(inputData);
-                      receiver.componentWillUnmount();
-                      sender.componentWillUnmount();
-                      done();
-                  }
-                },
-                 {
-                   name:"Submit",
-                   type:"action",
-                   onInput:function(message){
-                     console.log("**** Submit message received"+JSON.stringify(message));
-                   }
-                 }
-              ];
-            return config;
-           }
+          buildInitData(){
+        return {
+                action:"input",
+                form:{
+                  "title":"Sign In",
+                  fields:[{
+                            label:"Email address",
+
+                            operations:{
+                                onInput:function(username){
+                                    console.log("******"+username);
+                                    expect(username).toBe(inputData);
+                                    sender.disconnect();
+                                    receiver.componentWillUnmount();
+                                    done();
+                                }
+                            }
+
+                          },{
+                             label:"Password",
+                             type:"secret",
+                             operations:{
+                               onInput:function(password){
+
+                               }
+                             }
+
+                          },{
+                             label:"Login",
+                             type:"button",
+                             operations:{
+                                onInput:function(){
+
+                                }
+                             }
+
+                          }]
+                      }
+                }
+    }
+
+    buildConnectionOptions(){
+      var options=super.buildConnectionOptions();
+      options.onRegistered=function(next){
+
+            next();
+            var inputcodedata=receiver.connector.buildInputCodeData();
+            sender=createMessageConnector();
+            sender.processCodeData(inputcodedata, {
+                    onInputCodeData:function(codedata){
+
+                  var options=sender.buildOptionsFromInputCodedata(codedata, {
+                      onInputPermissionResult:function(message){
+                            console.log("***** received permission");
+                            sender.sendInputMessage(inputData,0);
+
+                      }
+
+                    });
+                    sender.connect(options);
+
+                }
+
+             });
+
+
       }
+      return options;
+    }
 
-      class TestGlobalInputSender extends GlobalInputComponent {
-        render(){
-          return (<div/>);
-        }
-        onInputPermissionResult(message){
-          super.onInputPermissionResult(message);
-          console.log("********sender is ready");
-          this.setGlobalInputData(0, inputData);
-        }
-      }
-
-      var onReceiverReady=function(next, registeredMessage,options){
-
-        console.log("**********receiver is ready******");
-        var codedata=receiver.connector.buildInputCodeData();
-
-        const senderRenderer = renderer.create(
-            <TestGlobalInputSender codedata={codedata} ref={(input) =>{sender=input}}/>
-          );
-          next();
 
       }
-      const receiverRenderer = renderer.create(
-          <TestGlobalInputReceiver onRegistered={onReceiverReady} ref={(input) =>{receiver=input}}/>
-      );
+      receiver=new TestGlobalInputReceiver();
+      receiver.componentDidMount();
+
+
 
 });
