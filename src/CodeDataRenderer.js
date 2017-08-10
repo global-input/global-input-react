@@ -8,17 +8,12 @@ export   default class CodeDataRenderer extends Component {
       var {connector,type, level, size}=this.props;
       var codedata=null;
       if(type==="input"){
-          codedata=connector.buildInputCodeData();
+          codedata=connector.buildPairingData();
       }
-      else if(type==="apikey"){
-          codedata=connector.buildAPIKeyCodeData();
+      else if(type==="pairing"){
+          codedata=connector.buildPairingData();
       }
-      else if(type==="securityGroup"){
-          codedata=connector.buildSecurityGroupCodeData();
-      }
-      else if(type==="codeAES"){
-          codedata=connector.buildCodeAESCodeData();
-      }
+
       else{
         console.error("type is not passed in");
           return null;
