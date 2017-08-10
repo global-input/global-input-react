@@ -8,7 +8,7 @@ export   default class CodeDataRenderer extends Component {
       var {connector,type, level, size}=this.props;
       var codedata=null;
       if(type==="input"){
-          codedata=connector.buildPairingData();
+          codedata=connector.buildInputData();
       }
       else if(type==="pairing"){
           codedata=connector.buildPairingData();
