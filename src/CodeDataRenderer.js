@@ -22,7 +22,10 @@ export   default class CodeDataRenderer extends Component {
             componentWillUnmount:this.service.componentWillUnmount
           };
           this.service.componentWillUnmount=function(){
-            globalInput.componentWillUnmount();
+            if(globalInput.componentWillUnmount){
+                globalInput.componentWillUnmount();
+            }
+
             globalInput.connector.disconnect();
           };
           globalInput.options.onSenderConnected=this.onSenderConnected.bind(this),
@@ -76,6 +79,10 @@ export   default class CodeDataRenderer extends Component {
       }
       else if(type==="pairing"){
           codedata=this.service.globalInput.connector.buildPairingData();
+      }
+      else{
+        console.error("unrecognized type is CodeDataRenderer, input/pairing expected");
+        return null;
       }
       if(!size){
         size=300;
