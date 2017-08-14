@@ -66,15 +66,14 @@ export   default class CodeDataRenderer extends Component {
       if(!this.state.connected){
           return null;
       }
-      var codeClassName="input senderNotConnected";
+      var codeClassName="globalInputCodeContainer senderNotConnected";
       if(this.state.senders && this.state.senders.length>0){
-          codeClassName="input senderConnected";
+          codeClassName="globalInputCodeContainer senderConnected";
       }
 
       var {connector,type, level, size}=this.props;
       var codedata=null;
       if((!type) || type==="input"){
-          console.log(":::::apikey:"+this.service.globalInput.connector.apikey);
           codedata=this.service.globalInput.connector.buildInputCodeData();
       }
       else if(type==="pairing"){
