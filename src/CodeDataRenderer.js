@@ -101,7 +101,7 @@ export   default class CodeDataRenderer extends Component {
       }
 
 
-      console.log("*****"+type+" code[["+codedata+"]]");
+      console.log("*** code[["+codedata+"]]");
       return(
         <div className={codeClassName}>
               <QRCode value={codedata} level={this.state.level} size={this.state.size}/>
