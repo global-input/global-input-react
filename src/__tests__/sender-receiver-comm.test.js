@@ -13,7 +13,7 @@ test("sender and receiver communication", function(done){
   }
   var config={};
   var component=renderer.create(
-  <CodeDataRenderer  service={service} config={config}/>
+  <CodeDataRenderer  service={service} config={config} showControl={true}/>
   );
 service.componentWillUnmount();
 
