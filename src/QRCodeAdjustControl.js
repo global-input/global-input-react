@@ -10,10 +10,10 @@ export   default class QRCodeAdjustControl extends Component {
       if(this.props.showControl){
 
         <div className="globalInputCodeControllerContainer">
-          <input type="range" min="100" max="1000" step="10" value={size} onChange={evt=>{
+          <input type="range" min="100" max="1000" step="10" value={this.props.size} onChange={evt=>{
               this.props.onSetSize(evt.target.value);
           }}/>
-          <select value={level} onChange={evt=>{
+        <select value={this.props.level} onChange={evt=>{
             this.props.onSetLevel(evt.target.value);
           }}>
             <option value="L">L</option>
