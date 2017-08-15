@@ -8,14 +8,16 @@ import {createMessageConnector} from "global-input-message";
 test("sender and receiver communication", function(done){
   var receiver=null;
   var sender=null;
-  var inputData="dilshat hewzulla";
-  var props={
-    service:{
-      globalInput:{}
-    }
-  };
+  var service={
 
-var n=new CodeDataRenderer(props);
+  }
+  var config={};
+  var component=renderer.create(
+  <CodeDataRenderer  service={service} config={config}/>
+  );
+service.componentWillUnmount();
+
+
 done();
 
 
