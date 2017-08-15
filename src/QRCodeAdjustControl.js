@@ -8,7 +8,7 @@ export   default class QRCodeAdjustControl extends Component {
 
   render() {
       if(this.props.showControl){
-
+return (
         <div className="globalInputCodeControllerContainer">
           <input type="range" min="100" max="1000" step="10" value={this.props.size} onChange={evt=>{
               this.props.onSetSize(evt.target.value);
@@ -22,6 +22,7 @@ export   default class QRCodeAdjustControl extends Component {
             <option value="H">H</option>
           </select>
         </div>
+      );
       }
       else{
           return null;
