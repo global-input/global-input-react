@@ -18,9 +18,15 @@ export   default class CodeDataRenderer extends Component {
           var globalInput={
             connector:createMessageConnector(),
             options:props.config,
-            state:{sender:{}, senders:[], connected:false},
+            state:{sender:{}, senders:[], connected:false, level:this.props.level, size:this.props.size},
             componentWillUnmount:this.service.componentWillUnmount
           };
+          if(!globalInput.state.size){
+            globalInput.state.size=300;
+          }
+          globalInput.state.size=parseInt(globalInput.state.size);
+
+
           this.service.componentWillUnmount=function(){
             if(globalInput.componentWillUnmount){
                 globalInput.componentWillUnmount();
@@ -60,6 +66,16 @@ export   default class CodeDataRenderer extends Component {
     this.service.globalInput.state=newState;
     this.setState(newState);
  }
+ onSetSize(size){
+   var newState=Object.assign({},this.state,{size});
+   this.service.globalInput.state=newState;
+   this.setState(newState);
+ }
+ onSetLevel(level){
+   var newState=Object.assign({},this.state,{level});
+   this.service.globalInput.state=newState;
+   this.setState(newState);
+ }
 
 
   render() {
@@ -71,30 +87,26 @@ export   default class CodeDataRenderer extends Component {
           codeClassName="globalInputCodeContainer senderConnected";
       }
 
-      var {connector,type, level, size}=this.props;
+
       var codedata=null;
-      if((!type) || type==="input"){
+      if((!this.props.type) || this.props.type==="input"){
           codedata=this.service.globalInput.connector.buildInputCodeData();
       }
-      else if(type==="pairing"){
+      else if(this.props.type==="pairing"){
           codedata=this.service.globalInput.connector.buildPairingData();
       }
       else{
         console.error("unrecognized type is CodeDataRenderer, input/pairing expected");
         return null;
       }
-      if(!size){
-        size=300;
-      }
-      size=parseInt(size);
+
 
       console.log("*****"+type+" code[["+codedata+"]]");
       return(
         <div className={codeClassName}>
-              <QRCode value={codedata} level={level} size={size}/>
-              <QRCodeAdjustControl setSize={this.props.setSize} setLevel={this.props.setLevel}/>
+              <QRCode value={codedata} level={this.state.level} size={this.state.size}/>
+              <QRCodeAdjustControl onSetSize={onSetSize} onSetLevel={onSetLevel}/>
               <SendersConnected senders={this.state.senders}/>
-
           </div>
       );
   }
