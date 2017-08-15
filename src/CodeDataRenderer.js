@@ -91,15 +91,10 @@ export   default class CodeDataRenderer extends Component {
       console.log("*****"+type+" code[["+codedata+"]]");
       return(
         <div className={codeClassName}>
-              <div className="adjustableCodeData">
-                <div className="adjustableCodeDataContainer">
-                     <QRCode value={codedata} level={level} size={size}/>
-                </div>
-                <QRCodeAdjustControl render={this.props.showControl}/>
-              </div>
-              <div>
-                 <SendersConnected senders={this.state.senders}/>
-              </div>
+              <QRCode value={codedata} level={level} size={size}/>            
+              <QRCodeAdjustControl render={this.props.showControl}/>
+              <SendersConnected senders={this.state.senders}/>
+
           </div>
       );
   }
