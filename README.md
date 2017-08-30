@@ -1,47 +1,88 @@
-# Global Input Software
-Global Input is the first commercial-grade, open-source software packages for enabling applications running on multiple devices to exchange information securely.
+# global-input-react
 
-Please visit
+global-input-react is a ReactJS library that wraps the global-input-message JavaScript library into a React component, so that you can easily power your Rect web application with the Global Input software, so that the Global Input user can securely connect to your services to carry out operation via mobile.
+
+###Installation
+
+To install the stable version:
+
+npm install --save global-input-react
+
+You can find working example that you can try with the Global Input mobile app.
 
      https://globalinput.co.uk
-for more information.
 
-In order to make an React.js application powered by the Global Input:
+###Usage
+Do the import on the top of your javascript file:
+```javascript
+import {CodeDataRenderer} from "global-input-react";
+```
 
-   npm install --save global-input-react
+And then write a function to return the metadata describing the form that you would like the Global Input mobile app to display it on the mobile screen  and the callback function when the mobile user interact with the form on the mobile.
 
-Simplest way is to follow the example in
-
-   https://globalinput.co.uk
-
-If you are familiar with React.js, you will find only two part are related to this package:
-
- (1) Returning a metadata in the buildInitData() method. Which contains the fields that are to be displayed in the mobile app. When the user begins to operate on the fields (text fields, buttons, ranges, selection etc), the corresponding function will be called specified in the onInput attribute of the metadata.
-
-(2) One line of code where the QR code should be displayed.
-
-As simple as that, your application will be powerred by the Global Input.
+For example, if you would lile the mobile app to display a Login form.
 
 
 
+```javascript
+  buildGlobalInputConfig(){
+        return {
+              initData:{
+                action:"input",
+                dataType:"login",
+                form:{
+                  "title":"Sign In",
+                  fields:[{
+                            label:"Email address",
+                            value:this.state.username,
+                            operations:{
+                                onInput:this.setUsername.bind(this)
+                            }
+
+                          },{
+                             label:"Password",
+                             type:"secret",
+                             operations:{
+                               onInput:this.setPassword.bind(this)
+                             }
+
+                          },{
+                             label:"Login",
+                             type:"button",
+                             operations:{
+                                onInput:this.login.bind(this)
+                             }
+
+                          }]
+                      }
+             }
+          };
+
+      }
+
+```
+Note that operations.onInput specifies the callback function when the corresponding form element is operated by the user. In the above example, obviously you need to define the functionb "setUsername" and"setPassword" functions to receive username and password as user entering the username and password.
+
+And then place the CodeDataRenderer component in your render method:
+
+
+```javascript
+
+render() {
+
+          return (
+              ....
+                  <CodeDataRenderer service={this}  config={this.buildGlobalInputConfig()} level="H" size="300" showControl={true}/>
+              ....
+          );
+        }
+      }
+
+```
+
+that is it. In place of the component, a QR code will be displayed, which user can scan with the Global Input App to connect to your service securely. The encruption key is generated within your service app and transferred to the mobile app via the QR code displayed to effectively implement the end-to-end encryption for each session.
 
 
 
 
-## License
 
-    /*
-     * Copyright 2017 Dr. Dilshat Hewzulla (hewzulla@gmail.com)
-     *
-     * Licensed under the Apache License, Version 2.0 (the "License");
-     * you may not use this file except in compliance with the License.
-     * You may obtain a copy of the License at
-     *
-     *      http://www.apache.org/licenses/LICENSE-2.0
-     *
-     * Unless required by applicable law or agreed to in writing, software
-     * distributed under the License is distributed on an "AS IS" BASIS,
-     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     * See the License for the specific language governing permissions and
-     * limitations under the License.
-     */
