@@ -1,70 +1,21 @@
 # global-input-react
 
-global-input-react is a ReactJS library that wraps the global-input-message JavaScript library into a React component, so that you can easily power your Rect web application with the Global Input software, so that the Global Input user can securely connect to your services to carry out operation via mobile.
+The global-input-react library wraps the global-input-message JavaScript library into a React component to make it easier for making a Rect web application Global Input ready.  So that a Global Input mobile app user can just point the phone camera to the QR code displayed and connect to your app and carry out operation on your app. 
 
-###Installation
+### Installation
 
 To install the stable version:
 
 npm install --save global-input-react
 
-You can find working example that you can try with the Global Input mobile app.
+### Usage
+Put the importing state in your javascript file to input the component that can display the QR code.
 
-     https://globalinput.co.uk
-
-###Usage
-Do the import on the top of your javascript file:
 ```javascript
 import {CodeDataRenderer} from "global-input-react";
 ```
 
-And then write a function to return the metadata describing the form that you would like the Global Input mobile app to display it on the mobile screen  and the callback function when the mobile user interact with the form on the mobile.
-
-For example, if you would lile the mobile app to display a Login form.
-
-
-
-```javascript
-  buildGlobalInputConfig(){
-        return {
-              initData:{
-                action:"input",
-                dataType:"login",
-                form:{
-                  "title":"Sign In",
-                  fields:[{
-                            label:"Email address",
-                            value:this.state.username,
-                            operations:{
-                                onInput:this.setUsername.bind(this)
-                            }
-
-                          },{
-                             label:"Password",
-                             type:"secret",
-                             operations:{
-                               onInput:this.setPassword.bind(this)
-                             }
-
-                          },{
-                             label:"Login",
-                             type:"button",
-                             operations:{
-                                onInput:this.login.bind(this)
-                             }
-
-                          }]
-                      }
-             }
-          };
-
-      }
-
-```
-Note that operations.onInput specifies the callback function when the corresponding form element is operated by the user. In the above example, obviously you need to define the functionb "setUsername" and"setPassword" functions to receive username and password as user entering the username and password.
-
-And then place the CodeDataRenderer component in your render method:
-
+and then just place it where you would like to display the QR code:
 
 ```javascript
 
@@ -72,7 +23,7 @@ render() {
 
           return (
               ....
-                  <CodeDataRenderer service={this}  config={this.buildGlobalInputConfig()} level="H" size="300" showControl={true}/>
+                  <CodeDataRenderer service={this}  config={globalInputConfig} level="H" size="300" showControl={true}/>
               ....
           );
         }
@@ -80,8 +31,53 @@ render() {
 
 ```
 
-that is it. In place of the component, a QR code will be displayed, which user can scan with the Global Input App to connect to your service securely. The encruption key is generated within your service app and transferred to the mobile app via the QR code displayed to effectively implement the end-to-end encryption for each session.
+You can see that the onlything you need to define is the globalInputConfig variable.
 
+you can use this variable to define the form that you would like to display on the user's mobile screen, and the callback function that you would like to be invokved when the user interfact with the form.
+
+
+For example, if you would lile the mobile app to display a Login form.
+
+
+```javascript
+var globalInputConfig={      
+             initData:{               
+               form:{
+                 "title":"Sign In",
+                 fields:[{
+                           label:"Email address",
+                           value:this.state.username,
+                           operations:{
+                               onInput:this.setUsername.bind(this)
+                           }
+
+                         },{
+                            label:"Password",
+                            type:"secret",
+                            operations:{
+                              onInput:this.setPassword.bind(this)
+                            }
+
+                         },{
+                            label:"Login",
+                            type:"button",
+                            operations:{
+                               onInput:this.login.bind(this)
+                            }
+
+                         }]
+                     },
+                     action:"input",
+                     dataType:"login"
+            }
+  };
+
+```
+In the above JSON structure, operations.onInput specifies the callback function to be invokoke when the corresponding form element is operated by the user. 
+
+In the above example, obviously you need to define the functionb "setUsername" and"setPassword" functions to receive username and password and call setState to pass the username and password to the state of your component to force it to re-render it.
+
+That is all you need to do to make it your React JS application to support the Global Input mobile app. 
 
 
 
