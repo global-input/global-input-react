@@ -18,30 +18,8 @@ import {CodeDataRenderer} from "global-input-react";
 And then reference it where you would like to display the QR Code in your renderer function:
 
 ```javascript
-var globalInputConfig={      
-             initData:{               
-               form:{
-                 "title":"Sign In",
-                 fields:[{
-                           label:"Email address",
-                           value:this.state.username,
-                           operations:{
-                               onInput:this.setUsername.bind(this)
-                           }
 
-                         },{
-                            label:"Password",
-                            type:"secret",
-                            operations:{
-                              onInput:this.setPassword.bind(this)
-                            }
-
-                         },{
-                            label:"Login",
-                            type:"button",
-                            operations:{
-                               onInput:this.login.bind(this)
-                            }
+render() {
 
           return (
               ....
@@ -52,7 +30,6 @@ var globalInputConfig={
       }
 
 ```
-In the above JSON structure, operations.onInput specifies the callback function to be invokoke when the corresponding form element is operated by the user.
 
 In the above code the ```globalInputConfig```  variabled passed in to the component. The variable defines the form that you would like to display on the mobile phone screen. You should also specify the callback function to to be invoked when user interact with the form.
 
