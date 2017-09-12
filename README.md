@@ -77,6 +77,8 @@ var globaInputConfig = {
  };
 ```
 
+Click on the the [JS Fiddler](https://jsfiddle.net/dilshat/26jh68wv/1/#&togetherjs=kz1kpIMxgG) link to play around with the above code and see it in action.
+
 You may find the above self-explanatory, but still I would like to explain line by line to make it absoltey clear:
 
 (1)
@@ -164,12 +166,13 @@ makes the QR code to instruct the Global Input App to display input form.
 ```
 tells the Global Input App that current session is the login operation, this helps the auo-filling operation within the Global Input app. The variable ```dataType``` can take any value, when it take specific values, the Global Input may add some extra functionalities to make it more interesting for example "auto-filling" or displaying selection of compatible data from within the mobile etc.
 
+
 As you can see that it is so simple to to make your application display a QR code, that can be instruct the Global Input mobile app to display any form you like and calls back your function on your choice.
 
 The communication between your application and the Global Input app is absolutely secure. An encryption key will be generated for each session and will be part of the QR code to be transferred to the mobile app to establish a secure end-to-end encryption. Nothing between your application and the Global Input App will know what the user is typing. Furthermore, you can control the authentication and authorisation from within your app when the mobile app tries to connect to your phone.
 
 
-Please try it out this free library and the free mobile app, and you will see that you can use Global Input app on your mobile to operate on your application like a magic. Try it out and if you like it let us know so we will be encouraged to make it better and exciting! 
+Please try it out this free library and the free mobile app, and you will see that you can use Global Input app on your mobile to operate on your application like a magic. Try it out and if you like it let us know so we will be encouraged to make it better and exciting!
 
 You can find the applications in action in
 
