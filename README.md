@@ -77,7 +77,7 @@ var globaInputConfig = {
  };
 ```
 
-Click on the the [JS Fiddler](https://jsfiddle.net/dilshat/26jh68wv) link to play around with the above code and see it in action.
+Click on the the [JS Fiddler](https://jsfiddle.net/dilshat/26jh68wv/) link to play around with the above code and see it in action.
 
 You may find the above self-explanatory, but still I would like to explain line by line to make it absoltey clear:
 
