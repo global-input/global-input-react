@@ -1,7 +1,7 @@
 # global-input-react
 
 
-The global-input-react library enables your React JS application to display a Global Input QR Code so that your users can connect their Global Input mobile app (available in [iOS](https://itunes.apple.com/us/app/global-input-app/id1269541616?mt=8&ign-mpt=uo%3D4) and [Android](https://itunes.apple.com/us/app/global-input-app/id1269541616?mt=8&ign-mpt=uo%3D4)) to your application just by poing the phone camera to the QR code displayed. Your users can operate securely on your application via their mobile. For example you can allow your users to sign in via their mobile and much more!
+The global-input-react library enables your React JS application to display a Global Input QR Code so that your users can connect their Global Input mobile app (available in [iOS](https://itunes.apple.com/us/app/global-input-app/id1269541616?mt=8&ign-mpt=uo%3D4) and [Android](https://itunes.apple.com/us/app/global-input-app/id1269541616?mt=8&ign-mpt=uo%3D4)) to your application just by poing the phone camera to the QR code displayed. Your users can operate securely on your application via their mobile. For example you can allow your users to sign in via their mobile and much more! Please visit [global-input-message library](https://github.com/global-input/global-input-message) for the javascript application that is not RectJS. More information is available on our [main website](https://globalinput.co.uk/)
 
 ### Installation
 
@@ -15,7 +15,9 @@ Import the ```CodeDataRender``` component:
 import {CodeDataRenderer} from "global-input-react";
 ```
 
-And then reference it where you would like to display the QR Code in your renderer function:
+Note that you can use 'require' if you are not using ES6 transpiler.
+
+After that you need to reference it where you would like to display the QR Code in your renderer function:
 
 ```javascript
 
@@ -31,17 +33,21 @@ render() {
 
 ```
 
-In the above code the ```globalInputConfig```  variable is passed in to the component. The variable defines the form that you would like to display on the mobile phone screen. It also contains the callback function that you would like to be invoked when the user interact with the form.
+### Configuration
 
-This can be explained very easily with the following requirements:
+In the above example, the ```globalInputConfig```  variable is passed in to the component. The variable defines the form that you would like to display on the mobile phone screen. It also contains the callback function that you would like to be invoked when the user interact with the form.
 
-* Suppose you would like to display a ```Sign In``` form on the mobile screen.
-* You would like the form to contain ```Email Address``` input field,  a ```Password``` input field and a ```Login``` button.
-* When a user enters something in the ```Email Address``` field on the mobile screen, you would like your function  ```setUsername(username)``` invoked.
+It might be better explained with an example, imagine you have the following requirement:
+
+You would like the mobile app to display
+
+* a ```Sign In``` form.
+* the form contains ```Email Address``` and  a ```Password``` input fields and a ```Login``` button.
+* When a user enters something in the ```Email Address``` field on the mobile screen, you would like your javascript function  ```setUsername(username)``` to be invoked.
 * When a user enters something in the ```Password``` field on the mobile screen, you would like your function called ```setPassword(password)``` invoked with the text entered.
 * When a user clicks on the ```Login``` button on the mobile screen, you would like your function ```login()``` invoked, so that you can do the login operation within your ```login()``` function
 
-The following ```globalInputConfig``` variable defines the requirements described above.
+For the above requirement, you can define the following ```globalInputConfig``` variable:
 
 ```javascript
 
@@ -69,17 +75,13 @@ var globaInputConfig = {
                                  onInput:login
                                 }
                              }]
-                     },
-                     action:"input",
-		                 dataType:"login"
+                     }                     
                }               
 
  };
 ```
 
-Click on the the [JS Fiddler](https://jsfiddle.net/dilshat/26jh68wv/) link to play around with the above code and see it in action.
-
-You may find the above self-explanatory, but still I would like to explain line by line to make it absoltey clear:
+Following is line-by-line explanation about the the configuration given above:
 
 (1)
 ```
@@ -94,7 +96,7 @@ defines the ```globaInputConfig``` variable, it has the ```initData``` object, w
 form:{
        title:"Sign In",
 ```
-defines the form that is to be displayed on the mobile screen. Obviously, ```Sign In``` will be displayed on the mobile screen as the title.
+defines the form that is to be displayed on the mobile screen. Obviously, ```Sign In``` will be displayed on the mobile screen as the title of the form.
 
 
 (3)
@@ -108,14 +110,13 @@ defines an array containing the form elements.
 {
              label:"Email address",
              operations:{
-                 onInput:this.setUsername
+                 onInput:setUsername
              }
 
 }
 ```
-Instructs the mobile app to display a ```text``` field on the mobile screen with the label ```Email Address```. Because the ```type``` is not defined, and the default value of the ```type``` is ```text```, the mobile display the text field.  
-The ```operations``` contains  contains all the callback functions. The ```onInput``` callback function will be invoked when user is entering text on the field. In this case, ```setUsername(username)``` will be invoked for each user typing in the ```Email Address``` field. The function ```setUsername(username)``` will passed in with the current value in the ```Email Address``` field.
-
+Instructs the mobile app to display a ```text``` field on the mobile screen with the label ```Email Address```. Because the ```type``` is not given, and the default value of the ```type``` is ```text```, so the mobile displays the text field.  
+The ```operations``` contains  all the callback functions. The value of the ```onInput``` is ```setUsername```, so the ```setUsername(username)``` will be invoked for each user typing in the ```Email Address``` field.
 
 (5)
 
@@ -128,11 +129,9 @@ The ```operations``` contains  contains all the callback functions. The ```onInp
      }
  }
 ```                             
-Instructs the mobile app to display a ```secret``` field on the mobile screen with the label ```Password```. The ```type``` defines the types of form field, it can be ```button```, ```secret```, ```range```, ```text```, ```list``` etc. If it is not defined, it take the default value ```text```.
+Instructs the mobile app to display a ```password``` field on the mobile screen with the label ```Password```. The ```type``` defines the type of form field, it can be ```button```, ```secret```, ```range```, ```text```, ```list``` etc. In this case, its value is ```secret```, so it displays a password field.
 
-The ```operations``` contains  contains all the callback functions.
-
-The ```onInput``` callback function will be invoked when user is entering text on the field. In this case, ```setPassword(password)``` will be invoked for each user typing in the ```Email Address``` field. The function ```setUsername(username)``` will passed in with the current value in the ```Email Address``` field.
+The ```operations``` contains all the callback functions. The value of the ```onInput``` is ```setPassword```, so when the user is entering text on the password field on the mobile screen, ```setPassword(password)``` will be invoked for each typing in the ```Password``` field.
 
 (6)
 ```
@@ -146,38 +145,19 @@ The ```onInput``` callback function will be invoked when user is entering text o
 ```                             
 
 
-Instructs the mobile app to display a ```Login``` button on the mobile screen. The ```type``` defines the types of form field, it can be ```button```, ```secret```, ```range```, ```text```, ```list``` etc.
+Instructs the mobile app to display a ```Login``` button on the mobile screen. The ```type``` defines the types of form field, it can be ```button```, ```secret```, ```range```, ```text```, ```list``` etc.  In this case, its value is ```button```, so it displays the ```Login``` button.
 
-The ```operations``` contains all the callback functions.
+The ```operations``` contains all the callback functions. The value of the ```onInput``` is ```login```, so when user has pressed on the button on the mobile screen, the ```login()``` will be invoked.
 
-The ```onInput``` callback function will be invoked when user has clicked on the button. In this case, ```login()``` will be invoked.
+In your implementation of ```setUsername()``` and ```setPassword()``` functions, you can store the username and password into the component state. In the implementation of ```login()``` function(), you can retrieve the value of ```username``` and ```password``` from the component state, and passed them to your cmponent that implements the login function.
 
-(7)
-```
- action:"input",
-```
-makes the QR code to instruct the Global Input App to display input form.
+The folllowing is link to the actual working example code that you can playaround online:
 
+  > [Example in JS Fiddler](https://jsfiddle.net/dilshat/26jh68wv/)
 
-(8)
+or you can have a look at the Sign In example at
 
-```
- dataType:"login",
-```
-tells the Global Input App that current session is the login operation, this helps the auo-filling operation within the Global Input app. The variable ```dataType``` can take any value, when it take specific values, the Global Input may add some extra functionalities to make it more interesting for example "auto-filling" or displaying selection of compatible data from within the mobile etc.
+>[https://globalinput.co.uk/](https://globalinput.co.uk/)
 
 
-As you can see that it is so simple to to make your application display a QR code, that can be instruct the Global Input mobile app to display any form you like and calls back your function on your choice.
-
-The communication between your application and the Global Input app is absolutely secure. An encryption key will be generated for each session and will be part of the QR code to be transferred to the mobile app to establish a secure end-to-end encryption. Nothing between your application and the Global Input App will know what the user is typing. Furthermore, you can control the authentication and authorisation from within your app when the mobile app tries to connect to your phone.
-
-
-Please try it out this free library and the free mobile app, and you will see that you can use Global Input app on your mobile to operate on your application like a magic. Try it out and if you like it let us know so we will be encouraged to make it better and exciting!
-
-You can find the applications in action in
-
-         https://globalinput.co.uk/
-
-If your application is not React JS application, you can use the core ```global-input-message``` javascript library. You can found how to use the core Javascript library from the following URL:
-
-         https://github.com/global-input/global-input-message
+Before the QR code is displayed, an encryption key will be generated within your app, and the encryption will be part of the QR code to be transfered to the mobile app along with the other communication information. With the secure end-to-end encrypted communication between your application and the mobile app, nothing between your application and mobile app can possibly intercept the communication.
