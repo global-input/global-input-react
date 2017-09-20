@@ -33,6 +33,27 @@ render() {
 
 ```
 
+In the above example code, ```CodeDataRenderer``` component is an Global Input Component responsible displaying a Global Input QR Code, which will be scanned by the Global Input App.
+
+```service={this}``` sets the reference to the current containing component, so that the Global Input component can be notified of the life-cycle events generated within the containing element.
+
+```config={globalInputConfig}``` passes the Global Input configuration to the component, this will be explained in detail in the next section.
+
+```level="H"``` defines that the error correction level of the QR Code is ```High```. the complete list of values that the atribute can take:
+
+>```H```: Correction level is ```High```, can take up to 30% damage
+
+>```Q```: Correction level is ```Quality, can take up to 25% damage
+
+>```M```: Correction level is ```Medium```, can take up to 15% datamage
+
+>```L```: Correction level is ```Low```, can take up to 7% datamage
+
+
+```size="300"``` sets the pixel size of the QR Code to 300.
+
+```showControl={true}``` specifies that QR code displayed can be adjused by the user. If you set to false, only the QR code will be displayed, the control that the user can use to adjust the QR code will not be displayed.
+
 ### Configuration
 
 In the above example, the ```globalInputConfig```  variable is passed in to the component. The variable defines the form that you would like to display on the mobile phone screen. It also contains the callback function that you would like to be invoked when the user interact with the form.
