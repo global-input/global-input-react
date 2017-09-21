@@ -201,4 +201,22 @@ var globaInputConfig = {
  };
 ```
 The value of the ```securityGroup``` can be any randomly generated string. If you have not specified the  ```securityGroup```, it will take the default value, which is ```1CNbWCFpsbmRQuKdd```. When a new user has installed the Global Input App into his/her mobile, the value of the ```securityGroup``` in his/her app will be  ```1CNbWCFpsbmRQuKdd```. So the user does not have to carry out the paring process if you use this default ```securityGroup```value. On the other hand, If you have used any ```securityGroup```value different from the default one, then the the Global Input App users will receive the "Permission Denied" message when trying to connect to your service application unless the mobile app is paired previously.
-For this, you can playout with this [this working example](https://jsfiddle.net/dilshat/gxvL901u/)
+For this, you can play around with this [this working example](https://jsfiddle.net/dilshat/gxvL901u/).
+In the example. it also show how to display the pairing QR code:
+
+```javascript
+ <CodeDataRenderer service={this} type="pairing" config={{securityGroup:"bmPAZcfsu0CDBg2V4"}} level="H" size="300"/>
+```
+In the above example code, ```CodeDataRenderer``` component is the Global Input Component responsible displaying the Global Input QR Code, which will be scanned by the Global Input App.
+
+```service={this}``` sets the reference to the current containing component.
+
+```type="pairing"``` instructs the Global Input component to display the pairing QR code. If you did not specify the ```type``` attribute, it takes the default value ```input```, so that it instructs to display the ```Input``` QR code/ The ```input``` QR code instruct the mobile app to connect to the service application.
+
+```config={{securityGroup:"bmPAZcfsu0CDBg2V4"}} ``` passes the Global Input configuration to the component, since this is the `pairing` QR code, only needs the ```securityGroup``` attribute.
+
+```level="H"``` defines that the error correction level of the QR Code is ```High```.
+
+```size="300"``` sets the pixel size of the QR Code to 300.
+
+```showControl={true}``` specifies that QR code displayed can be adjused by the user. If you set to false, only the QR code will be displayed, the control that the user can use to adjust the QR code will not be displayed.
