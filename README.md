@@ -222,7 +222,7 @@ In the above example code, ```CodeDataRenderer``` component is the Global Input 
 ```showControl={true}``` specifies that QR code displayed can be adjused by the user. If you set to false, only the QR code will be displayed, the control that the user can use to adjust the QR code will not be displayed.
 
 
-### API Key and and URL to the Web Socket Server
+### API Key and and URL to the Websocket Server
 
 The service application and the mobile app will communicate with each other with the end-to-end encryption and the encryption key is generated for each session within the service application and passed over to the mobile app via the QR code. So it is impossible for anything to intercept the communication between them.
 
