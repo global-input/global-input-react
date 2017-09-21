@@ -220,3 +220,33 @@ In the above example code, ```CodeDataRenderer``` component is the Global Input 
 ```size="300"``` sets the pixel size of the QR Code to 300.
 
 ```showControl={true}``` specifies that QR code displayed can be adjused by the user. If you set to false, only the QR code will be displayed, the control that the user can use to adjust the QR code will not be displayed.
+
+
+### API Key and and URL to the Web Socket Server
+
+The service application and the mobile app will communicate with each other with the end-to-end encryption and the encryption key is generated for each session within the service application and passed over to the mobile app via the QR code. So it is impossible for anything to intercept the communication between them.
+
+The communication between the service application and the mobile app will be established via a websocket server. So they need a URL to the websocket server and a ```apikey``` value to authenticate themselves with the websocket server. Both the URL and the ```apikey``` will be transfered over to the Global Input App via the QR code.
+
+The Global Input javascript library comes with the default ```apikey``` value and the default ```url``` value.
+
+If you would like to host the websocket server yourself, you can do so by downloading the NodeJS code from
+
+>>[https://github.com/global-input/global-input-node](https://github.com/global-input/global-input-node)
+
+
+In this case,  you need to include both ```apikey``` and ```url``` in your ```globaInputConfig``` described previously:
+
+```javascript
+
+var globaInputConfig = {
+        apikey:"k7jc3QcMPKEXGW5UC",
+        url:"https://globalinput.co.uk",
+        initData:{                
+               form:{
+                      ....                      
+                     }                     
+               }     
+ };
+```
+In the above example, the value shown are the default values distributed with the JavaScrpt library, you need to change them to you ones.
