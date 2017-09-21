@@ -200,6 +200,5 @@ var globaInputConfig = {
                }     
  };
 ```
-The value of the ```securityGroup``` can be any randomly generated string. If you have not specified the  ```securityGroup```, it will take the default value, which is ```1CNbWCFpsbmRQuKdd```. When a new user has installed the Global Input App into his mobile, the value of the ```securityGroup``` in his/her app will be  ```1CNbWCFpsbmRQuKdd```. So the user does not have to carry out the paring process if you use this defaul t ```securityGroup```value.
-If you have used any ```securityGroup```value different from the default one, then the the Global Input App users will receive the "Permission Denied" message when trying to connect to your service application unless the mobile app is paired previously.
-For example you can try with [this example](https://jsfiddle.net/dilshat/gxvL901u/)
+The value of the ```securityGroup``` can be any randomly generated string. If you have not specified the  ```securityGroup```, it will take the default value, which is ```1CNbWCFpsbmRQuKdd```. When a new user has installed the Global Input App into his/her mobile, the value of the ```securityGroup``` in his/her app will be  ```1CNbWCFpsbmRQuKdd```. So the user does not have to carry out the paring process if you use this default ```securityGroup```value. On the other hand, If you have used any ```securityGroup```value different from the default one, then the the Global Input App users will receive the "Permission Denied" message when trying to connect to your service application unless the mobile app is paired previously.
+For this, you can playout with this [this working example](https://jsfiddle.net/dilshat/gxvL901u/)
