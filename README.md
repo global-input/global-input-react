@@ -249,4 +249,4 @@ var globaInputConfig = {
                }     
  };
 ```
-In the above example, the value shown are the default values distributed with the JavaScrpt library, you need to change them to you ones.
+In the above example, the value shown are the default values distributed with the JavaScrpt library, you need to change them to your ones.
