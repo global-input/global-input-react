@@ -17,7 +17,7 @@ export   default class CodeDataRenderer extends Component {
 
           var globalInput={
             connector:createMessageConnector(),
-            options:props.config,
+            options:Object.assign({},props.config),
             state:{sender:{}, senders:[], connected:false, level:this.props.level, size:this.props.size},
             componentWillUnmount:this.service.componentWillUnmount
           };
@@ -57,14 +57,18 @@ export   default class CodeDataRenderer extends Component {
     this.setState(newState);
   }
  onSenderConnected(sender, senders){
-
+     if(this.props.config.onSenderConnected){
+          this.props.config.onSenderConnected(sender,senders);
+     }
      var newState=Object.assign({},this.state,{sender, senders});
      this.service.globalInput.state=newState;
      this.setState(newState);
 
  }
  onSenderDisconnected(sender, senders){
-  
+   if(this.props.config.onSenderDisconnected){
+        this.props.config.onSenderDisconnected(sender,senders);
+   }
     var newState=Object.assign({},this.state,{sender, senders});
     this.service.globalInput.state=newState;
     this.setState(newState);
