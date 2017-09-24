@@ -21,6 +21,7 @@ export   default class CodeDataRenderer extends Component {
             state:{sender:{}, senders:[], connected:false, level:this.props.level, size:this.props.size},
             componentWillUnmount:this.service.componentWillUnmount
           };
+
           if(!globalInput.state.size){
             globalInput.state.size=300;
           }
@@ -56,22 +57,37 @@ export   default class CodeDataRenderer extends Component {
     this.service.globalInput.state=newState;
     this.setState(newState);
   }
+  scrollDocumentOffsetTop(element){
+     return element.offsetTop + ( element.offsetParent ? this.scrollDocumentOffsetTop(element.offsetParent) : 0 );
+  }
  onSenderConnected(sender, senders){
+
+        var newState=Object.assign({},this.state,{sender, senders});
+        this.service.globalInput.state=newState;
+        this.setState(newState);
+
      if(this.props.config.onSenderConnected){
           this.props.config.onSenderConnected(sender,senders);
      }
-     var newState=Object.assign({},this.state,{sender, senders});
-     this.service.globalInput.state=newState;
-     this.setState(newState);
+     if(this.props.config.scrollToOnConnected){
+             var scrollElement=document.getElementById(this.props.config.scrollToOnConnected);
+             if(scrollElement){
+               var top=this.scrollDocumentOffsetTop(scrollElement)-(window.innerHeight / 2 );
+               window.scrollTo(0,top);
+             }
+     }
 
  }
  onSenderDisconnected(sender, senders){
+   var newState=Object.assign({},this.state,{sender, senders});
+   this.service.globalInput.state=newState;
+   this.setState(newState);
+
    if(this.props.config.onSenderDisconnected){
         this.props.config.onSenderDisconnected(sender,senders);
    }
-    var newState=Object.assign({},this.state,{sender, senders});
-    this.service.globalInput.state=newState;
-    this.setState(newState);
+
+
  }
  onSetSize(size){
    var newState=Object.assign({},this.state,{size});
