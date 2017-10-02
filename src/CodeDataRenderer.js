@@ -102,8 +102,12 @@ export   default class CodeDataRenderer extends Component {
 
 
   render() {
+      var loadingClassName="loader";
+      if(this.props.loadingClassName){
+          loadingClassName=this.props.loadingClassName;
+      }
       if(!this.state.connected){
-          return null;
+          return (<div className={loadingClassName}></div>);
       }
       var codeClassName="globalInputCodeContainer senderNotConnected";
       if(this.state.senders && this.state.senders.length>0){
