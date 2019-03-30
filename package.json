@@ -21,7 +21,9 @@
   },
   "scripts": {
     "prepublish": "babel --plugins transform-es2015-modules-umd src --ignore __tests__ --out-dir ./dist",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "jest": {
     "transform": {
@@ -53,7 +55,12 @@
     "react-addons-test-utils": "^15.6.2",
     "react-dom": "^16.8.6",
     "react-test-renderer": "^16.8.6",
-    "sinon": "^7.3.1"
+    "sinon": "^7.3.1",
+    "@storybook/react": "^5.0.5",
+    "@storybook/addon-actions": "^5.0.5",
+    "@storybook/addon-links": "^5.0.5",
+    "@storybook/addons": "^5.0.5",
+    "babel-loader": "^7.1.5"
   },
   "dependencies": {
     "global-input-message": "^1.5.2",
