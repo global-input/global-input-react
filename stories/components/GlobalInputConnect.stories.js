@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
-import GlobalInputConnect from '../../src/index';
+import {GlobalInputConnect} from '../../src/index';
 
 
 var data={

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {createMessageConnector} from "global-input-message";
 import cloneDeep from "lodash/cloneDeep";
 import DisplayQRCode from "./DisplayQRCode";
-export  default class GlobalInputConnect extends Component {
+export  class GlobalInputConnect extends Component {
   RENDER_TYPE={
       ERROR:0,
       CONNECTING:1,
