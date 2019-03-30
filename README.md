@@ -60,7 +60,7 @@ Let's say you have another application that you would like to allow users to use
                                   label:"Play",
                                   type:'button'           
                                   operations:{
-                                      onInput:play();
+                                      onInput:()=>play();
                                   }
                                 }]
                               }
@@ -72,8 +72,42 @@ return(
 );
 ```
 
+If you have a Sign In Component that uses password authentication, and you would like your users to use mobiles to sign in speedily. You just need to include the following in the render function of your component:
 
-
+```JavaScript
+ const [username, setUsername]=useState("");  
+ const [password, setPassword]=useState("");  
+ let mobileConfig={        
+                          initData:{                              
+                              form:{
+                                	title:"Sign In",
+                                  id:"###usernane###@mycompany.com",  
+                                fields:[{
+                                  label:"Username",            
+                                  operations:{
+                                      onInput:username=>setUsername(username);
+                                  }
+                                },{
+                                  label:"Password",            
+                                  operations:{
+                                      onInput:password=>setPassword(password);
+                                  }
+                                },{
+                                  label:"Sign In",
+                                  type:"button",            
+                                  operations:{
+                                      onInput:()=>this.signIn(username,password);
+                                  }
+                                }]
+                              }
+                          },
+             };
+return(
+<GlobalInputConnect mobileConfig={mobileConfig}
+                        </GlobalInputConnect>
+);
+```
+In the above example, you just need to implement 'this.signIn()' function that accepts username and password that are push into your application from the [Global Input App](https://globalinput.co.uk/) user
 
 
 
