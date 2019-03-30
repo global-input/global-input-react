@@ -102,10 +102,7 @@ If you have a Sign In Component that uses password authentication, and you would
                               }
                           },
              };
-return(
-<GlobalInputConnect mobileConfig={mobileConfig}
-                        </GlobalInputConnect>
-);
+return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 In the above example, you can replace the ```this.signIn()``` with whatever function that accepts username and password to carry out user sign in.
 
