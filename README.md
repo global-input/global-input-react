@@ -46,7 +46,7 @@ return(
                         </GlobalInputConnect>
 );
 ```
-Above example is from the [Content Transfer Live Demo] (https://globalinput.co.uk/global-input-app/content-transfer), you can download the source code from its [GitHub repository](https://github.com/global-input/content-transfer-example).
+Above example is from the [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer), you can download the source code from its [GitHub repository](https://github.com/global-input/content-transfer-example).
 
 Let's say you have another application that you would like to allow users to use mobiles to invoke its ```play()``` function. You can put the following into the render function of your component:
 
@@ -104,7 +104,7 @@ If you have a Sign In Component that uses password authentication, and you would
              };
 return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
-In the above example, you can replace the ```this.signIn()``` with whatever function that you have implemented to accept username and password to validate user credential. 
+In the above example, you can replace the ```this.signIn()``` with whatever function that you have implemented to accept username and password to validate user credential.
 
 The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
 
