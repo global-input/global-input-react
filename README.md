@@ -49,5 +49,5 @@ return(
 * [Game Control Application](https://globalinput.co.uk/global-input-app/game-example)
 * [Mobile Form Automation](https://globalinput.co.uk/global-input-app/send-message)
 * [Mobile Form Transfer](https://globalinput.co.uk/global-input-app/form-data-transfer)
-* Mobile Content Encryption[https://globalinput.co.uk/global-input-app/qr-printing]
+* [Mobile Content Encryption](https://globalinput.co.uk/global-input-app/qr-printing)
 *
