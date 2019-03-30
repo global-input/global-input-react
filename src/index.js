@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {createMessageConnector} from "global-input-message";
+import {createMessageConnector,encrypt,decrypt} from "global-input-message";
 import cloneDeep from "lodash/cloneDeep";
 import DisplayQRCode from "./DisplayQRCode";
 export  class GlobalInputConnect extends Component {
@@ -219,4 +219,4 @@ export  class GlobalInputConnect extends Component {
 }
 
 
-export {DisplayQRCode};
+export {DisplayQRCode,encrypt,decrypt};

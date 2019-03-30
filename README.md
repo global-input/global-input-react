@@ -1,5 +1,5 @@
 
-A [Global Input App](https://globalinput.co.uk) React Component for implementing mobile integrations.
+A [Global Input App](https://globalinput.co.uk) React Component for React applications to implement mobile integrations.
 
 The [Global Input App](https://globalinput.co.uk) with its extensions provides a universal mobile integration solution for web and device applications, allowing users to use mobiles to operate on those applications. It provides applications with mobile input, mobile control, and portable encrypted storage functionalities without the need to develop separate mobile apps. Applications can implement mobile integration logic within its application context.
 
@@ -104,7 +104,7 @@ If you have a Sign In Component that uses password authentication, and you would
              };
 return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
-In the above example, you can replace the ```this.signIn()``` with whatever function that accepts username and password to carry out user sign in.
+In the above example, you can replace the ```this.signIn()``` with whatever function that you have implemented to accept username and password to validate user credential. 
 
 The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
 
