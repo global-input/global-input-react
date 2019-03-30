@@ -81,7 +81,7 @@ If you have a Sign In Component that uses password authentication, and you would
                           initData:{                              
                               form:{
                                 	title:"Sign In",
-                                  id:"###usernane###@mycompany.com",  
+                                  id:"###username###@mycompany.com",  
                                 fields:[{
                                   label:"Username",            
                                   operations:{
@@ -107,9 +107,9 @@ return(
                         </GlobalInputConnect>
 );
 ```
-In the above example, you just need to implement 'this.signIn()' function that accepts username and password that are push into your application from the [Global Input App](https://globalinput.co.uk/) user
+In the above example, you can replace the ```this.signIn()``` with whatever function that accepts username and password to carry out user sign in.
 
-
+The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
 
 ### More Examples
 * [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer)
