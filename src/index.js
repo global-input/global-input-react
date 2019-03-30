@@ -217,3 +217,6 @@ export  default class GlobalInputConnect extends Component {
 
 
 }
+
+
+export {DisplayQRCode};
