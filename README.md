@@ -48,6 +48,35 @@ return(
 ```
 Above example is from the [Content Transfer Live Demo] (https://globalinput.co.uk/global-input-app/content-transfer), you can download the source code from its [GitHub repository](https://github.com/global-input/content-transfer-example).
 
+Let's say you have another application that you would like to allow users to use mobiles to invoke its ```play()``` function. You can put the following into the render function of your component:
+
+
+```JavaScript
+ let mobileConfig={        
+                          initData:{                              
+                              form:{
+                                	title:"Play",   
+                                fields:[{
+                                  label:"Play",
+                                  type:'button'           
+                                  operations:{
+                                      onInput:play();
+                                  }
+                                }]
+                              }
+                          },
+             };
+return(
+<GlobalInputConnect mobileConfig={mobileConfig}
+                        </GlobalInputConnect>
+);
+```
+
+
+
+
+
+
 ### More Examples
 * [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer)
 * [Second Screen Application](https://globalinput.co.uk/global-input-app/video-player)
