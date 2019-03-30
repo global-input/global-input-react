@@ -24,7 +24,9 @@
     "test": "jest"
   },
   "jest": {
-    "transform": {".*": "<rootDir>/node_modules/jest-css-modules"}
+    "transform": {
+      ".*": "<rootDir>/node_modules/jest-css-modules"
+    }
   },
   "devDependencies": {
     "babel-cli": "^6.6.4",
@@ -55,6 +57,7 @@
   },
   "dependencies": {
     "global-input-message": "^1.5.2",
+    "lodash": "^4.17.11",
     "qrcode.react": "^0.9.3"
   }
 }
