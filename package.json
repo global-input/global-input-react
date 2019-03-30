@@ -24,37 +24,37 @@
     "test": "jest"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/jest-css-modules"
+    "transform": {".*": "<rootDir>/node_modules/jest-css-modules"}
   },
   "devDependencies": {
     "babel-cli": "^6.6.4",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^6.0.2",
+    "babel-eslint": "^10.0.1",
     "babel-plugin-transform-es2015-modules-umd": "^6.6.5",
     "babel-polyfill": "^6.7.4",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-2": "^6.5.0",
-    "chai": "^3.5.0",
-    "enzyme": "^2.2.0",
-    "eslint": "^2.7.0",
-    "eslint-plugin-babel": "^3.1.0",
-    "eslint-plugin-react": "^4.2.3",
-    "install": "^0.10.4",
-    "jest": "^20.0.4",
+    "chai": "^4.2.0",
+    "enzyme": "^3.9.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-react": "^7.12.4",
+    "install": "^0.12.2",
+    "jest": "^24.5.0",
     "jest-css-modules": "^1.1.0",
-    "jsdom": "^8.1.0",
-    "mocha": "^2.4.5",
+    "jsdom": "^14.0.0",
+    "mocha": "^6.0.2",
     "nodemon": "^1.17.5",
-    "npm": "^5.10.0",
-    "react": "^15.6.2",
+    "npm": "^6.9.0",
+    "react": "^16.8.6",
     "react-addons-test-utils": "^15.6.2",
-    "react-dom": "^15.6.2",
-    "react-test-renderer": "^15.6.2",
-    "sinon": "^1.17.3"
+    "react-dom": "^16.8.6",
+    "react-test-renderer": "^16.8.6",
+    "sinon": "^7.3.1"
   },
   "dependencies": {
     "global-input-message": "^1.5.2",
-    "qrcode.react": "^0.7.2"
+    "qrcode.react": "^0.9.3"
   }
 }
