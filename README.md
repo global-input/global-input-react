@@ -1,5 +1,7 @@
 
-A [Global Input App](https://globalinput.co.uk) React Component for React applications to implement mobile integrations.
+##global-input-react
+
+This is a [Global Input App](https://globalinput.co.uk) React Component for React applications to implement mobile integrations.
 
 The [Global Input App](https://globalinput.co.uk) with its extensions provides a universal mobile integration solution for web and device applications, allowing users to use mobiles to operate on those applications. It provides applications with mobile input, mobile control, and portable encrypted storage functionalities without the need to develop separate mobile apps. Applications can implement mobile integration logic within its application context.
 
@@ -22,9 +24,7 @@ npm i global-input-react
 import {GlobalInputConnect} from 'global-input-react';
 ```
 
-Let's say you have a content that is attached to [React Hook](https://reactjs.org/docs/hooks-intro.html), and you would like to
-allow users to use mobile to set its content, you just need to place
-the following into the render function of your component:
+Let's say that you would like to display a text field, labelled with ```Content```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to receive the typed content when the user is typing on his/her mobile. You can achieve your requirement by including the following code that uses [React Hook](https://reactjs.org/docs/hooks-intro.html) in the render function of your component:
 
 ```JavaScript
 const [content, setContent]=useState("");  
@@ -46,9 +46,16 @@ return(
                         </GlobalInputConnect>
 );
 ```
+
+
+
 Above example is from the [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer), you can download the source code from its [GitHub repository](https://github.com/global-input/content-transfer-example).
 
-Let's say you have another application that you would like to allow users to use mobiles to invoke its ```play()``` function. You can put the following into the render function of your component:
+The 'GlobalInputConnect' component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters. When a user scans the QR Code with his/her [Global Input App](https://globalinput.co.uk/), it initiates an end-to-end encrypted communication across devices and use the configuration you have specified to construct the mobile user interface and your application is able to receives mobile events via callbacks.
+
+### Another Example
+
+Let's say that you would like to display a button, labelled with ```Play```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to invoke ```play()``` function when the user has press the button on his/her mobile. You can include the following code in the render function of your component:
 
 
 ```JavaScript
@@ -72,7 +79,11 @@ return(
 );
 ```
 
-If you have a Sign In Component that uses password authentication, and you would like your users to use mobiles to sign in speedily. You just need to include the following in the render function of your component:
+### Sign In Example
+Let's say that you would like to display a ```Username``` and a ```Password``` fields, and a ```Sign In``` button, on
+the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to receive user inputs when the user are filling their credentials. And you would like to invoke ```signIn()``` function when the user has pressed the ```Sign In``` button on
+his/her button. You can include the following code in the render function of your component to achieve that:
+
 
 ```JavaScript
  const [username, setUsername]=useState("");  
@@ -96,7 +107,7 @@ If you have a Sign In Component that uses password authentication, and you would
                                   label:"Sign In",
                                   type:"button",            
                                   operations:{
-                                      onInput:()=>this.signIn(username,password);
+                                      onInput:()=>signIn(username,password);
                                   }
                                 }]
                               }
@@ -104,7 +115,7 @@ If you have a Sign In Component that uses password authentication, and you would
              };
 return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
-In the above example, you can replace the ```this.signIn()``` with whatever function that you have implemented to accept username and password to validate user credential.
+In the above example, you need to replace ```signIn()``` with whatever function that you have implemented to accept username and password to validate user credential.
 
 The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
 
