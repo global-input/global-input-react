@@ -13,8 +13,12 @@
   },
   "homepage": "https://github.com/global-input/global-input-react#readme",
   "keywords": [
+    "global-input",
     "global input",
-    "global-input"
+    "mobile integration",
+    "mobile authentication",
+    "moible input",
+    "mobile control"
   ],
   "options": {
     "mocha": "--require scripts/mocha_runner src/**/__tests__/**/*.js"
