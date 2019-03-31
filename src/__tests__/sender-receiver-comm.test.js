@@ -1,6 +1,6 @@
-import {CodeDataRenderer} from "../index";
+
 import React from 'react';
-import GlobalInputConnect from '../index';
+import {GlobalInputConnect} from '../index';
 
 import renderer from 'react-test-renderer';
 
