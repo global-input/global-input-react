@@ -1,5 +1,5 @@
 
-##global-input-react
+## global-input-react
 
 This is a [Global Input App](https://globalinput.co.uk) React Component for React applications to implement mobile integrations.
 
