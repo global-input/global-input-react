@@ -20,6 +20,10 @@ npm i global-input-react
 ```
 
 ## Usage
+
+Import the ```GlobalInputConnect``` component:
+
+
 ```JavaScript
 import {GlobalInputConnect} from 'global-input-react';
 ```
