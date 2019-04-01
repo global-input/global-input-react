@@ -28,7 +28,7 @@ Import the ```GlobalInputConnect``` component:
 import {GlobalInputConnect} from 'global-input-react';
 ```
 
-Let's say that you would like to display a text field, labelled with ```Content```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to receive the typed content when the user is typing on his/her mobile. You can achieve your requirement by including the following code that uses [React Hook](https://reactjs.org/docs/hooks-intro.html) in the render function of your component:
+Let's say that you would like to display a text field, labelled with ```Content```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to receive the typed content when the user is typing on his/her mobile. Add the following code that uses [React Hook](https://reactjs.org/docs/hooks-intro.html) in the render function of your component:
 
 ```JavaScript
 const [content, setContent]=useState("");  
@@ -51,15 +51,13 @@ return(
 );
 ```
 
-
-
-Above example is from the [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer), you can download the source code from its [GitHub repository](https://github.com/global-input/content-transfer-example).
+Above example is from the [Content Transfer Example Demo](https://globalinput.co.uk/global-input-app/content-transfer), and its full source code is available on [GitHub](https://github.com/global-input/content-transfer-example).
 
 The 'GlobalInputConnect' component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters. When a user scans the QR Code with his/her [Global Input App](https://globalinput.co.uk/), it initiates an end-to-end encrypted communication across devices and use the configuration you have specified to construct the mobile user interface and your application is able to receives mobile events via callbacks.
 
 ### Another Example
 
-Let's say that you would like to display a button, labelled with ```Play```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to invoke ```play()``` function when the user has press the button on his/her mobile. You can include the following code in the render function of your component:
+Let's say that you would like to display a button, labelled with ```Play```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to invoke ```play()``` function when the user has press the button on his/her mobile. Add the following in the render function of your component:
 
 
 ```JavaScript
