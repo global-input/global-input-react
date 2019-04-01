@@ -11,7 +11,7 @@ Some of its use cases:
 * [Second Screen Experience](https://globalinput.co.uk/global-input-app/about-second-screen)
 * [Mobile Content Encryption](https://globalinput.co.uk/global-input-app/about-print-scan-qrcodes)
 
-### Setup
+## Setup
 
 Install the global-input-react JavaScript library:
 
@@ -19,7 +19,7 @@ Install the global-input-react JavaScript library:
 npm i global-input-react
 ```
 
-### Usage
+## Usage
 ```JavaScript
 import {GlobalInputConnect} from 'global-input-react';
 ```
@@ -119,7 +119,7 @@ In the above example, you need to replace ```signIn()``` with whatever function 
 
 The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
 
-### More Examples
+## More Examples
 * [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer)
 * [Second Screen Application](https://globalinput.co.uk/global-input-app/video-player)
 * [Game Control Application](https://globalinput.co.uk/global-input-app/game-example)
