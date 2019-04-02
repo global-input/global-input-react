@@ -45,9 +45,12 @@ const [content, setContent]=useState("");
 return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 
-Above example is from the [Content Transfer Example Demo](https://globalinput.co.uk/global-input-app/content-transfer), and its full source code is available on [GitHub](https://github.com/global-input/content-transfer-example).
+Above code is from the [Content Transfer Example Demo](https://globalinput.co.uk/global-input-app/content-transfer).
 
-The 'GlobalInputConnect' component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters. When a user scans the QR Code with his/her [Global Input App](https://globalinput.co.uk/), it initiates an end-to-end encrypted communication across devices and use the configuration you have specified to construct the mobile user interface and your application is able to receives mobile events via callbacks.
+On scanning the Encrypted QR Code using the [Global Input App](https://globalinput.co.uk/), a form titles as "Content Transfer" will be displayed on the mobile screen. The form contains a single field labelled as "Content". If you type on the content field on your mobile, the application will receive the content in real-time. The GlobalInputConnect component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters.
+
+The 'GlobalInputConnect' component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters.
+
 
 ### Another Example
 
