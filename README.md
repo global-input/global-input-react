@@ -13,7 +13,7 @@ Some of its use cases are:
 
 ## Setup
 
-type the following to install the npm module:
+The following command installs the ```npm``` module:
 
 ```shell
 npm i global-input-react
