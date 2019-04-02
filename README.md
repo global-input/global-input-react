@@ -76,6 +76,7 @@ You can achieve the requirement by including the following in the render functio
 ```JavaScript
  const [username, setUsername]=useState("");  
  const [password, setPassword]=useState("");  
+ ...
  let mobileConfig={        
                           initData:{                              
                               form:{
