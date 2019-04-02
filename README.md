@@ -28,9 +28,13 @@ Import the ```GlobalInputConnect``` component:
 import {GlobalInputConnect} from 'global-input-react';
 ```
 
-Let's say that you would like to display a text field, labelled with ```Content```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to receive the typed content when the user is typing on his/her mobile. Add the following code that uses [React Hook](https://reactjs.org/docs/hooks-intro.html) in the render function of your component:
+Let's say that you would like to display a text field, labelled as ```Content```, on the user's mobile screen after the user has connected to your application by scanning an encrypted QR code. And you would like to receive the content when the user is typing on his/her mobile. Add the following code that uses [React Hook](https://reactjs.org/docs/hooks-intro.html) in the render function of your component:
 
 ```JavaScript
+import {GlobalInputConnect} from 'global-input-react';
+import React, { useState } from 'react';
+
+
 const [content, setContent]=useState("");  
  let mobileConfig={        
                           initData:{                              
