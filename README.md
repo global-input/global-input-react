@@ -52,7 +52,7 @@ On scanning the Encrypted QR Code using the [Global Input App](https://globalinp
 The 'GlobalInputConnect' component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters.
 
 
-If you would like to display a button, labelled as ```Play```, on the user's mobile screen, and you would like to invoke ```play()``` function when the user has press the button on his/her mobile. you just need to add the following to the ```fields```
+If you would like to display a button, labelled as ```Play```, on the user's mobile screen, and you would like to invoke ```play()``` function when the user has pressed the button on his/her mobile. you just need to add the following to the ```fields```
 array of the above example:
 
 
@@ -66,8 +66,8 @@ array of the above example:
 
 ### Sign In Example
 Let's say that you would like to display a ```Username``` and a ```Password``` fields, and a ```Sign In``` button, on
-the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to receive user inputs when the user are filling their credentials. And you would like to invoke ```signIn()``` function when the user has pressed the ```Sign In``` button on
-his/her button. You can include the following code in the render function of your component to achieve that:
+the user's mobile screen after the user has connected to your application by scanning an encrypted QR code.
+You can achieve the requirement by including the following in the render function of your component:
 
 
 ```JavaScript
@@ -103,6 +103,8 @@ return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 In the above example, you need to replace ```signIn()``` with whatever function that you have implemented to accept username and password to validate user credential.
 
 The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
+
+This means that users can sign in to your application by pushing stored credentials from the mobile devices to your application. This speeds up the sign process allowing users to set up complicated passwords without the need to remember them. Also it increases security when security when signing in to your application using shared devices in public view.
 
 ## More Examples
 * [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer)
