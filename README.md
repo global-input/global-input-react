@@ -42,7 +42,7 @@ const [content, setContent]=useState("");
                               }
                           },
              };
-return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
+return (<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 
 Above code is from the [Content Transfer Example Demo](https://globalinput.co.uk/global-input-app/content-transfer).
@@ -98,7 +98,7 @@ You can achieve the requirement by including the following in the render functio
                               }
                           },
              };
-return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
+return (<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 In the above example, you need to replace ```signIn()``` with whatever function that you have implemented to accept username and password to validate user credential.
 
