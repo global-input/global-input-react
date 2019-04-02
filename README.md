@@ -104,7 +104,7 @@ In the above example, you need to replace ```signIn()``` with whatever function 
 
 The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. The place holder ```###username###``` is used when a user needs to have multiple user accounts on the same application/domain.
 
-This means that users can sign in to your application by pushing stored credentials from the mobile devices to your application. This bring convenience and security by allowing users to set up complicated passwords without the need to remember them, allowing users to sign in securely on shared devices in public view.
+This means that users can sign in to your application by pushing stored credentials from the mobile devices to your application. This brings convenience and security by allowing users to set up complicated passwords without the need to remember them, allowing users to sign in securely on shared devices in public view.
 
 ## More Examples
 * [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer)
