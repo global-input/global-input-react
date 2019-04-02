@@ -102,7 +102,7 @@ return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 In the above example, you need to replace ```signIn()``` with whatever function that you have implemented to accept username and password to validate user credential.
 
-The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. using place holder ```###username###``` allows to store multiple accounts on the same domain.
+The value of the ```id``` of the form in the above example identifies the form data when the user stores/loads it from/to the encrypted storage on his/her mobile device. The place holder ```###username###``` can be used to identify form data when multiple user accounts are created on the same application/domain.
 
 This means that users can sign in to your application by pushing stored credentials from the mobile devices to your application. This speeds up the sign process allowing users to set up complicated passwords without the need to remember them. Also it increases security when security when signing in to your application using shared devices in public view.
 
