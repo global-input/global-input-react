@@ -35,10 +35,10 @@
     }
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^5.0.5",
-    "@storybook/addon-links": "^5.0.5",
-    "@storybook/addons": "^5.0.5",
-    "@storybook/react": "^5.0.5",
+    "@storybook/addon-actions": "^5.0.6",
+    "@storybook/addon-links": "^5.0.6",
+    "@storybook/addons": "^5.0.6",
+    "@storybook/react": "^5.0.6",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
@@ -54,7 +54,7 @@
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-react": "^7.12.4",
     "install": "^0.12.2",
-    "jest": "^24.5.0",
+    "jest": "^24.6.0",
     "jest-css-modules": "^1.1.0",
     "jsdom": "^14.0.0",
     "mocha": "^6.0.2",
@@ -67,7 +67,7 @@
     "sinon": "^7.3.1"
   },
   "dependencies": {
-    "global-input-message": "^1.6.8",
+    "global-input-message": "^1.6.21",
     "lodash": "^4.17.11",
     "qrcode.react": "^0.9.3"
   }

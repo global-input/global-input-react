@@ -29,6 +29,8 @@ import React, { useState } from 'react';
 
 
 const [content, setContent]=useState("");  
+
+...
  let mobileConfig={        
                           initData:{                              
                               form:{
@@ -36,12 +38,13 @@ const [content, setContent]=useState("");
                                 fields:[{
                                   label:"Content",            
                                   operations:{
-                                      onInput:value=>setContent(value);
+                                      onInput:value=>setContent(value)
                                   }
                                 }]
                               }
                           },
              };
+
 return (<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 
@@ -81,18 +84,18 @@ You can achieve the requirement by including the following in the render functio
                                 fields:[{
                                   label:"Username",            
                                   operations:{
-                                      onInput:username=>setUsername(username);
+                                      onInput:username=>setUsername(username)
                                   }
                                 },{
                                   label:"Password",            
                                   operations:{
-                                      onInput:password=>setPassword(password);
+                                      onInput:password=>setPassword(password)
                                   }
                                 },{
                                   label:"Sign In",
                                   type:"button",            
                                   operations:{
-                                      onInput:()=>signIn(username,password);
+                                      onInput:()=>signIn(username,password)
                                   }
                                 }]
                               }
