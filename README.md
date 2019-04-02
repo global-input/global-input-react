@@ -96,7 +96,7 @@ You can achieve the requirement by including the following in the render functio
                                   label:"Sign In",
                                   type:"button",            
                                   operations:{
-                                      onInput:()=>signIn(username,password)
+                                      onInput:()=>signIn()
                                   }
                                 }]
                               }
