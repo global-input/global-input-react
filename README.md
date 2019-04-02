@@ -42,10 +42,7 @@ const [content, setContent]=useState("");
                               }
                           },
              };
-return(
-<GlobalInputConnect mobileConfig={mobileConfig}
-                        </GlobalInputConnect>
-);
+return(<GlobalInputConnect mobileConfig={mobileConfig}/>);
 ```
 
 Above example is from the [Content Transfer Example Demo](https://globalinput.co.uk/global-input-app/content-transfer), and its full source code is available on [GitHub](https://github.com/global-input/content-transfer-example).
