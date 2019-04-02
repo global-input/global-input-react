@@ -52,30 +52,16 @@ On scanning the Encrypted QR Code using the [Global Input App](https://globalinp
 The 'GlobalInputConnect' component is responsible for displaying an encrypted QR code that contains a one-time-use encryption key among other communication channel parameters.
 
 
-### Another Example
-
-Let's say that you would like to display a button, labelled with ```Play```, on the user's mobile screen after the user has connected to your application by scanning the encrypted QR code. And you would like to invoke ```play()``` function when the user has press the button on his/her mobile. Add the following in the render function of your component:
+If you would like to display a button, labelled as ```Play```, on the user's mobile screen, and you would like to invoke ```play()``` function when the user has press the button on his/her mobile. you just need to add the following to the ```fields```
+array of the above example:
 
 
 ```JavaScript
- let mobileConfig={        
-                          initData:{                              
-                              form:{
-                                	title:"Play",   
-                                fields:[{
-                                  label:"Play",
-                                  type:'button'           
-                                  operations:{
-                                      onInput:()=>play();
-                                  }
-                                }]
-                              }
-                          },
-             };
-return(
-<GlobalInputConnect mobileConfig={mobileConfig}
-                        </GlobalInputConnect>
-);
+  {
+        label:"Play",
+        type:'button'           
+        operations:{onInput:()=>play();}
+  }
 ```
 
 ### Sign In Example
