@@ -13,12 +13,17 @@
   },
   "homepage": "https://github.com/global-input/global-input-react#readme",
   "keywords": [
-    "global-input",
-    "global input",
     "mobile integration",
     "mobile authentication",
-    "moible input",
-    "mobile control"
+    "mobile input",
+    "mobile control",
+    "second screen experience",
+    "mobile personal storage",
+    "mobile encryption",
+    "mobile signing",
+    "mobile content transfer",
+    "mobile encrypted storage",
+    "password-less authentication"
   ],
   "options": {
     "mocha": "--require scripts/mocha_runner src/**/__tests__/**/*.js"
@@ -54,11 +59,11 @@
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-react": "^7.12.4",
     "install": "^0.12.2",
-    "jest": "^24.6.0",
+    "jest": "^24.7.1",
     "jest-css-modules": "^1.1.0",
     "jsdom": "^14.0.0",
-    "mocha": "^6.0.2",
-    "nodemon": "^1.17.5",
+    "mocha": "^6.1.3",
+    "nodemon": "^1.18.11",
     "npm": "^6.9.0",
     "react": "^16.8.6",
     "react-addons-test-utils": "^15.6.2",
@@ -67,7 +72,7 @@
     "sinon": "^7.3.1"
   },
   "dependencies": {
-    "global-input-message": "^1.6.21",
+    "global-input-message": "^1.6.23",
     "lodash": "^4.17.11",
     "qrcode.react": "^0.9.3"
   }
