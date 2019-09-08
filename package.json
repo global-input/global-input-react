@@ -26,7 +26,7 @@
     "password-less authentication"
   ],
   "scripts": {
-    "dbuild": "./node_modules/.bin/babel src  --out-dir dist",
+    "build": "./node_modules/.bin/babel src  --out-dir dist",
     "webpackdev": "webpack --mode development",
     "webpack": "webpack --mode production",
     "dprepublish": "npm run build",
@@ -51,11 +51,12 @@
     "@storybook/react": "^5.1.11",
     "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
+    "react-dom": "^16.9.0",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.8"
+    "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
-    "global-input-message": "^1.7.0",
+    "global-input-message": "^1.7.2",
     "lodash": "^4.17.15",
     "qrcode.react": "^0.9.3"
   }
