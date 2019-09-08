@@ -8,5 +8,10 @@
 .eslintrc
 npm-debug.log
 lib
-/deploy
 /src/
+.storybook/
+./storybook/
+*.tgz
+.webpack.config.babel
+.babel.config.js
+./stories/
