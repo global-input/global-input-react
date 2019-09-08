@@ -28,8 +28,7 @@
   "scripts": {
     "build": "./node_modules/.bin/babel src  --out-dir dist",
     "webpackdev": "webpack --mode development",
-    "webpack": "webpack --mode production",
-    "dprepublish": "npm run build",
+    "webpack": "webpack --mode production",    
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
