@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {createMessageConnector,encrypt,decrypt} from "global-input-message";
-import cloneDeep from "lodash/cloneDeep";
 import DisplayQRCode from "./DisplayQRCode";
 export  class GlobalInputConnect extends Component {
   RENDER_TYPE={
@@ -66,7 +65,34 @@ export  class GlobalInputConnect extends Component {
           message:"form is missing in initData of the mobileConfig in the GlobalInputConnect component"
       }
     }
-    this.mobileConfig=cloneDeep(this.props.mobileConfig);
+    var simpleClone=function(obj) {
+      var copy;      
+      if (null == obj || "object" != typeof obj) {
+        return obj;      
+      }        
+      if (obj instanceof Date) {
+          copy = new Date();
+          copy.setTime(obj.getTime());
+          return copy;
+      }
+      if (obj instanceof Array) {
+          copy = [];
+          for (var i = 0, len = obj.length; i < len; i++) {
+                copy[i] = simpleClone(obj[i]);
+          }
+          return copy;
+      }
+      if (obj instanceof Object) {
+          copy = {};
+          for (var attr in obj) {
+              if (obj.hasOwnProperty(attr)) copy[attr] = simpleClone(obj[attr]);
+          }
+          return copy;
+      }
+      throw new Error("Unable to copy obj! Its type isn't supported.");
+    };
+
+    this.mobileConfig=simpleClone(this.props.mobileConfig);
     this.mobileConfig.onRegistered=next=>{
             next();
             this.onGlobalInputConnected();

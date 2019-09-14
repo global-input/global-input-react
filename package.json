@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "global-input-message": "^1.7.2",
-    "lodash": "^4.17.15",
     "qrcode.react": "^0.9.3",
     "react": "^16.9.0"
   }
