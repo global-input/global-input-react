@@ -18,7 +18,7 @@ var mobileConfig={
                           form:{
                             id:"test@globalinput.co.uk",
                             title:"Global Input App Test",
-                            label:"globalinputtest",
+                            label:"Global Input Test",
                             fields:[{
                               label:"Content",
                               id:"content",
@@ -46,7 +46,7 @@ class OneTextAreaTest extends React.Component{
                               form:{
                                 id:"test@globalinput.co.uk",
                                 title:"Global Input App Test",
-                                label:"globalinputtest",
+                                label:"Global Input Test",
                                 fields:[{
                                   label:"Content",
                                   id:"content",
