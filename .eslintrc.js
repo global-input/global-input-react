@@ -29,6 +29,12 @@ module.exports = {
           'stories/**' 
         ]
       }
-    ]
-  },
+    ],
+    "no-trailing-spaces": "error",
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "no-spaced-func": "error",
+    "no-whitespace-before-property": "error",
+    "space-before-function-paren": ["error", "never"],
+    "space-infix-ops": "error",
+  }
 };

@@ -57,7 +57,8 @@ class OneTextAreaTest extends React.Component{
                                   }
                                }]
                               }
-                        }
+                        },
+                        url: "https://globalinput.co.uk"
 
          };
   }
@@ -90,7 +91,7 @@ class OneTextAreaTest extends React.Component{
 
 storiesOf('GlobalInputConnect', module)
   .addDecorator(story => <div style={{ textAlign: 'center', marginTop:100 }}>{story()}</div>)
-  .add('without props', () => <GlobalInputConnect/>)
+  .add('without props', () => <GlobalInputConnect connectingMessage="Connecting....."/>)
   .add('without initData', () => <GlobalInputConnect mobileConfig={{}}/>)
   .add('without form', () => <GlobalInputConnect mobileConfig={{initData:{}}}/>)
   .add('without fields', () => <GlobalInputConnect mobileConfig={{initData:{form:{}}}}/>)

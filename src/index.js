@@ -1,248 +1,147 @@
-import React, {Component} from 'react';
-import {createMessageConnector,encrypt,decrypt} from "global-input-message";
-import DisplayQRCode from "./DisplayQRCode";
-export  class GlobalInputConnect extends Component {
-  RENDER_TYPE={
-      ERROR:0,
-      CONNECTING:1,
-      CONNECTED:2,
-      SENDER_CONNECTED:3,
-      SENDER_DISCONNECTED:4
-  }
-  constructor(props){
-    super(props);
-    this.state=this.buildConnectingState(this.props);
-    this.connector=null;
-  }
+import React, { useState, useEffect } from 'react';
+import { createMessageConnector, encrypt, decrypt } from "global-input-message";
+import DisplayQRCode from './DisplayQRCode';
 
-  componentDidUpdate(prevProps){
-    if(prevProps.mobileConfig!=this.props.mobileConfig){
-        this.setState(this.buildConnectingState(this.props.mobileConfig));
-        this.connectGlobalInputApp();
-    }
-  }
-  onGlobalInputConnected(){
-    this.setState(this.buildConnectedState());
-  }
-  onSenderDisconnected(sender,senders){
-    if(!this.props.MultiSenders){
-        this.disconnectGlobaInputApp();
-    }
-    try{
-        if(this.props.mobileConfig.onSenderDisconnected){
-          this.props.mobileConfig.onSenderDisconnected(sender, senders);
+
+const GIASTATUS = {
+    CONNECTING: 0,
+    CONNECTED: 1,
+    SENDER_CONNECTED: 2,
+    SENDER_DISCONNECTED: 3
+};
+
+function createGlobalInput() {
+    var connector = null;
+    const disconnect = () => {
+        if (connector) {
+            connector.disconnect();
         }
-    }
-    catch(error){
-      console.error(error);
-    }
-
-    if(this.props.reconnectOnDisconnect){
-
-        this.setRenderType(this.RENDER_TYPE.CONNECTING, "");
-        this.connectGlobalInputApp();
-    }
-    else{
-        this.setState(this.buildSenderDisconnectedState(sender,senders));
-    }
-  }
-  buildConnectingState(props){
-    if(!props.mobileConfig){
-      return {
-          renderType:this.RENDER_TYPE.ERROR,
-          message:"GlobalInputConnect component requires mobileConfig parameter."
-      }
-    }
-    else if(!props.mobileConfig.initData){
-      return {
-          renderType:this.RENDER_TYPE.ERROR,
-          message:"initData is missing in the parameter mobileConfig in the GlobalInputConnect component"
-      }
-    }
-    else if(!props.mobileConfig.initData.form){
-      return {
-          renderType:this.RENDER_TYPE.ERROR,
-          message:"form is missing in initData of the mobileConfig in the GlobalInputConnect component"
-      }
-    }
-    var simpleClone=function(obj) {
-      var copy;      
-      if (null == obj || "object" != typeof obj) {
-        return obj;      
-      }        
-      if (obj instanceof Date) {
-          copy = new Date();
-          copy.setTime(obj.getTime());
-          return copy;
-      }
-      if (obj instanceof Array) {
-          copy = [];
-          for (var i = 0, len = obj.length; i < len; i++) {
-                copy[i] = simpleClone(obj[i]);
-          }
-          return copy;
-      }
-      if (obj instanceof Object) {
-          copy = {};
-          for (var attr in obj) {
-              if (obj.hasOwnProperty(attr)) copy[attr] = simpleClone(obj[attr]);
-          }
-          return copy;
-      }
-      throw new Error("Unable to copy obj! Its type isn't supported.");
+        connector = null;
     };
+    const connect = ({ mobileConfig, onConnected, onSenderConnected, onSenderDisconnected }) => {
+        disconnect();
+        if (!mobileConfig) {
+            console.log("mobile config is not set");
+            return;
+        }
 
-    this.mobileConfig=simpleClone(this.props.mobileConfig);
-    this.mobileConfig.onRegistered=next=>{
+
+
+        const connector = createMessageConnector();
+
+        const config = { ...mobileConfig };
+        config.onRegistered = next => {
             next();
-            this.onGlobalInputConnected();
+            var code = connector.buildInputCodeData();
+            onConnected(code);
+        }
+        config.onSenderConnected = (sender, senders) => {
+            if (mobileConfig.onSenderConnected) {
+                mobileConfig.onSenderConnected(sender, senders);
+            }
+            onSenderConnected(sender, senders);
+        }
+        config.onSenderDisconnected = (sender, senders) => {
+            if (mobileConfig.onSenderDisconnected) {
+                mobileConfig.onSenderDisconnected(sender, senders);
+            }
+            onSenderDisconnected(sender, senders);
+        }
+        connector.connect(config);
     };
-    this.mobileConfig.onSenderConnected=(sender, senders)=>{
-          if(this.props.mobileConfig.onSenderConnected){
-            this.props.mobileConfig.onSenderConnected(sender, senders);
-          }
-          this.setState(this.buildSenderConnectedState(sender,senders));
-    }
-    this.mobileConfig.onSenderDisconnected=this.onSenderDisconnected.bind(this)
-
-    return {
-        renderType:this.RENDER_TYPE.CONNECTING
-    }
-  }
-  setRenderType(renderType,message){
-      this.setState(Object.assign({},this.state,{renderType,message}));
-  }
-
-  buildConnectedState(){
-    return{
-      renderType:this.RENDER_TYPE.CONNECTED,
-      code:this.connector.buildInputCodeData()
+    const checkMobileConfig = mobileConfig => {
+        if (!mobileConfig) {
+            return "mobileConfig is required";
+        }
+        if (!mobileConfig.initData) {
+            return "initData is missing in the parameter mobileConfig";
+        }
+        if (!mobileConfig.initData.form) {
+            return "form is missing in the initData of the mobileConfig";
+        }
+        return null;
     };
-  }
-  buildSenderConnectedState(sender,senders){
-    return{
-      renderType:this.RENDER_TYPE.SENDER_CONNECTED,
-      sender,
-      senders
+    const getCode = () => {
+        if (connector) {
+            return connector.buildInputCodeData();
+        }
     };
-  }
-  buildSenderDisconnectedState(sender,senders){
-    return{
-      renderType:this.RENDER_TYPE.SENDER_DISCONNECTED,
-      sender,
-      senders
-    };
-  }
-
-
-  componentDidMount(){
-    this.connectGlobalInputApp();
-  }
-  disconnectGlobaInputApp(){
-    if(this.connector){
-      this.connector.disconnect();
-      this.connector=null;
-      this.onSenderDisconnected();
-    }
-
-  }
-  connectGlobalInputApp(){
-      if(this.connector){
-        this.disconnectGlobaInputApp();
-      }
-      this.connector=createMessageConnector();
-      if(this.props.mobileConfig){
-        this.connector.connect(this.mobileConfig);
-      }
-
-  }
-  sendInputMessage(message, fieldIndex, fieldId){
-    if(this.connector){
-       this.connector.sendInputMessage(message,fieldIndex, fieldId);
-    }
-  }
-
-  changeInitData(initData){
-    if(this.connector){
-       this.connector.sendInitData(initData);
-    }
-    else{
-        console.log("sendInitData is called when disconnected:");
-    }
-  }
-
-
-
-  render(){
-    if(this.state.renderType===this.RENDER_TYPE.ERROR){
-        return this.renderError();
-    }
-    else if(this.state.renderType===this.RENDER_TYPE.CONNECTED){
-      return this.renderConnected();
-    }
-    else if(this.state.renderType===this.RENDER_TYPE.SENDER_CONNECTED){
-      return this.renderSenderConnected();
-    }
-    else if(this.state.renderType===this.RENDER_TYPE.SENDER_DISCONNECTED){
-          return this.renderSenderDisconnected();
-    }
-    else{
-        return this.renderConnecting();
-    }
-
-
-  }
-  renderError(){
-
-        return (<DisplayQRCode code={this.state.message} label={this.state.message} size={this.props.qrCodeSize}/>);
-
-  }
-  renderConnecting(){
-        if(this.props.connectingMessage){
-            return (<div>{this.props.connectingMessage}</div>);
-        }
-        else{
-          return null;
-        }
-
-  }
-  renderSenderConnected(){
-        if(this.props.renderSenderConnected){
-            return this.props.renderSenderConnected(this.state.sender,this.state.senders)
-        }
-        else if(this.props.senderConnectedMessage){
-            return (<div>{this.props.senderConnectedMessage}</div>);
-        }
-        else if(this.props.children){
-             return this.props.children;
-        }
-        else{
-          return null;
-        }
-
-  }
-  renderSenderDisconnected(){
-        if(this.props.renderSenderDisconnected){
-            return this.props.renderSenderDisconnected(this.state.sender,this.state.senders)
-        }
-        else if(this.props.senderDisconnectedMessage){
-            return (<div>{this.props.senderDisconnectedMessage}</div>);
-        }
-        else if(this.props.children){
-             return this.props.children;
-        }
-        else{
-          return null;
-        }
-  }
-  renderConnected(){
-          console.log("[["+this.state.code+"]]");
-          return (<DisplayQRCode code={this.state.code} label={this.props.connectedMessage} size={this.props.qrCodeSize}/>);
-
-  }
-
+    return { connect, disconnect, checkMobileConfig, getCode };
 
 }
+const globalInput = createGlobalInput();
+
+const GlobalInputConnect = function ({ mobileConfig, connectingMessage, connectedMessage, qrCodeSize, renderSenderConnected, senderConnectedMessage, renderSenderDisconnected, senderDisconnectedMessage, children }) {
+    var error = globalInput.checkMobileConfig(mobileConfig);
+    const [giaStatus, setGIAStatus] = useState(GIASTATUS.CONNECTING);
+    const [senders, setSenders] = useState([]);
+    const [sender, setSender] = useState(null);
+    const [code, setCode] = useState("");
+    const onConnected = code => {
+        setGIAStatus(GIASTATUS.CONNECTED);
+        setCode(code);
+    };
+
+    const onSenderConnected = (sender, senders) => {
+        setSender(sender);
+        setSenders([...senders]);
+        setGIAStatus(GIASTATUS.SENDER_CONNECTED);
+    };
+    const onSenderDisconnected = (sender, senders) => {
+        setSender(sender);
+        if (senders) {
+            setSenders([...senders]);
+        }
+        else {
+            setSenders([]);
+        }
 
 
-export {DisplayQRCode,encrypt,decrypt};
+        setGIAStatus(GIASTATUS.SENDER_DISCONNECTED);
+
+    };
+    useEffect(() => {
+        if (!error) {
+            globalInput.connect({ mobileConfig, onConnected, onSenderConnected, onSenderDisconnected });
+        }
+        return globalInput.disconnect;
+    }, [mobileConfig]);
+
+    if (error) {
+        return (<DisplayQRCode code={error} label={error} size={qrCodeSize} />);
+    }
+    switch (giaStatus) {
+        case GIASTATUS.CONNECTED:
+            console.log("[[" + code + "]]");
+            return (<DisplayQRCode code={code} label={connectedMessage} size={qrCodeSize} />);
+        case GIASTATUS.CONNECTING:
+            return connectingMessage ? (<div>{connectingMessage}</div>) : null;
+        case GIASTATUS.SENDER_CONNECTED:
+            if (renderSenderConnected) {
+                return renderSenderConnected(sender, senders);
+            }
+            else if (senderConnectedMessage) {
+                return <div>{senderConnectedMessage}</div>
+            }
+            else {
+                return children;
+            }
+        case GIASTATUS.SENDER_DISCONNECTED:
+            if (renderSenderDisconnected) {
+                return renderSenderDisconnected(sender, senders)
+            }
+            else if (senderDisconnectedMessage) {
+                return (<div>{senderDisconnectedMessage}</div>);
+            }
+            else if (this.props.children) {
+                return this.props.children;
+            }
+            else {
+                return null;
+            }
+        default:
+            return (<div>Unknown State</div>);
+    }
+};
+
+export { encrypt, decrypt, GlobalInputConnect, DisplayQRCode }

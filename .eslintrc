@@ -16,7 +16,7 @@
         "no-floating-decimal": 2,
         "no-inner-declarations": [2, "both"],
         "no-lonely-if": 2,
-        "no-multiple-empty-lines": [2, {"max": 3}],
+        "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 1 }],
         "no-self-compare": 2,
         "no-underscore-dangle": 0,
         "no-use-before-define": 0,
@@ -40,7 +40,14 @@
         "strict": [0],
         "valid-jsdoc": 2,
         "wrap-iife": [2, "any"],
-        "yoda": [1, "never"]
+        "yoda": [1, "never"],
+        "no-multi-spaces": "error",
+        "no-trailing-spaces": "error",
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "no-spaced-func": "error",
+        "no-whitespace-before-property": "error",
+        "space-before-function-paren": ["error", "never"],
+        "space-infix-ops": "error",
     },
     "plugins": [
         "react"
