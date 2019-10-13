@@ -123,8 +123,11 @@ const GlobalInputConnect = function ({ mobileConfig, connectingMessage, connecte
             else if (senderConnectedMessage) {
                 return <div>{senderConnectedMessage}</div>
             }
-            else {
+            else if (children) {
                 return children;
+            }
+            else {
+                return (<span/>);
             }
         case GIASTATUS.SENDER_DISCONNECTED:
             if (renderSenderDisconnected) {
@@ -133,11 +136,11 @@ const GlobalInputConnect = function ({ mobileConfig, connectingMessage, connecte
             else if (senderDisconnectedMessage) {
                 return (<div>{senderDisconnectedMessage}</div>);
             }
-            else if (this.props.children) {
-                return this.props.children;
+            else if (children) {
+                return children;
             }
             else {
-                return null;
+                return <span/>;
             }
         default:
             return (<div>Unknown State</div>);

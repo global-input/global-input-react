@@ -1,5 +1,8 @@
   const presets = [
-      ['@babel/preset-env'],
+      ['@babel/preset-env',{
+        "targets": { "browsers": ["last 2 chrome versions"] },
+      //  "useBuiltIns": "entry"
+      }],
       ["@babel/preset-react"]
   ];
   plugins=["@babel/plugin-proposal-class-properties"]

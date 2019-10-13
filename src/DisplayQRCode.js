@@ -23,9 +23,7 @@ const styles={
     fontWeight: 300
   }
 };
-function computeDefaultSize(){
-      console.log(window.innerWidth-50);
-      console.log(window.innerHeight-50);
+function computeDefaultSize(){      
       let size = Math.min(window.innerWidth-50,window.innerHeight-50);
       return Math.max(size,400);
 }
@@ -50,7 +48,7 @@ export default ({label="",code="",level='H',size=0})=>{
                                         size={size?size:defaultSize}
                                        />
         </div>
-        <div style={styles.label}>{label}</div>
+        <div style={styles.label} data-testid="globalinput-qr-code-label">{label}</div>
       </div>
     );
 };

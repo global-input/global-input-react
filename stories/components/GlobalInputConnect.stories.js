@@ -90,10 +90,7 @@ class OneTextAreaTest extends React.Component{
 
 
 storiesOf('GlobalInputConnect', module)
-  .addDecorator(story => <div style={{ textAlign: 'center', marginTop:100 }}>{story()}</div>)
-  .add('without props', () => <GlobalInputConnect connectingMessage="Connecting....."/>)
-  .add('without initData', () => <GlobalInputConnect mobileConfig={{}}/>)
-  .add('without form', () => <GlobalInputConnect mobileConfig={{initData:{}}}/>)
+  .addDecorator(story => <div style={{ textAlign: 'center', marginTop:100 }}>{story()}</div>)  
   .add('without fields', () => <GlobalInputConnect mobileConfig={{initData:{form:{}}}}/>)
   .add('testing messages',()=>(<GlobalInputConnect
     mobileConfig={mobileConfig}
