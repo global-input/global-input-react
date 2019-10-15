@@ -24,8 +24,8 @@ const styles={
   }
 };
 function computeDefaultSize(){      
-      let size = Math.min(window.innerWidth-50,window.innerHeight-50);
-      return Math.max(size,400);
+      return  Math.min(window.innerWidth-50,window.innerHeight-50,400);
+      //return Math.max(size,400);
 }
 
 export default ({label="",code="",level='H',size=0})=>{
@@ -41,13 +41,13 @@ export default ({label="",code="",level='H',size=0})=>{
         });
     return(
         <div style={styles.container}>
-        <div style={styles.qrCodeContainer}>
+            <div style={styles.qrCodeContainer}>
                 <QRCode
                                         value={code}
                                         level={level}
                                         size={size?size:defaultSize}
                                        />
-        </div>
+            </div>
         <div style={styles.label} data-testid="globalinput-qr-code-label">{label}</div>
       </div>
     );
