@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState,useRef} from 'react';
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
@@ -69,28 +69,64 @@ class OneTextAreaTest extends React.Component{
       return(
         <React.Fragment>
             <GlobalInputConnect mobileConfig={this.mobileConfig}
-            connectedMessage="Scan with your Global Input App"
-            renderSenderConnected={(sender, senders)=>(<div>When you type on your mobile, the content will appear below</div>)}
-            renderSenderDisconnected={(sender, senders)=>(<div>Disconnected</div>)}/>
-            {this.renderContent()}
+            connectedMessage="Scan with your Global Input App"            
+            renderSenderDisconnected={(sender, senders)=>(<div>Disconnected</div>)}>
+              <div>When you type on your mobile, the content will appear below!</div>
+              <div><textarea style={{width:500, height:500}} value={this.state.content} readOnly={true}/></div>
+          </GlobalInputConnect>
+            
         </React.Fragment>
       );
 
-    }
-    renderContent(){
-      if(this.state.content){
-        return(<div><textarea style={{width:500, height:500}} value={this.state.content} readOnly={true}/></div>);
-      }
-      else{
-        return null;
-      }
-    }
+    }    
 
 }
 
+const TwoWayCommunication= ()=>{  
+    const [content,setContent]=useState('');
+    const globalInput=useRef(null);
+
+    const mobileConfig={
+      initData:{
+          action:"input",
+          dataType:"form",
+          form:{
+            id:"test@globalinput.co.uk",
+            title:"Global Input App Test",
+            label:"Global Input Test",
+            fields:[{
+              label:"Content",
+              id:"content",
+              value:"",
+              nLines:10,
+              operations:{
+                  onInput:setContent
+              }
+          }]
+          }
+    },
+       url: "https://globalinput.co.uk"
+    };
+    
+    return (
+        <GlobalInputConnect mobileConfig={mobileConfig}  connectedMessage="Scan with your Global Input App"  ref={globalInput}      
+        renderSenderDisconnected={(sender, senders)=>(<div>Disconnected</div>)}>
+              <div>When you type on your mobile, the content will appear below</div>
+              <textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                  setContent(evt.target.value);
+                  globalInput.current.sendInputMessage(evt.target.value,0);
+                  }}/>
+        </GlobalInputConnect>
+    );
+}
+
+
+
+
+
 
 storiesOf('GlobalInputConnect', module)
-  .addDecorator(story => <div style={{ textAlign: 'center', marginTop:100 }}>{story()}</div>)  
+  .addDecorator(story => <div style={{ textAlign: 'center', marginTop:0 }}>{story()}</div>)  
   .add('without fields', () => <GlobalInputConnect mobileConfig={{initData:{form:{}}}}/>)
   .add('testing messages',()=>(<GlobalInputConnect
     mobileConfig={mobileConfig}
@@ -98,4 +134,6 @@ storiesOf('GlobalInputConnect', module)
     connectedMessage="Scan with Global Input App"
     senderConnectedMessage="Global Input App has connected, the received content will be printed in the console"
     senderDisconnectedMessage="Global Input App has disconnected"/>))
-  .add("One TextArea Form",()=><OneTextAreaTest/>);
+  .add("One TextArea Form",()=><OneTextAreaTest/>)
+  .add("Two Communication",()=><TwoWayCommunication/>)
+

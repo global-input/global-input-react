@@ -11,16 +11,23 @@ import "@testing-library/jest-dom/extend-expect";
 
 describe("missing data in the config", () => {
   test("missing mobileConfig", async () => {
-    const { getByTestId } = render(<GlobalInputConnect />);
+    const { getByTestId,asFragment } = render(<GlobalInputConnect />);
+    //const firstRender = asFragment();
+   // const secondRender=asFragment();
+   // expect(secondRender).toMatchSnapshot();
     expect(getByTestId("globalinput-qr-code-label")).toHaveTextContent(
       "mobileConfig is required"
     );
+
   });
 
   test("missing initData in mobileConfig", async () => {
     const { getByTestId } = render(
       <GlobalInputConnect mobileConfig={{}} />
     );
+    // const resolvedDiv = await waitForElement(() =>
+    //             getByTestId("globalinput-qr-code-label")
+    // );
     expect(getByTestId("globalinput-qr-code-label")).toHaveTextContent(
       "initData is missing in the parameter mobileConfig"
     );

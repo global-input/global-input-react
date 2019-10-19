@@ -29,13 +29,15 @@
     "build": "./node_modules/.bin/babel src  --out-dir dist",
     "webpack": "webpack --mode production",
     "test": "jest",
+    "debug": "node --debug-brk --inspect ./node_modules/.bin/jest -i",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
   "jest": {
     "transform": {
       ".*": "<rootDir>/node_modules/jest-css-modules"
-    }
+    },
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

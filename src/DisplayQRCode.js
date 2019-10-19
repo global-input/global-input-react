@@ -24,8 +24,7 @@ const styles={
   }
 };
 function computeDefaultSize(){      
-      return  Math.min(window.innerWidth-50,window.innerHeight-50,400);
-      //return Math.max(size,400);
+      return  Math.min(window.innerWidth-50,window.innerHeight-50,400);    
 }
 
 export default ({label="",code="",level='H',size=0})=>{
