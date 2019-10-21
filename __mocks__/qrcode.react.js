@@ -1,13 +1,17 @@
 import React from 'react';
 
+let codeResolve=null;
 
-let tracker=Object.create(null);
-const QRCode = ({value,level,size})=>{
-       
-    tracker.lastCall={value,level,size};
+const codePromise=new Promise(resolve => {codeResolve = resolve});
+
+const QRCode = ({value,level,size})=>{ 
+    if(value){
+        codeResolve({value,level,size});
+    }    
     return (<div data-testid="mock-qr-code">{value}</div>);
 }
-export {tracker};
+const getDisplayedQRCodeProperties=async ()=>codePromise;
+export {getDisplayedQRCodeProperties};
 export default QRCode 
 
 
