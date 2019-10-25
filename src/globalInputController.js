@@ -70,6 +70,7 @@ const sendInputMessage = (message, fieldIndex, fieldId) => {
     }
 };
 
-export default { STATUS, reconnect, disconnect, connect, sendInputMessage};
+const changeInitData =initData=>connector ? connector.sendInitData(initData):console.log("sendInitData is invoked while in disconnected state.")
+export default { STATUS, reconnect, disconnect, connect, sendInputMessage,changeInitData};
 
 

@@ -7,6 +7,17 @@ import { render, fireEvent, waitForElement } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { JestEnvironment } from "@jest/environment";
 
+
+/**
+   * This is for creating promise object that are to be resolved outside of the construct of Promise.    * 
+   */
+  const createMessagePromise=()=>{
+    let resultResolve=null;
+    let promise=new Promise(resolve => resultResolve=resolve);
+    return {promise, resolve:resultResolve};
+  }
+
+
 /**
  * 
  * @typedef {Object} DeviceAppMobileConfig 
@@ -20,8 +31,8 @@ import { JestEnvironment } from "@jest/environment";
  * return {DeviceAppMobileConfig} 
  */
 const createDeviceAppMobileConfig= () => {  
-    var contentResolver = null;  
-    var contentPromise = new Promise((resolve, reject) => contentResolver=resolve);   
+    var contentMessage = createMessagePromise();
+    
     const mobileConfig = {
       initData: {
         action: "input",
@@ -36,14 +47,14 @@ const createDeviceAppMobileConfig= () => {
               id: "content",
               value: "",
               nLines: 10,
-              operations: {onInput:message => contentResolver(message)}
+              operations: {onInput:message => contentMessage.resolve(message)}
             }
           ]
         }
       },
       url: "https://globalinput.co.uk"
     };
-    const getContentReceivedFromGIA=async ()=>contentPromise;  
+    const getContentReceivedFromGIA=async ()=>contentMessage.promise;  
     return { mobileConfig, getContentReceivedFromGIA} 
   };
   /**
@@ -72,9 +83,56 @@ const createDeviceAppMobileConfig= () => {
         var sendMessageToGIA = (content,index) =>{
               globalInputController.current.sendInputMessage(content, index);
         };
-        return {getDisplayedQRCodeProperties, sendMessageToGIA,getContentReceivedFromGIA, mobileConfig};
+
+        var changeInitData = initData =>{
+            globalInputController.current.changeInitData(initData);
+        };
+        
+
+        return {getDisplayedQRCodeProperties, sendMessageToGIA,getContentReceivedFromGIA, mobileConfig, changeInitData};
   }
+
   
+
+  /**
+   * This function will be invoked when the connection information is extracted from the QR code successfully.
+   * @param {*} sender - the GIA connector 
+   * @param {*} connectionInformation - the connection information extracted from the QR code,
+   * @return {Object} - the connectToDeviceApp function property can be invoked after this to connect to the device application
+   */
+  
+  const buildGIAConnectorFromConnectionInformation= (sender, connectionInformation) => {
+                                        
+        let connectionResult=createMessagePromise();    
+        let messageFromDeviceApp=createMessagePromise();
+
+
+        let mobileConfig = {
+                connectSession: connectionInformation.session,
+                url: connectionInformation.url,
+                aes: connectionInformation.aes,
+                apikey: connectionInformation.apikey,
+                securityGroup: connectionInformation.securityGroup,
+                onInputPermissionResult: function (message) {
+                    connectionResult.resolve(message);
+                },
+                onInput: message=>messageFromDeviceApp.resolve(message)
+        };
+        let connectToDeviceApp=async ()=>{
+            sender.connect(mobileConfig);
+            return connectionResult.promise; 
+        }
+        let getMessageFromDeviceApp=async ()=>messageFromDeviceApp.promise; 
+        let sendMessageToDeviceApplication = (content,index) => sender.sendInputMessage(content,index);   
+        let resetMessageFromDeviceApp = ()=> messageFromDeviceApp=createMessagePromise();            
+
+        return {mobileConfig,connectToDeviceApp,sendMessageToDeviceApplication,getMessageFromDeviceApp, resetMessageFromDeviceApp};
+  };
+  
+ 
+  
+
+
   /**
    * 
    * @type {Object} GlobalInputApp   
@@ -94,44 +152,48 @@ const createDeviceAppMobileConfig= () => {
         sender.client = "testsender";
         return new Promise(resolve => {
             sender.processCodeData(connectionCode, {
-              onInputCodeData: connectionInformation => {
-                
-                let resolveConnectionResult=null;
-                let promiseForConnectionResult=new Promise(resolve => resolveConnectionResult=resolve);
-                
-      
-                let resolveForMessageFromDeviceApp=null;
-                let promiseForMessageFromDeviceApp=new Promise(resolve => resolveForMessageFromDeviceApp=resolve);
-                
-      
-                let mobileConfig = {
-                  connectSession: connectionInformation.session,
-                  url: connectionInformation.url,
-                  aes: connectionInformation.aes,
-                  apikey: connectionInformation.apikey,
-                  securityGroup: connectionInformation.securityGroup,
-                  onInputPermissionResult: function (message) {
-                      resolveConnectionResult(message);
-                  },
-                  onInput: message=>resolveForMessageFromDeviceApp(message)
-                };
-      
-                let connectToDeviceApp=async ()=>{           
-                    sender.connect(mobileConfig);
-                    return promiseForConnectionResult; 
-                }
-                let getMessageFromDeviceApp=async ()=>promiseForMessageFromDeviceApp; 
-                let sendMessageToDeviceApplication = (content,index) => sender.sendInputMessage(content,index);
-      
-                resolve({mobileConfig,connectToDeviceApp,sendMessageToDeviceApplication, getMessageFromDeviceApp});
-              }
-            });
+                onInputCodeData:connectionInformation => {
+                const result=buildGIAConnectorFromConnectionInformation(sender,connectionInformation);                            
+                resolve(result);
+              }});
           });
-        
+  };   
 
-  };
   
   
+       
+        
+    const createNextInitData = ()=>{
+            var firstName = createMessagePromise();                
+            var lastName = createMessagePromise();                
+            const  initData = {
+                    action: "input",
+                    dataType: "form",
+                    form: {
+                    id: "test2@globalinput.co.uk",
+                    title: "Global Input App Test 2",
+                    label: "Global Input Test 2",
+                    fields: [
+                        {
+                            label: "First Name",
+                            id: "firstName",
+                            value: "",
+                            nLines: 10,
+                            operations: {onInput:message => firstName.resolve(message)}
+                        },{
+                            label: "Last Name",
+                            id: "lastName",
+                            value: "",
+                            nLines: 10,
+                            operations: {onInput:message => lastName.resolve(message)}
+                        },
+                    ]
+                    }
+                }
+            const waitForFirstName=async ()=>firstName.promise;  
+            const waitForLastName=async ()=>lastName.promise;  
+            return { initData, waitForFirstName,waitForLastName};
+        };
   
-  
-  export {createDeviceApp,createGlobalInputApp};
+
+  export {createDeviceApp,createGlobalInputApp,createNextInitData};
