@@ -1,4 +1,4 @@
-This is a [Global Input App](https://globalinput.co.uk) React Extension (GIA React Extension) for React device and web applications to implement mobile integrations within its application context, eliminating the need for developing separate mobile apps. It enables applications to have:
+This is an [Global Input App](https://globalinput.co.uk) extension (GIA React Extension) library to enable device and web applications, which are written in React JS, to have mobile input and control features. Some of the features you can get with the GIA extension:
 
  - [Mobile Authentication](https://globalinput.co.uk/global-input-app/mobile-authentication)
  - [Mobile Input & Control](https://globalinput.co.uk/global-input-app/mobile-input-control)
@@ -7,7 +7,7 @@ This is a [Global Input App](https://globalinput.co.uk) React Extension (GIA Rea
  - [Mobile Encryption & Signing](https://globalinput.co.uk/global-input-app/mobile-content-encryption)
  - [Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer)
 
-This is a React wrapper around [the GIA JS Extension](https://github.com/global-input/global-input-message) to make it even more straightforward to introduce mobile integrations to React applications.
+Also, this is a React wrapper around [the GIA JS Extension](https://github.com/global-input/global-input-message) to make it easier for the React JS application to have mobile extension.
 
 ## Setup
 
@@ -17,46 +17,63 @@ npm i global-input-react
 
 ## Usage
 
-In order to implement the mobile integration, you just need to pass configurations to the GIA component, specifying the mobile interfaces and callbacks for processing the mobile events. The GIA component is responsible for displaying an Encrypted QR Code, so that users can scan the QR Code and connect to your application to operate on it with mobile devices. The communication between devices is secured with end-to-end encryption.
+The application needs to pass a configuration data to the GIA component, specifying the mobile interfaces and callbacks when the user interacts with the specified mobile interface elements. The GIA component is responsible for displaying an Encrypted QR Code, so that users can scan the QR Code and connect to your application to operate on it with mobile devices. The communication between devices is secured with end-to-end encryption.
 
-Let's say that you would like to display a text field ```Content``` on the user's mobile screen after the user has connected to your application by scanning an encrypted QR code. Following component does exactly that:
+Let's say that you would like to display a text field ```Content``` on the user's mobile screen after the user has connected to your application by scanning an encrypted QR code:
 
 ```JavaScript
 import {GlobalInputConnect} from 'global-input-react';
-import React from 'react';
-let onContentReceived = c=>{
-	console.log(c);
-};
-const mobileConfig={	  
-    initData:{                              
-	    form:{
-	      title:"Content Transfer",   
-	      fields:[{
-	        label:"Content",            
-	         operations:{onInput:c=>onContentReceived(c)}
-	      }]
-	    }
-	 }
-  };
-export default props=>{
-  const [content, setContent]=React.useState("");    
-  onContentReceived=setContent;
-  return (<div>
-    <GlobalInputConnect mobileConfig={mobileConfig}/>   
-    {content}
-  </div>);
+import React, {useState,useRef} from 'react';
+const SingleFieldFormDemo= ()=>{  
+    const [content,setContent]=useState('');
+    
+    const globalInput=useRef(null); //used for sending message back to GIA
+
+    const mobileConfig={
+      initData:{
+          action:"input",
+          dataType:"form",
+          form:{
+            id:"test@globalinput.co.uk",
+            title:"Global Input App Test",
+            label:"Global Input Test",
+            fields:[{
+              label:"Content",
+              id:"content",
+              value:"",
+              nLines:10,
+              operations:{
+                  onInput:setContent
+              }
+          }]
+          }
+    },
+       url: "https://globalinput.co.uk"
+    };
+    
+    return (
+        <GlobalInputConnect mobileConfig={mobileConfig}          
+        ref={globalInput}>
+        <div>When you type on your mobile, the content will appear below</div>
+              <textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                  setContent(evt.target.value);
+                  globalInput.current.sendInputMessage(evt.target.value,0);
+                  }}/>
+        </GlobalInputConnect>
+    );
+}
+
+
 ```
 You may experiment with the sample code on [JSFiddle](https://jsfiddle.net/dilshat/ubakg74e/)
 
 You may find the source code of the [Content Transfer Application](https://globalinput.co.uk/global-input-app/content-transfer) is not much different from the above sample code.
 
-The GIA extension converts the content of the ```initData``` to a JSON and sends it to the mobile app(GIA). The content of the ```form``` describes the form that the GIA should display on the user's mobile screen. Each item in the ```fields```  describes a user interface element in the form. In the above example, there is only one text field element ```Content```, and it specifies the callback function for receiving the content that the user types on the text field.
 
-The ```GlobalInputConnect``` component renders an Encrypted QR Code, so that user scan it to connect to the application securely to operate on the application using a mobile device. When a mobile has connected to the application, the ```GlobalInputConnect``` component renders nothing (QR Code will disappear) on computer/device screen, and the form specified in the ```mobileConfig``` will be displayed on the user's mobile screen, allowing user to use mobile to operate on the application. You can also customise the behaviour of the ```GlobalInputConnect```  component.
 
 ### Sign In Example
 
-Another example is to display a Sign In form on the connected mobile. The form comprises of a  ```Username``` text field, a ```Password``` text field, and a ```Sign In``` button. Following component does exactly that:
+Another example is to display a Sign In form on the connected mobile. The form comprises of a  ```Username``` text field, a ```Password``` text field, and a ```Sign In``` button:
 
 ```JavaScript
 import {GlobalInputConnect} from 'global-input-react';
