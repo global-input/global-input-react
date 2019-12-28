@@ -1,7 +1,7 @@
 import React from "react";
 import { getDisplayedQRCodeProperties } from 'qrcode.react';
 import { createMessageConnector } from "global-input-message";
-import { GlobalInputConnect } from "../index";
+import { GlobalInputConnect } from "../../index";
 
 import { render, fireEvent, waitForElement } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";

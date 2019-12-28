@@ -1,6 +1,6 @@
 
 
-import {createDeviceApp,createGlobalInputApp,createNextInitData} from "./testFunctions";
+import {createDeviceApp,createGlobalInputApp,createNextInitData} from "./utils/utils";
 
 
 /**
