@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React from "react";
 import { getDisplayedQRCodeProperties } from 'qrcode.react';
 import { createMessageConnector } from "global-input-message";

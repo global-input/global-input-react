@@ -26,8 +26,7 @@ let connectionParameters = null;
 const reconnect = () => {
     connect(connectionParameters);
 };
-const connect = ({ mobileConfig, onConnected, updateSenders, onError }) => {
-    connectionParameters = { mobileConfig, onConnected, updateSenders, onError };
+const connect = ({ mobileConfig, onConnected, updateSenders, onError }) => {    
     if (!mobileConfig) {
         onError("mobileConfig is required");
         return;
@@ -40,6 +39,7 @@ const connect = ({ mobileConfig, onConnected, updateSenders, onError }) => {
         onError("form is missing in the initData of the mobileConfig");
         return;
     }
+    connectionParameters = { mobileConfig, onConnected, updateSenders, onError };
     disconnect();
     connector = createMessageConnector();
     const config = { ...mobileConfig };
