@@ -1,19 +1,17 @@
 import React, {useState,useRef} from 'react';
 
+import QRCode from "qrcode.react";
+
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
-import {GlobalInputConnect} from '../../src/index';
+import {useGlobalInputApp,MobileState} from '../../src/index';
 
 
 const SingleFieldFormTest= ()=>{  
-    const [content,setContent]=useState('');
-    
-    const globalInput=useRef(null);
-
-    const mobileConfig={
-      initData:{
+    const [content,setContent]=useState('');    
+      const initData={
           action:"input",
           dataType:"form",
           form:{
@@ -29,23 +27,33 @@ const SingleFieldFormTest= ()=>{
                   onInput:setContent
               }
           }]
-          }
-    },
-       url: "https://globalinput.co.uk"
-    };
+      }
+   };
+   const {mobile, connectionCode,mobileState,errorMessage}=useGlobalInputApp({initData});
+   switch(mobileState){
+        case MobileState.INITIALIZING:return (<div>Initialising....</div>);
+        case MobileState.ERROR:return (<div>{errorMessage}</div>);
+        case MobileState.WAITING_FOR_MOBILE:return(
+            <div>
+                <div>
+                <QRCode value={connectionCode} level={'H'} size={400}/>
+                </div>
+                <div>
+                Scan with Global Input App
+                </div>                                
+            </div>            
+        );
+        case MobileState.MOBILE_CONNECTED:
+            return(<textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                setContent(evt.target.value);
+                            mobile.sendInputMessage(evt.target.value,0);
+                }}/>);
+        case MobileState.MOBILE_DISCONNECTED:
+            return <div>Disconnected</div>
+
+
+   }    
     
-    return (
-        <GlobalInputConnect mobileConfig={mobileConfig}  
-        connectedMessage="Scan with your Global Input App"  
-        ref={globalInput}
-        renderSenderDisconnected={(sender, senders)=>(<div>Disconnected</div>)}>
-        <div>When you type on your mobile, the content will appear below</div>
-              <textarea style={{width:500, height:500}} value={content} onChange={evt => {
-                  setContent(evt.target.value);
-                  globalInput.current.sendInputMessage(evt.target.value,0);
-                  }}/>
-        </GlobalInputConnect>
-    );
 }
 
 

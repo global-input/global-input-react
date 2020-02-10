@@ -3,6 +3,8 @@ import { createMessageConnector, encrypt, decrypt } from "global-input-message";
 import DisplayQRCode from './DisplayQRCode';
 import globalInputController from "./globalInputController";
 
+import useGlobalInputApp, {MobileState} from './useGlobalInputApp';
+
 
 const _GlobalInputConnect =  ({ mobileConfig, connectingMessage, connectedMessage, qrCodeSize, renderSenderConnected, senderConnectedMessage, renderSenderDisconnected, senderDisconnectedMessage, multiSenders, reconnectOnDisconnect,children}, ref) => {        
     const [giaStatus, setGIAStatus] = useState(globalInputController.STATUS.CONNECTING);
@@ -82,4 +84,5 @@ const _GlobalInputConnect =  ({ mobileConfig, connectingMessage, connectedMessag
 const GlobalInputConnect=forwardRef(_GlobalInputConnect);
 
 
-export { encrypt, decrypt, GlobalInputConnect, DisplayQRCode }
+export { encrypt, decrypt, GlobalInputConnect, DisplayQRCode,useGlobalInputApp,MobileState};
+
