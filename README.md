@@ -20,40 +20,38 @@ You need to specify a configuration data that request data from the Global Input
 For example, if you would like your application request a ```Content``` data item:
 
 ```JavaScript
-import {useGlobalInputApp,MobileState} from 'global-input-react';
-import React  from 'react';
-import QRCode from "qrcode.react";
+import {useGlobalInputApp} from 'global-input-react';
+import React, {useState}  from 'react';
 
-export default ({content, setContent})=>{  
+
+export default ()=>{  
+    const [content,setContent]=useState('');
     
     const initData = {
-    action: "input",
-    dataType: "form",
-    form: {
-      title: "Content Transfer",
-      fields: [{
-        label: "Content",
-        id: "content",
-        value: "",
-        nLines: 10,
-        operations: {
-          onInput: setContent
-        }
-      }]
-    },
-    };
-    const { mobile, mobileState, connectionCode, errorMessage } = useGlobalInputApp({initData});
+            action: "input",
+            dataType: "form",
+            form: {
+              title: "Content Transfer",
+              fields: [{
+                label: "Content",
+                id: "content",
+                value: "",
+                nLines: 10,
+                operations: {
+                  onInput: setContent
+                }
+              }]
+            }
+        };
     
-    switch (mobileState) {
-        case MobileState.WAITING_FOR_MOBILE:
-        return (
+    const {connectionMessage}=useGlobalInputApp({initData},[]);
+    
+    return (
           <div>
-            <QRCode value={connectionCode} level='H' size={400} />
-            <P>Scan with Global Input App</P>
+            <div>{connectionMessage}</div>
+            <div>{content}</div>            
           </div>
-        );     
-    default: return null;
-   }
+    );         
 };
 
 
@@ -67,11 +65,32 @@ Another example is to display a Sign In form on the connected mobile. The form c
 
 ```JavaScript
 
-import {useGlobalInputApp,MobileState} from 'global-input-react';
-import React  from 'react';
-import QRCode from "qrcode.react";
+import {useGlobalInputApp} from 'global-input-react';
+import React, {useState}  from 'react';
 
-export default ({setUserName, setPassword, login}){
+
+export default ({login}){  
+  
+  const [data,setData]=useState({username:'',password:''});
+
+  const setUsername = username =>{
+        setData(data=>{
+          return {...data,username};
+        });
+  };
+  const setPassword = password =>{
+        setData(data=>{
+          return {...data,password};
+        });
+  };
+  const onLogin = ()=>{
+      setData(data=>{
+          login(data.username,data.password);          
+      });
+  };
+
+  
+
   let initData={                              
      form:{
        title:"Sign In",
@@ -79,30 +98,39 @@ export default ({setUserName, setPassword, login}){
        fields:[{
          label:"Username",
          id:"username",            
-         operations:{onInput:u=>onUsernameReceived(u)}
+         operations:{onInput:setUsername}
        },{
          label:"Password",
          id:"password",
-         operations:{onInput:p=>onPasswordReceived(p)}
+         operations:{onInput:setPassword}
       },{
         label:"Sign In",
         type:"button",            
-        operations:{onInput:()=>onSignIn()}
+        operations:{onInput:onLogin}
      }]
     }  
  };
- const { mobile, mobileState, connectionCode, errorMessage } = useGlobalInputApp({initData});
- switch (mobileState) {
-        case MobileState.WAITING_FOR_MOBILE:
-        return (
-          <div>
-            <QRCode value={connectionCode} level='H' size={400} />
-            <P>Scan with Global Input App</P>
+ const {connectionMessage}=useGlobalInputApp({initData},[]);    
+    return (
+        <div>
+           {connectionMessage}
+          <div>             
+              <label htmlFor='username'>Username:</label>
+             <input  id='username' type='text'
+             readOnly={true} value={data.username}/>            
           </div>
-        );     
-    default: return null;
-   }
-};
+          <div>             
+              <label htmlFor='password'>Username:</label>
+             <input  id='password' type='password'
+             readOnly={true} value={data.password}/>            
+          </div>
+          <div>                           
+             <button  id='login' onClick={onLogin}></button>
+             
+          </div>
+        </div>
+    );
+  };
 
  
 
