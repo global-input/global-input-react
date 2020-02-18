@@ -27,18 +27,23 @@ const initialState={
     senders:null,    
 }
 
-const doProcessInitData=(state, action)=>{
-    const {mobile}=state;    
-    if(!action.initData){
+const doProcessConnect=(state, action)=>{
+    const {mobile,mobileState}=state;    
+    const {initData,mobileConfig}=action; 
+    if(!initData){
         console.warn("ignored empty InitData");
         return state;
-    }                
+    }                                                        
     if(mobile.isConnected()){
-        const {initData}=action;                    
-        mobile.sendInitData(initData);
-        return {...state,errorMessage:''};                             
-    }                                
-    const {initData,mobileConfig}=action; 
+        if(mobileState===MobileState.MOBILE_CONNECTED){
+            const {initData}=action;                    
+            mobile.sendInitData(initData);
+            return {...state,errorMessage:''};                             
+        }
+        else{
+            mobile.disconnect();
+        }
+    }
     if(!mobileConfig){
         console.warn("ignored empty mobileConfig");
         return state;
@@ -47,6 +52,16 @@ const doProcessInitData=(state, action)=>{
     mobile.connect(mobileConfig);
     return {...state,errorMessage:''};
 };
+const doProcessSetProcessConnectionCode=(state, action)=>{
+    const {mobile}=state;                    
+    if(!mobile){                   
+        return state;
+    } 
+    const mobileState=MobileState.WAITING_FOR_MOBILE               
+    const connectionCode = mobile.buildInputCodeData();           
+    console.log("[[" + connectionCode + "]]");
+    return {...state,mobileState,connectionCode};    
+}
 
 const reducer= (state, action)=>{
     
@@ -69,19 +84,10 @@ const reducer= (state, action)=>{
                 return {...state,mobileState:MobileState.ERROR,errorMessage};                                      
             }    
         case ACTION_TYPES.CONNECT:
-                return doProcessInitData(state, action);
+                return doProcessConnect(state, action);
         
         case  ACTION_TYPES.SET_CONNECTION_CODE:              
-            {
-                const {mobile}=state;                    
-                if(!mobile){                   
-                    return state;
-                } 
-                const mobileState=MobileState.WAITING_FOR_MOBILE               
-                const connectionCode = mobile.buildInputCodeData();           
-                console.log("[[" + connectionCode + "]]");
-                return {...state,mobileState,connectionCode};                
-            }
+                return doProcessSetProcessConnectionCode(state,action);
         case ACTION_TYPES.MOBILE_CONNECTED:
             {
                 const {senders}= action;
