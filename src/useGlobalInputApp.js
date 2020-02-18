@@ -61,39 +61,43 @@ const doProcessSetProcessConnectionCode=(state, action)=>{
     const connectionCode = mobile.buildInputCodeData();           
     console.log("[[" + connectionCode + "]]");
     return {...state,mobileState,connectionCode};    
+};
+const doProcessDisconnect=(state, action)=>{
+    const {mobile}=state;    
+    if(mobile){
+        mobile.disconnect();
+        console.log("disconnected");        
+    }                  
+    return {...initialState,mobileState:MobileState.DISCONNECTED};                      
+};
+const doProcessSetError=(state, action)=>{
+    const {mobile}=state;    
+    const {errorMessage}=action;   
+    if(mobile){
+        mobile.disconnect();
+        console.log("disconnected because of error");        
+    }     
+    return {...state,mobileState:MobileState.ERROR,errorMessage};                                      
+};
+const doProcessMobileConnected=(state, action)=>{
+    const {senders}= action;
+    const mobileState=MobileState.MOBILE_CONNECTED               
+    return {...state,mobileState,connectionCode:null,senders};
 }
 
 const reducer= (state, action)=>{
     
     switch(action.type){   
         case ACTION_TYPES.DISCONNECT:      
-            {                
-                const {mobile}=state;    
-                if(mobile){
-                    mobile.disconnect();
-                 }                  
-                return {...initialState,mobileState:MobileState.DISCONNECTED};                      
-            }
+                return doProcessDisconnect(state, action);
         case  ACTION_TYPES.SET_ERROR:
-            {
-                const {mobile}=state;    
-                const {errorMessage}=action;   
-                if(mobile){
-                    mobile.disconnect();
-                }     
-                return {...state,mobileState:MobileState.ERROR,errorMessage};                                      
-            }    
+                return doProcessSetError(state,action);    
         case ACTION_TYPES.CONNECT:
-                return doProcessConnect(state, action);
-        
+                return doProcessConnect(state, action);        
         case  ACTION_TYPES.SET_CONNECTION_CODE:              
                 return doProcessSetProcessConnectionCode(state,action);
         case ACTION_TYPES.MOBILE_CONNECTED:
-            {
-                const {senders}= action;
-                const mobileState=MobileState.MOBILE_CONNECTED               
-                return {...state,mobileState,connectionCode:null,senders};
-            }              
+                return doProcessMobileConnected(state, action);              
         default: 
               return state;
     };
@@ -182,6 +186,10 @@ export default ({initData, options, renders}, dependencies)=>{
                     </QRCodeContainer>
               );
     },[connectionCode]);
+    useEffect(()=>{
+        return ()=>disconnect();        
+    },[]);
+
     
     const connectionMessage=(()=>{
         switch(state.mobileState){
