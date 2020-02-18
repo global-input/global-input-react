@@ -1,4 +1,4 @@
-import React, {useState,useRef} from 'react';
+import React, {useState,useRef, useEffect} from 'react';
 
 import QRCode from "qrcode.react";
 
@@ -28,7 +28,8 @@ const SimpleTest= ()=>{
           }]
       }
    };
-   const {mobile, connectionMessage}=useGlobalInputApp({initData});
+   const {mobile, connectionMessage, disconnect}=useGlobalInputApp({initData});
+   
             return(
                 <>
                     <div>{connectionMessage}

@@ -147,8 +147,7 @@ export default ({initData, options, renders}, dependencies)=>{
             onError,
             ...options
         };
-        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig});
-        return ()=>disconnect()
+        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig});        
     },dependencies?dependencies:[]);
     
     const connectionCodeQR=useMemo(()=>{             
