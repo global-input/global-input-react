@@ -8,6 +8,42 @@ import { linkTo } from '@storybook/addon-links';
 
 import {useGlobalInputApp,MobileState} from '../../src/index';
 
+const SimpleTest= ()=>{  
+    const [content,setContent]=useState('');    
+      const initData={
+          action:"input",
+          dataType:"form",
+          form:{
+            id:"test@globalinput.co.uk",
+            title:"Global Input App Test",
+            label:"Global Input Test",
+            fields:[{
+              label:"Content",
+              id:"content",
+              value:"",
+              nLines:10,
+              operations:{
+                  onInput:setContent
+              }
+          }]
+      }
+   };
+   const {mobile, connectionMessage}=useGlobalInputApp({initData});
+            return(
+                <>
+                    <div>{connectionMessage}
+                    <textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                        setContent(evt.target.value);
+                            mobile.sendInputMessage(evt.target.value,0);
+                    }}/>
+                    </div>
+                </>
+                );
+        
+    
+};
+
+
 
 const SingleFieldFormTest= ()=>{  
     const [content,setContent]=useState('');    
@@ -63,5 +99,6 @@ const SingleFieldFormTest= ()=>{
 
 storiesOf('GlobalInputConnect', module)
   .addDecorator(story => <div style={{ textAlign: 'center', marginTop:0 }}>{story()}</div>)     
+  .add("Simple Test",()=><SimpleTest/>)
   .add("Single Field Form",()=><SingleFieldFormTest/>)
 

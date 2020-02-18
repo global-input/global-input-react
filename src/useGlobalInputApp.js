@@ -148,8 +148,8 @@ export default ({initData, options, renders}, dependencies)=>{
             ...options
         };
         dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig});
-        
-    },dependencies?dependencies:[initData]);
+        return ()=>disconnect()
+    },dependencies?dependencies:[]);
     
     const connectionCodeQR=useMemo(()=>{             
               if(!connectionCode){               
