@@ -68,3 +68,5 @@ dist
 
 # dotenv environment variables file
 .env
+
+storybook-static/
