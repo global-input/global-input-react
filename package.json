@@ -70,7 +70,6 @@
   "dependencies": {
     "global-input-message": "^1.7.3",
     "qrcode.react": "^0.9.3",    
-    "react": "^16.12.0",
-    "save-dev": "0.0.1-security"
+    "react": "^16.12.0" 
   }
 }
