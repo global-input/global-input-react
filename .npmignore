@@ -14,5 +14,13 @@ lib
 *.tgz
 .webpack.config.babel
 .babel.config.js
-./stories/
-./storybook-static/
+/.vscode
+/stories/
+/storybook-static/
+/__mocks__/
+.eslintrc.js
+babel.config.js
+jest.config.js
+/scripts/
+setupJest.js
+webpack.config.babel.js
