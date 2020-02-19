@@ -1,4 +1,4 @@
-This is a [Global Input App](https://globalinput.co.uk) React JS library, which allows applications that are running on computers, SmartTV, IoT and other smart devices to have mobile integration, so that users can use their mobile to operate on the applications and enjoy many mobile-related features such as 
+This is a [Global Input App](https://globalinput.co.uk) React JS library for applications that are running on computers, SmartTV, IoT and other smart devices to have mobile integration. With the mobile integration, users can use their mobile to operate on the applications and enjoy many mobile-related features such as 
 [Mobile Encryption](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
 [Mobile Authentication](https://globalinput.co.uk/global-input-app/mobile-authentication), 
 [Mobile Input & Control](https://globalinput.co.uk/global-input-app/mobile-input-control), 
@@ -15,94 +15,31 @@ npm i global-input-react
 
 ## Usage
 
-You need to specify a configuration data that request data from the Global Input App.
+You just need to pass the configuration to the ```useGlobalInputApp```, so that the [Global Input App](https://globalinput.co.uk/) knows what user interface element it needs to display to the user. The content of the user input will be passed over to the mobile to the application via a secure communication powered by end-to-end encryption.
 
-For example, if you would like your application request a ```Content``` data item:
-
-```JavaScript
-import {useGlobalInputApp} from 'global-input-react';
-import React, {useState}  from 'react';
-
-
-export default ()=>{  
-    const [content,setContent]=useState('');
-    
-    const initData = {
-            action: "input",
-            dataType: "form",
-            form: {
-              title: "Content Transfer",
-              fields: [{
-                label: "Content",
-                id: "content",
-                value: "",
-                nLines: 10,
-                operations: {
-                  onInput: setContent
-                }
-              }]
-            }
-        };
-    
-    const {connectionMessage}=useGlobalInputApp({initData});
-    
-    return (
-          <div>
-            <div>{connectionMessage}</div>
-            <div>{content}</div>            
-          </div>
-    );         
-};
-
-
-```
-The complete code for [Content Transfer Application](https://globalinput.co.uk/global-input-app/content-transfer) is available on [GutHub](https://github.com/global-input/content-transfer-example)
-Or you mat experiment with on [JSFiddle](https://jsfiddle.net/dilshat/ubakg74e/)
-
-### Sign In Example
-
-Another example is to display a Sign In form on the connected mobile. The form comprises of a  ```Username``` text field, a ```Password``` text field, and a ```Sign In``` button:
+For example, following will display a Sign In form on the connected mobile device:
 
 ```JavaScript
 
 import {useGlobalInputApp} from 'global-input-react';
-import React, {useState}  from 'react';
+import React  from 'react';
 
 
 export default ({login}){  
   
-  const [data,setData]=useState({username:'',password:''});
-
-  const setUsername = username =>{
-        setData(data=>{
-          return {...data,username};
-        });
-  };
-  const setPassword = password =>{
-        setData(data=>{
-          return {...data,password};
-        });
-  };
-  const onLogin = ()=>{
-      setData(data=>{
-          login(data.username,data.password);          
-      });
-  };
-
-  
-
-  let initData={                              
+  const onLogin=()=>{
+    login(username,password);
+  }
+  const initData={                              
      form:{
        title:"Sign In",
        id:"###username###@mycompany.com",  
        fields:[{
          label:"Username",
-         id:"username",            
-         operations:{onInput:setUsername}
+         id:"username"         
        },{
          label:"Password",
-         id:"password",
-         operations:{onInput:setPassword}
+         id:"password"         
       },{
         label:"Sign In",
         type:"button",            
@@ -110,19 +47,21 @@ export default ({login}){
      }]
     }  
  };
- const {connectionMessage}=useGlobalInputApp({initData});    
+ const {connectionMessage, values}=useGlobalInputApp({initData});    
+ const [username,password]=values;
+
     return (
         <div>
            {connectionMessage}
           <div>             
               <label htmlFor='username'>Username:</label>
              <input  id='username' type='text'
-             readOnly={true} value={data.username}/>            
+             readOnly={true} value={username}/>            
           </div>
           <div>             
               <label htmlFor='password'>Username:</label>
              <input  id='password' type='password'
-             readOnly={true} value={data.password}/>            
+             readOnly={true} value={password}/>            
           </div>
           <div>                           
              <button  id='login' onClick={onLogin}></button>
@@ -132,8 +71,7 @@ export default ({login}){
     );
   };
 
- 
 
 ```
-The source code of an application that demonstrates the content transfer feature is available on [GitHub](https://github.com/global-input/content-transfer-example).
+For more information, please visit [Global Input Website](https://globalinput.co.uk/)
 
