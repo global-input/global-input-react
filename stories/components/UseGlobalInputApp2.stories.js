@@ -15,7 +15,8 @@ const LoginTest = ()=>{
         action:"input",
         dataType:"form",
         form:{            
-          title:"Sign In",            
+          title:"Sign In", 
+          id:"testloginform",           
           fields:[{
             label:"Username",
             id:"username",
@@ -59,7 +60,7 @@ const LoginTest = ()=>{
                 value:password,                        
             }]
             }
-          }
+          };
           setInitData(initData);
 
         }
@@ -87,12 +88,49 @@ const LoginTest = ()=>{
 };
 
 
+const ContentTransferTest = ()=>{  
+
+    const initData={
+        action:"input",
+        dataType:"form",
+        form:{            
+          title:"Content Transfer",            
+          fields:[{
+            label:"Content",
+            id:"content",
+            value:"",
+            nLines:10            
+        }]
+        }
+    };  
+    let {connectionMessage,WhenConnected, WhenDisconnected,field,values,setters}=useGlobalInputApp({initData});
+    const [content]=values;
+    const [setContent]=setters;
+
+    return(
+        <div>
+           <div>{connectionMessage}</div>
+                    <WhenConnected>
+                            <textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                                setContent(evt.target.value);                                   
+                            }}/>
+                    </WhenConnected>
+                    <WhenDisconnected>
+                     {content}
+                    </WhenDisconnected>
+    </div>
+    );
+
+
+}
 
 
 
 storiesOf('UseGlobalInputApp2', module)
   .addDecorator(story => <div style={{ textAlign: 'center', marginTop:0 }}>{story()}</div>)     
-  .add("Login",()=><LoginTest/>);
+  .add("Login",()=><LoginTest/>)
+  .add("ContentTransferTest",()=><ContentTransferTest/>);
+  
   
   
 

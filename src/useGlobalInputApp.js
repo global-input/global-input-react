@@ -8,7 +8,9 @@ const ACTION_TYPES = {
     SET_ERROR:3,    
     SET_CONNECTION_CODE:5,
     MOBILE_CONNECTED:6,
-    INPUT_RECEIVED:7
+    INPUT_RECEIVED:7,
+    SET_SETTERS:8,
+    SEND_INPUT_STREAM:9
 };
 
 export const MobileState = {    
@@ -28,7 +30,8 @@ const initialState={
     senders:null,
     fields:[],
     values:[],
-    field:null
+    field:null,
+    setters:[]
 };
 
 
@@ -101,7 +104,28 @@ const doProcessInputReceived=(state, action)=>{
     const newValues=values.map((v,ind)=>ind===index?value:v);
     const field={...fields[index],value};
     return {...state,values:newValues,field};
+};
+const doProcessSetSetters=(state, action)=>{
+    const {setters}=action; 
+    return {...state,setters};   
 }
+const doProcessSendInputStream=(state,action)=>{
+    const {index,value}=action;  
+    const  {values,fields,mobile}=state;    
+    if(!values || values.length<=index || index<0){
+        console.log("index out of range, ignored for sending inputstream:"+index);        
+        return state;
+    }
+    if(!fields || fields.length<=index){
+        console.log("index out of range, ignored for sending inputstream:"+index);        
+        return state;
+    }
+    values[index]=value;    
+    fields[index].value=value;    
+    mobile.sendInputMessage(value,index);
+    return {...state};
+}
+
 
 const reducer= (state, action)=>{
     
@@ -118,6 +142,10 @@ const reducer= (state, action)=>{
                 return doProcessMobileConnected(state, action);              
         case ACTION_TYPES.INPUT_RECEIVED:
                 return doProcessInputReceived(state,action);
+        case ACTION_TYPES.SET_SETTERS:
+                return doProcessSetSetters(state,action);
+        case ACTION_TYPES.SEND_INPUT_STREAM:
+                return doProcessSendInputStream(state,action);
         default: 
               return state;
     };
@@ -138,7 +166,7 @@ const DefaultLabelContainer=({children})=>(
 export default ({initData, options, renders}, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
-    const {connectionCode, mobile,mobileState,errorMessage,values,field}=state;
+    const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;
     
     const disconnect = () => {         
         dispatch({type:ACTION_TYPES.DISCONNECT});            
@@ -183,6 +211,21 @@ export default ({initData, options, renders}, dependencies)=>{
     useEffect(()=>{
         return ()=>disconnect();        
     },[]);
+    
+    useEffect(()=>{
+        const setters=[];
+        if(fields && fields.length){
+            fields.forEach((f,index)=>{
+                const s= (value)=>{
+                    if(mobile){
+                        dispatch({type:ACTION_TYPES.SEND_INPUT_STREAM,value,index});
+                    }
+                };
+                setters.push(s);                
+            });            
+        };        
+        dispatch({type:ACTION_TYPES.SET_SETTERS,setters});        
+    },[mobile,fields]);
 
     
     const connectionMessage=useMemo(()=>{                                        
@@ -275,6 +318,7 @@ export default ({initData, options, renders}, dependencies)=>{
             connectionMessage,
             values,
             field,
+            setters,
             WhenWaiting, 
             WhenConnected,
             WhenDisconnected
