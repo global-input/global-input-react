@@ -44,7 +44,7 @@ export default ()=>{
             }
         };
     
-    const {connectionMessage}=useGlobalInputApp({initData},[]);
+    const {connectionMessage}=useGlobalInputApp({initData});
     
     return (
           <div>
@@ -110,7 +110,7 @@ export default ({login}){
      }]
     }  
  };
- const {connectionMessage}=useGlobalInputApp({initData},[]);    
+ const {connectionMessage}=useGlobalInputApp({initData});    
     return (
         <div>
            {connectionMessage}
@@ -135,12 +135,5 @@ export default ({login}){
  
 
 ```
+The source code of an application that demonstrates the content transfer feature is available on [GitHub](https://github.com/global-input/content-transfer-example).
 
-
-## More Examples
-* [Content Transfer Example](https://globalinput.co.uk/global-input-app/content-transfer)
-* [Second Screen Application](https://globalinput.co.uk/global-input-app/video-player)
-* [Game Control Application](https://globalinput.co.uk/global-input-app/game-example)
-* [Mobile Form Automation](https://globalinput.co.uk/global-input-app/send-message)
-* [Mobile Form Transfer](https://globalinput.co.uk/global-input-app/form-data-transfer)
-* [Mobile Content Encryption](https://globalinput.co.uk/global-input-app/qr-printing)

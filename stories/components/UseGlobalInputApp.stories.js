@@ -6,9 +6,9 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 
-import {useGlobalInputApp,MobileState} from '../../src/index';
+import {useGlobalInputApp} from '../../src/index';
 
-const SimpleTest= ()=>{  
+const SimpleTest= ()=>{
     const [content,setContent]=useState('');    
       const initData={
           action:"input",
@@ -27,16 +27,24 @@ const SimpleTest= ()=>{
           }]
       }
    };
-   const {mobile, connectionMessage, disconnect}=useGlobalInputApp({initData});
+   const {mobile, connectionMessage, WhenConnected, WhenDisconnected}=useGlobalInputApp({initData});
    
             return(
                 <>
-                    <div>{connectionMessage}
-                    <textarea style={{width:500, height:500}} value={content} onChange={evt => {
-                        setContent(evt.target.value);
-                            mobile.sendInputMessage(evt.target.value,0);
-                    }}/>
-                    </div>
+                    <div>Multiple Steps Test</div>                      
+                    <div>{connectionMessage}</div>
+                    <WhenConnected>
+                            <textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                                setContent(evt.target.value);
+                                    mobile.sendInputMessage(evt.target.value,0);
+                            }}/>
+                    </WhenConnected>
+                    <WhenDisconnected>
+                     {content}
+                    </WhenDisconnected>
+
+                    
+                    
                 </>
                 );
         
@@ -145,13 +153,21 @@ const TwoUITest = ()=>{
        setInitData(userNameInitData);
    },[]);
 
-   const {mobile, connectionMessage, disconnect}=useGlobalInputApp({initData},[initData]);
+   const {connectionMessage,WhenConnected, WhenDisconnected}=useGlobalInputApp({initData},[initData]);
    
             return(
                 <>
+                    <div>Multiple Steps</div>
                     <div>{connectionMessage}
-                    <div>Username:{data.username}</div>
-                    <div>Password:{data.password}</div>
+                    <WhenConnected>
+                        <div>Username:{data.username}</div>
+                        <div>Password:{data.password}</div>
+                    </WhenConnected>
+                    <WhenDisconnected>
+                        Reload the page to try again
+                    </WhenDisconnected>
+
+                    
                     </div>
                 </>
                 );

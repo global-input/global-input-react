@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useRef, useMemo} from "react";
+import React, { useReducer, useEffect, useMemo,useCallback} from "react";
 import { createMessageConnector } from 'global-input-message';
 import QRCode from "qrcode.react";
 
@@ -118,16 +118,12 @@ const DefaultLabelContainer=({children})=>(
 export default ({initData, options, renders}, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
-    const {mobileState,
-        connectionCode,
-        errorMessage,    
-        mobile,
-        senders}=state;
-
+    const {connectionCode, mobile,mobileState,errorMessage}=state;
+    
     const disconnect = () => {         
         dispatch({type:ACTION_TYPES.DISCONNECT});            
     };
-    const setMobileData=initData=>dispatch({type:ACTION_TYPES.SET_INIT_DATA, initData});    
+    const setInitData=initData=>dispatch({type:ACTION_TYPES.SET_INIT_DATA, initData});    
     const waitForMobileToConnect = ()=> dispatch({type:ACTION_TYPES.SET_CONNECTION_CODE});                    
     const onSenderConnected = (sender, senders) => {
         dispatch({type:ACTION_TYPES.MOBILE_CONNECTED, senders});
@@ -159,57 +155,103 @@ export default ({initData, options, renders}, dependencies)=>{
         };
         dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig});        
     },dependencies?dependencies:[]);
-    
-    const connectionCodeQR=useMemo(()=>{             
-              if(!connectionCode){               
-                  return null;                  
-              }              
-              let  qrCodeSize = window.innerWidth-10;
-              if(qrCodeSize>400){
-                qrCodeSize=400;
-              }
-              let QRCodeContainer=DefaultQRCodeContainer;
-              if(renders && renders.QRCodeContainer){
-                QRCodeContainer=renders.QRCodeContainer;                
-              }
-              let LabelContainer=DefaultLabelContainer;
-              if(renders && renders.LabelContainer){
-                LabelContainer=renders.LabelContainer;                
-              }
-              return (
-                    <QRCodeContainer>                    
-                        <QRCode value={connectionCode} level='H' size={qrCodeSize} />                    
-                        <LabelContainer>
-                            Scan with 
-                            <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a>
-                        </LabelContainer>
-                    </QRCodeContainer>
-              );
-    },[connectionCode]);
+
     useEffect(()=>{
         return ()=>disconnect();        
     },[]);
 
     
-    const connectionMessage=(()=>{
-        switch(state.mobileState){
-                case MobileState.ERROR:return errorMessage;
-                case MobileState.INITIALIZING: return "Initializing...";
-                case MobileState.DISCONNECTED:return "Disconnected";
-                case MobileState.WAITING_FOR_MOBILE:return connectionCodeQR;
-                default:return null;
+    const connectionMessage=useMemo(()=>{                                        
+        let  qrCodeSize = window.innerWidth-10;
+        if(qrCodeSize>400){
+                qrCodeSize=400;
         }
-    })();     
+        let QRCodeContainer=DefaultQRCodeContainer;
+        if(renders && renders.QRCodeContainer){
+            QRCodeContainer=renders.QRCodeContainer;                
+        }
+        let LabelContainer=DefaultLabelContainer;
+        if(renders && renders.LabelContainer){
+                LabelContainer=renders.LabelContainer;                
+        }
+        if(mobileState===MobileState.INITIALIZING){
+            return (
+                <QRCodeContainer>                    
+                    Initializing...
+                </QRCodeContainer>
+            );
+        } 
+        if(mobileState===MobileState.WAITING_FOR_MOBILE){
+            if(!connectionCode){
+                return(
+                <QRCodeContainer>                    
+                    Empty connection code
+                </QRCodeContainer>
+                );
+            }
+            return (
+                <QRCodeContainer>                    
+                    <QRCode value={connectionCode} level='H' size={qrCodeSize} />                    
+                    <LabelContainer>
+                        Scan with 
+                        <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a>
+                    </LabelContainer>
+                </QRCodeContainer>
+            );
+
+        }
+        return null;        
+    },[connectionCode,mobileState]);
+
+   const WhenWaiting = useCallback(({children})=>{
+       if(mobileState!==MobileState.WAITING_FOR_MOBILE){
+           return null;
+       }
+       return (<React.Fragment>
+           {children}
+       </React.Fragment>);
+   },[mobileState===MobileState.WAITING_FOR_MOBILE]);
+   
+   const WhenConnected = useCallback(({children})=>{
+       if(mobileState!==MobileState.MOBILE_CONNECTED){
+           return null;
+       }
+    return (<React.Fragment>
+        {children}
+    </React.Fragment>);
+   },[mobileState===MobileState.MOBILE_CONNECTED]);
+
+   const WhenDisconnected = useCallback(({children})=>{
+        if(mobileState!==MobileState.DISCONNECTED){
+            return null;
+        }
+        return (<React.Fragment>
+            {children}
+        </React.Fragment>);
+   },[mobileState===MobileState.DISCONNECTED]);    
+
+   const WhenError=useCallback(({children})=>{
+    if(mobileState!==MobileState.ERROR){
+        return null;
+    }
+    return (<React.Fragment>
+        {children}
+    </React.Fragment>);
+},[mobileState===MobileState.ERROR]);    
+
+   
     
     return {
             mobileState,
             connectionCode,
-            mobile,
-            connectionCodeQR,
+            errorMessage,            
+            mobile,            
+            disconnect,            
+            setInitData, 
             connectionMessage,
-            disconnect,
-            initData,
-            setMobileData           
+            WhenWaiting, 
+            WhenConnected,
+            WhenDisconnected            
     };
 };
 
