@@ -1,11 +1,12 @@
-This is a [Global Input App](https://globalinput.co.uk) React JS library for applications that are running on computers, SmartTV, IoT and other smart devices to have mobile integration. With the mobile integration, users can use their mobile to operate on the applications and enjoy many mobile-related features such as 
+This is a [Global Input App](https://globalinput.co.uk) React JS library for applications that are running on computers, SmartTV, IoT and other smart devices to have mobile integration. With the mobile integration, users will be able to use their mobiles to operate on the applications to enjoy many mobile-related features such as 
 [Mobile Encryption](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
 [Mobile Authentication](https://globalinput.co.uk/global-input-app/mobile-authentication), 
 [Mobile Input & Control](https://globalinput.co.uk/global-input-app/mobile-input-control), 
 [Second Screen Experience](https://globalinput.co.uk/global-input-app/second-screen-experience), 
  [Mobile Personal Storage](https://globalinput.co.uk/global-input-app/mobile-personal-storage), 
  [Mobile Encryption & Signing](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
-[Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer) etc. Since this is a React JS wrapper build on top of [the JavaScript library](https://github.com/global-input/global-input-message), you may opt to use the JavaScript library directly if you want.
+[Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer) etc. 
+
 
 ## Setup
 
@@ -15,9 +16,9 @@ npm i global-input-react
 
 ## Usage
 
-You just need to pass the configuration to the ```useGlobalInputApp```, so that the [Global Input App](https://globalinput.co.uk/) knows what user interface element it needs to display to the user. The content of the user input will be passed over to the mobile to the application via a secure communication powered by end-to-end encryption.
+You just need to pass a configuration to the ```useGlobalInputApp``` function, specifying the user interface elements that the [Global Input App](https://globalinput.co.uk/) should display to the user. The mobile application transfers the result of the user interactions with those elements via a secure communication powered by end-to-end encryption.
 
-For example, following will display a Sign In form on the connected mobile device:
+For example, following will display a Sign In form on the connected mobile device, and the application will receive the events as the user interacts with it:
 
 ```JavaScript
 
@@ -36,9 +37,11 @@ export default ({login}){
        id:"###username###@mycompany.com",  
        fields:[{
          label:"Username",
-         id:"username"         
+         id:"username",
+         type:"text"        
        },{
          label:"Password",
+         type:"text",        
          id:"password"         
       },{
         label:"Sign In",
@@ -70,8 +73,8 @@ export default ({login}){
         </div>
     );
   };
-
-
 ```
-For more information, please visit [Global Input Website](https://globalinput.co.uk/)
+When the above application runs, it displays an encrypted QR code in the place of ```connectionMessage``` that a user would use the [Global Input App](https://globalinput.co.uk/) to scan to establish a  communication that is secured with end-to-end encryption. The ```values``` variable that is returned by ```useGlobalInputApp``` will contains the up-to-date values of the form elements. The ```id``` of the form is used by the mobile app to locate an existing data in its encrypted storage.
+
+If a field in a form has the type attribute with "encrypt", its content will be encrypted and sent to the application. In the same way, if the type "decrypt", the content will be decrypted. You may employ this to secure the data stored on the cloud. For more information, please visit [Global Input Website](https://globalinput.co.uk/)
 
