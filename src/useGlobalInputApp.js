@@ -7,7 +7,8 @@ const ACTION_TYPES = {
     CONNECT:2,
     SET_ERROR:3,    
     SET_CONNECTION_CODE:5,
-    MOBILE_CONNECTED:6
+    MOBILE_CONNECTED:6,
+    INPUT_RECEIVED:7
 };
 
 export const MobileState = {    
@@ -24,21 +25,25 @@ const initialState={
     connectionCode:null,
     errorMessage:null,    
     mobile:createMessageConnector(),
-    senders:null,    
-}
+    senders:null,
+    fields:[],
+    values:[],
+    field:null
+};
+
+
 
 const doProcessConnect=(state, action)=>{
     const {mobile,mobileState}=state;    
-    const {initData,mobileConfig}=action; 
+    const {initData,mobileConfig,fields,values}=action; 
     if(!initData){
         console.warn("ignored empty InitData");
         return state;
     }                                                        
     if(mobile.isConnected()){
-        if(mobileState===MobileState.MOBILE_CONNECTED){
-            const {initData}=action;                    
+        if(mobileState===MobileState.MOBILE_CONNECTED){            
             mobile.sendInitData(initData);
-            return {...state,errorMessage:''};                             
+            return {...state,errorMessage:'',fields,values};
         }
         else{
             mobile.disconnect();
@@ -50,7 +55,7 @@ const doProcessConnect=(state, action)=>{
     }                                                                       
     mobileConfig.initData=initData;                        
     mobile.connect(mobileConfig);
-    return {...state,errorMessage:''};
+    return {...state,errorMessage:'',fields,values};
 };
 const doProcessSetProcessConnectionCode=(state, action)=>{
     const {mobile}=state;                    
@@ -83,6 +88,19 @@ const doProcessMobileConnected=(state, action)=>{
     const {senders}= action;
     const mobileState=MobileState.MOBILE_CONNECTED               
     return {...state,mobileState,connectionCode:null,senders};
+};
+
+const doProcessInputReceived=(state, action)=>{
+    const {index,value}=action;    
+    const  {values,fields}=state;
+    
+    if(!values || values.length<=index || index<0){
+        console.log("index out of range, ignored:"+index);        
+        return state;
+    }
+    const newValues=values.map((v,ind)=>ind===index?value:v);
+    const field={...fields[index],value};
+    return {...state,values:newValues,field};
 }
 
 const reducer= (state, action)=>{
@@ -98,6 +116,8 @@ const reducer= (state, action)=>{
                 return doProcessSetProcessConnectionCode(state,action);
         case ACTION_TYPES.MOBILE_CONNECTED:
                 return doProcessMobileConnected(state, action);              
+        case ACTION_TYPES.INPUT_RECEIVED:
+                return doProcessInputReceived(state,action);
         default: 
               return state;
     };
@@ -118,12 +138,15 @@ const DefaultLabelContainer=({children})=>(
 export default ({initData, options, renders}, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
-    const {connectionCode, mobile,mobileState,errorMessage}=state;
+    const {connectionCode, mobile,mobileState,errorMessage,values,field}=state;
     
     const disconnect = () => {         
         dispatch({type:ACTION_TYPES.DISCONNECT});            
     };
-    const setInitData=initData=>dispatch({type:ACTION_TYPES.SET_INIT_DATA, initData});    
+    const setInitData=initData=>{
+        const {fields,values}=buildFieldsAndValuesFromInitData({dispatch,initData});        
+        dispatch({type:ACTION_TYPES.CONNECT, initData,fields,values});    
+    }
     const waitForMobileToConnect = ()=> dispatch({type:ACTION_TYPES.SET_CONNECTION_CODE});                    
     const onSenderConnected = (sender, senders) => {
         dispatch({type:ACTION_TYPES.MOBILE_CONNECTED, senders});
@@ -153,7 +176,8 @@ export default ({initData, options, renders}, dependencies)=>{
             onError,
             ...options
         };
-        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig});        
+        const {fields,values}=buildFieldsAndValuesFromInitData({dispatch,initData});        
+        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values});        
     },dependencies?dependencies:[]);
 
     useEffect(()=>{
@@ -238,7 +262,7 @@ export default ({initData, options, renders}, dependencies)=>{
         {children}
     </React.Fragment>);
 },[mobileState===MobileState.ERROR]);    
-
+    
    
     
     return {
@@ -249,12 +273,41 @@ export default ({initData, options, renders}, dependencies)=>{
             disconnect,            
             setInitData, 
             connectionMessage,
+            values,
+            field,
             WhenWaiting, 
             WhenConnected,
-            WhenDisconnected            
+            WhenDisconnected
+            
     };
 };
 
+
+const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
+        let fields=[];
+        let values=[];        
+        if(!initData || !initData.form || !initData.form.fields || !initData.form.fields.length){
+            return {fields,values};            
+        };        
+        initData.form.fields.forEach((f,index)=>{
+            const field={...f,operations:null};            
+            fields.push(field);
+            values.push(f.value);
+            if(f.operations && f.operations.onInput){                                     
+                return;
+            }
+            if(f.type==='info'){                
+                return;
+            }
+            if(!frames.operations){
+                f.operations={};                
+            }
+            f.operations.onInput=value=>{                
+                dispatch({type:ACTION_TYPES.INPUT_RECEIVED,value,index});
+            }            
+        });
+        return {fields,values};
+}
 
 
 const styles={
