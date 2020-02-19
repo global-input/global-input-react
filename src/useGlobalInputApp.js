@@ -271,13 +271,13 @@ export default ({initData, options, renders}, dependencies)=>{
     },[connectionCode,mobileState]);
 
    const WhenWaiting = useCallback(({children})=>{
-       if(mobileState!==MobileState.WAITING_FOR_MOBILE){
+       if(mobileState!==MobileState.WAITING_FOR_MOBILE && mobileState === MobileState.INITIALIZING){
            return null;
        }
        return (<React.Fragment>
            {children}
        </React.Fragment>);
-   },[mobileState===MobileState.WAITING_FOR_MOBILE]);
+   },[mobileState===MobileState.WAITING_FOR_MOBILE || mobileState === MobileState.INITIALIZING]);
    
    const WhenConnected = useCallback(({children})=>{
        if(mobileState!==MobileState.MOBILE_CONNECTED){
