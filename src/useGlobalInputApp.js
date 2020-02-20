@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useMemo,useCallback} from "react";
 import { createMessageConnector } from 'global-input-message';
 import QRCode from "qrcode.react";
-
+import loading from './loading.gif'; 
 const ACTION_TYPES = {    
     DISCONNECT:1,
     CONNECT:2,
@@ -243,8 +243,8 @@ export default ({initData, options, renders}, dependencies)=>{
         }
         if(mobileState===MobileState.INITIALIZING){
             return (
-                <QRCodeContainer>                    
-                    Initializing...
+                <QRCodeContainer>  
+                    <img src={loading}/>                    
                 </QRCodeContainer>
             );
         } 

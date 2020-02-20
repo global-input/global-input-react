@@ -16,17 +16,17 @@ const LoginTest = ()=>{
         dataType:"form",
         form:{            
           title:"Sign In", 
-          id:"testloginform",           
+          id:"###username###@global-input-app-story-test",           
           fields:[{
             label:"Username",
             id:"username",
-            value:"",
+            value:"test",
             nLines:1,
             
         },{
             label:"Password",
             id:"password",
-            value:"",
+            value:"test",
             nLines:1,            
         },{
           label:"Login",
@@ -37,8 +37,9 @@ const LoginTest = ()=>{
  };  
  
  
-   let {connectionMessage,WhenConnected, WhenDisconnected,field,values,setInitData}=useGlobalInputApp({initData});
-   const [username,password]=values;
+   const {connectionMessage,WhenConnected, WhenDisconnected,field,values,setInitData}=useGlobalInputApp({initData});
+   const [username, password]=values;
+   
    
     useEffect(()=>{
         if(field && field.id=='login'){
@@ -49,22 +50,13 @@ const LoginTest = ()=>{
               title:"Sign In Complete",            
               fields:[{
                 type:"info",            
-                value:"You have entered",                        
-            },{
-                label:"Username",
-                type:"info",                        
-                value:username,                        
-            },{
-                label:"Password",
-                type:"info",                        
-                value:password,                        
+                value:"Test Completed",                        
             }]
             }
           };
           setInitData(initData);
-
         }
-    },[field])
+    },[field]);
    
 
             return(

@@ -28,9 +28,6 @@ import React  from 'react';
 
 export default ({login}){  
   
-  const onLogin=()=>{
-    login(username,password);
-  }
   const initData={                              
      form:{
        title:"Sign In",
@@ -46,35 +43,39 @@ export default ({login}){
       },{
         label:"Sign In",
         type:"button",            
-        operations:{onInput:onLogin}
+        operations: {
+          onInput:() => login(username, password)
+        }
      }]
     }  
  };
- const {connectionMessage, values}=useGlobalInputApp({initData});    
- const [username,password]=values;
+ const globalInputApp=useGlobalInputApp({initData});    
+    const {connectionMessage,WhenConnected, values}=globalInputApp;
+    const [username,password]=values;
 
     return (
-        <div>
+        <>
            {connectionMessage}
-          <div>             
-              <label htmlFor='username'>Username:</label>
-             <input  id='username' type='text'
-             readOnly={true} value={username}/>            
-          </div>
-          <div>             
-              <label htmlFor='password'>Username:</label>
-             <input  id='password' type='password'
-             readOnly={true} value={password}/>            
-          </div>
-          <div>                           
-             <button  id='login' onClick={onLogin}></button>
-             
-          </div>
-        </div>
+          <WhenConnected>
+            Now operate on your mobile to login
+          </WhenConnected>             
+        </>
     );
   };
 ```
-When the above application runs, it displays an encrypted QR code in the place of ```connectionMessage``` that a user would use the [Global Input App](https://globalinput.co.uk/) to scan to establish a  communication that is secured with end-to-end encryption. The ```values``` variable that is returned by ```useGlobalInputApp``` will contains the up-to-date values of the form elements. The ```id``` of the form is used by the mobile app to locate an existing data in its encrypted storage.
+When the above application runs, it displays an encrypted QR code in the place of ```connectionMessage``` that a user would use the [Global Input App](https://globalinput.co.uk/) to scan to establish a  communication secured with end-to-end encryption. The ```values``` variable that is returned by ```useGlobalInputApp``` will contains the received values matching the form fields specified. The ```id``` of the form is used by the mobile app to locate an existing data in its encrypted storage for autofill operation.
 
-If a field in a form has the type attribute with "encrypt", its content will be encrypted and sent to the application. In the same way, if the type "decrypt", the content will be decrypted. You may employ this to secure the data stored on the cloud. For more information, please visit [Global Input Website](https://globalinput.co.uk/)
+If a field in a form has the type attribute with "encrypt", its content will be encrypted and sent to the application. In the same way, if the type "decrypt", the content will be decrypted. You may employ this to secure the data stored on the cloud. For more information, please visit [Global Input Website](https://globalinput.co.uk/).
 
+The some of the useful attribute values  in the object that is returned by ```useGlobalInputApp``` are listed in the table below:
+
+| Attributes | Description |
+| ------ | ------ |
+| connectionMessage | The connection information that the Global Input App scans to establish a secure connection to the application |
+| values | An array of values that corresponds to the fields in the forms |
+|setters | An array of functions, each corresponds to a field in the form, and you can use it set the value of the matching field |
+| WhenWaiting | A container React component that you can use it to wrap content that you would like to display only when the application waiting for the user to connect |
+| WhenConnected |  A container React component that you can use it to wrap content that you would like to display only when a user has connected to the application  |
+| WhenDisconnected | A container React component that you can use it to wrap content that you would like to display only when a user has connected and then disconnected |
+| WhenError | A container React component that you can use it to wrap content that you would like to display only when the library throws error, you can use {errorMessage} to find out what has happenned, for example ```<WhenError>{errorMessage}</WhenError>``` |
+| errorMessage | this variable wil be populated when an error occurs within the library |
