@@ -305,9 +305,6 @@ export default ({initData, options, renders}, dependencies)=>{
         {children}
     </React.Fragment>);
 },[mobileState===MobileState.ERROR]);    
-    
-   
-    
     return {
             mobileState,
             connectionCode,
@@ -321,7 +318,8 @@ export default ({initData, options, renders}, dependencies)=>{
             setters,
             WhenWaiting, 
             WhenConnected,
-            WhenDisconnected
+            WhenDisconnected,
+            WhenError
             
     };
 };
