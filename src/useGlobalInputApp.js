@@ -271,7 +271,7 @@ export default ({initData, options, renders}, dependencies)=>{
     },[connectionCode,mobileState]);
 
    const WhenWaiting = useCallback(({children})=>{
-       if(mobileState!==MobileState.WAITING_FOR_MOBILE && mobileState === MobileState.INITIALIZING){
+       if(mobileState!==MobileState.WAITING_FOR_MOBILE && mobileState !== MobileState.INITIALIZING){
            return null;
        }
        return (<React.Fragment>
@@ -343,7 +343,7 @@ const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
             if(f.type==='info'){                
                 return;
             }
-            if(!frames.operations){
+            if(!f.operations){
                 f.operations={};                
             }
             f.operations.onInput=value=>{                
