@@ -74,6 +74,7 @@ The some of the useful attribute values  in the object that is returned by ```us
 | connectionMessage | The connection information that the Global Input App scans to establish a secure connection to the application |
 | values | An array of values that corresponds to the fields in the forms |
 |setters | An array of functions, each corresponds to a field in the form, and you can use it set the value of the matching field |
+|fields |  An array of fields, each element contain an id and a value. This array is an alternative to ```values```, which is composed of only values of the fields|
 | WhenWaiting | A container React component that you can use it to wrap content that you would like to display only when the application waiting for the user to connect |
 | WhenConnected |  A container React component that you can use it to wrap content that you would like to display only when a user has connected to the application  |
 | WhenDisconnected | A container React component that you can use it to wrap content that you would like to display only when a user has connected and then disconnected |
