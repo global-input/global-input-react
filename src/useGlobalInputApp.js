@@ -103,7 +103,8 @@ const doProcessInputReceived=(state, action)=>{
     }
     const newValues=values.map((v,ind)=>ind===index?value:v);
     const field={...fields[index],value};
-    return {...state,values:newValues,field};
+    const newFields=fields.map((f,ind)=>ind===index?field:f);
+    return {...state,values:newValues,field, fields:newFields};
 };
 const doProcessSetSetters=(state, action)=>{
     const {setters}=action; 
@@ -310,7 +311,7 @@ export default ({initData, options, renders}, dependencies)=>{
     return (<React.Fragment>
         {children}
     </React.Fragment>);
-},[mobileState===MobileState.ERROR]);    
+},[mobileState===MobileState.ERROR]);
     return {
             mobileState,
             connectionCode,
@@ -321,6 +322,7 @@ export default ({initData, options, renders}, dependencies)=>{
             connectionMessage,
             values,
             field,
+            fields,
             setters,
             WhenWaiting, 
             WhenConnected,
