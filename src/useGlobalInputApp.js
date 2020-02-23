@@ -37,7 +37,9 @@ const initialState={
 
 
 const doProcessConnect=(state, action)=>{
-    const {mobile,mobileState}=state;    
+    const {mobile}=state;    
+    let {mobileState}=state;
+
     const {initData,mobileConfig,fields,values}=action; 
     if(!initData){
         console.warn("ignored empty InitData");
@@ -49,16 +51,18 @@ const doProcessConnect=(state, action)=>{
             return {...state,errorMessage:'',fields,values};
         }
         else{
+            mobileState=MobileState.DISCONNECTED;
             mobile.disconnect();
         }
     }
     if(!mobileConfig){
         console.warn("ignored empty mobileConfig");
-        return state;
+        return {...state,mobileState};
     }                                                                       
-    mobileConfig.initData=initData;                        
+    mobileConfig.initData=initData;  
+    mobileState=MobileState.INITIALIZING;
     mobile.connect(mobileConfig);
-    return {...state,errorMessage:'',fields,values};
+    return {...state,mobileState,errorMessage:'',fields,values};
 };
 const doProcessSetProcessConnectionCode=(state, action)=>{
     const {mobile}=state;                    
@@ -172,28 +176,23 @@ export default ({initData, options, renders}, dependencies)=>{
     const disconnect = () => {         
         dispatch({type:ACTION_TYPES.DISCONNECT});            
     };
-    const setInitData=initData=>{
-        const {fields,values}=buildFieldsAndValuesFromInitData({dispatch,initData});        
-        dispatch({type:ACTION_TYPES.CONNECT, initData,fields,values});    
-    }
-    const waitForMobileToConnect = ()=> dispatch({type:ACTION_TYPES.SET_CONNECTION_CODE});                    
-    const onSenderConnected = (sender, senders) => {
-        dispatch({type:ACTION_TYPES.MOBILE_CONNECTED, senders});
-    };
-    const onSenderDisconnected = (sender, senders) => {            
-        disconnect();
-    };
-    const onError = errorMessage => {                   
-        dispatch({type:ACTION_TYPES.SET_ERROR,errorMessage});
-    }; 
-    
-    useEffect(()=>{               
+    const setInitData= (initData,options) => {
         if(typeof initData ==='function'){
             initData=initData();            
         }
         if(!initData){
             return;
         }        
+        const waitForMobileToConnect = ()=> dispatch({type:ACTION_TYPES.SET_CONNECTION_CODE});
+        const onSenderConnected = (sender, senders) => {
+            dispatch({type:ACTION_TYPES.MOBILE_CONNECTED, senders});
+        };
+        const onSenderDisconnected = (sender, senders) => {            
+            disconnect();
+        };
+        const onError = errorMessage => {                   
+            dispatch({type:ACTION_TYPES.SET_ERROR,errorMessage});
+        }; 
         const mobileConfig={            
             onRegistered: next => {
                 next();
@@ -206,7 +205,11 @@ export default ({initData, options, renders}, dependencies)=>{
             ...options
         };
         const {fields,values}=buildFieldsAndValuesFromInitData({dispatch,initData});        
-        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values});        
+        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values});
+    }
+    
+    useEffect(()=>{               
+        setInitData(initData, options);        
     },dependencies?dependencies:[]);
 
     useEffect(()=>{
