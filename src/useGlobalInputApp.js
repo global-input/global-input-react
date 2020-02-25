@@ -315,6 +315,20 @@ export default ({initData, options, renders}, dependencies)=>{
         {children}
     </React.Fragment>);
 },[mobileState===MobileState.ERROR]);
+    
+    const setFieldValueById=(fieldId, valueToSet)=>{ 
+        if(mobileState!==MobileState.MOBILE_CONNECTED){
+            return null;
+        }
+        if(fields && fields.length){
+            for(let [index,field] of fields.entries()){                    
+                if(field.id===fieldId){
+                    setters[index](valueToSet);                            
+                    break;
+                }
+            };
+        }                                           
+    };
     return {
             mobileState,
             connectionCode,
@@ -330,7 +344,8 @@ export default ({initData, options, renders}, dependencies)=>{
             WhenWaiting, 
             WhenConnected,
             WhenDisconnected,
-            WhenError
+            WhenError,
+            setFieldValueById
             
     };
 };

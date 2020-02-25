@@ -8,160 +8,64 @@ import { linkTo } from '@storybook/addon-links';
 
 import {useGlobalInputApp} from '../../src/index';
 
-const SimpleTest= ()=>{
-    const [content,setContent]=useState('');    
-      const initData={
-          action:"input",
-          dataType:"form",
-          form:{            
-            title:"Global Input App Test",
-            label:"Global Input Test",
-            fields:[{
-              label:"Content",
-              id:"content",
-              value:"",
-              nLines:10,
-              operations:{
-                  onInput:setContent
-              }
-          }]
-      }
-   };
-   const {mobile, connectionMessage, WhenConnected, WhenDisconnected}=useGlobalInputApp({initData});
-   
-            return(
-                <>
-                    <div>Multiple Steps Test</div>                      
-                    <div>{connectionMessage}</div>
-                    <WhenConnected>
-                            <textarea style={{width:500, height:500}} value={content} onChange={evt => {
-                                setContent(evt.target.value);
-                                    mobile.sendInputMessage(evt.target.value,0);
-                            }}/>
-                    </WhenConnected>
-                    <WhenDisconnected>
-                     {content}
-                    </WhenDisconnected>
 
-                    
-                    
-                </>
-                );
-        
-    
-};
-
-
-
-
-const TwoUITest = ()=>{  
-    const [data,setData]=useState({username:'',password:''});
-    const [initData,setInitData]=useState(null);
-
-    const setUsername=username=>{
-        setData(data=>{
-            return {...data,username};
-        });
-    };
-    const setPassword=password=>{
-        setData(data=>{
-            return{...data,password};
-        });
-    };
-    const toPassword=()=>{
-        setInitData(passwordInitData);
-    };
-    const toLogin=()=>{
-        setData(data=>{
-            setInitData({
-                action:"input",
-                dataType:"form",
-                form:{
-                        title:"Completed",
-                        fields:[{
-                            label:'',
-                            type:"info",
-                            value:"You antered the following information"
-                        },{
-                            label:"Username",
-                            type:"info",
-                            value:data.username
-                        },{
-                            label:"Password",
-                            type:"info",
-                            value:data.password
-                        }
-
-                    ]
-    
-                }   
-            });
-            return data;
-
-        })
-          
-    }
-    const userNameInitData={
+const MobileToDeviceOnly = ()=>{  
+       
+    const initData={
         action:"input",
         dataType:"form",
         form:{            
-          title:"Username",            
+          title:"Sign In", 
+          id:"###username###@global-input-app-story-test",           
           fields:[{
             label:"Username",
             id:"username",
-            value:"",
+            value:"test",
             nLines:1,
-            operations:{
-                onInput:setUsername
-            }
+            
         },{
-          label:"Continue",
+            label:"Password",
+            id:"password",
+            value:"test",
+            nLines:1,            
+        },{
+          label:"Login",
           type:"button",
-          id:"toPassword",                        
-          operations:{
-              onInput:toPassword
-          } 
+          id:"login"           
         }]
     }
  };  
- const passwordInitData={
-    action:"input",
-    dataType:"form",
-    form:{            
-      title:"Password",            
-      fields:[{
-        label:"password",
-        id:"password",
-        value:"",
-        nLines:1,
-        operations:{
-            onInput:setPassword
-        }
-    },{
-      label:"Login",
-      type:"button",
-      id:"toLogin",                        
-      operations:{
-          onInput:toLogin
-      } 
-    }]
-}
-};   
-      
-    
-   useEffect(()=>{
-       setInitData(userNameInitData);
-   },[]);
-
-   const {connectionMessage,WhenConnected, WhenDisconnected}=useGlobalInputApp({initData},[initData]);
+ 
+ 
+   const {connectionMessage,WhenConnected, WhenDisconnected,field,values,setInitData}=useGlobalInputApp({initData});
+   const [username, password]=values;
    
+   
+    useEffect(()=>{
+        if(field && field.id=='login'){
+            const initData={
+                action:"input",
+                dataType:"form",
+            form:{            
+              title:"Sign In Complete",            
+              fields:[{
+                type:"info",            
+                value:"Test Completed",                        
+            }]
+            }
+          };          
+          setInitData(initData);
+        }
+    },[field]);
+   
+
             return(
                 <>
                     <div>Multiple Steps</div>
                     <div>{connectionMessage}
                     <WhenConnected>
-                        <div>Username:{data.username}</div>
-                        <div>Password:{data.password}</div>
+                        <div>Username:{username}</div>
+                        <div>Password:{password}</div>
                     </WhenConnected>
                     <WhenDisconnected>
                         Reload the page to try again
@@ -176,12 +80,145 @@ const TwoUITest = ()=>{
 };
 
 
+const UseSetters = ()=>{  
 
+    const initData={
+        action:"input",
+        dataType:"form",
+        form:{            
+          title:"Content Transfer",            
+          fields:[{
+            label:"Content",
+            id:"content",
+            value:"",
+            nLines:10            
+        }]
+        }
+    };  
+    let {connectionMessage,WhenConnected, WhenDisconnected,field,values,setters}=useGlobalInputApp({initData});
+    const [content]=values;
+    const [setContent]=setters;
+
+    return(
+        <div>
+           <div>{connectionMessage}</div>
+                    <WhenConnected>
+                            <textarea style={{width:500, height:500}} value={content} onChange={evt => {
+                                setContent(evt.target.value);                                   
+                            }}/>
+                    </WhenConnected>
+                    <WhenDisconnected>
+                     {content}
+                    </WhenDisconnected>
+    </div>
+    );
+
+
+}
+
+
+
+
+
+const UseSetFieldValueById = ()=>{  
+    const [username,setUsername]=useState('uu');
+    const [password,setPassword]=useState('pp');
+ 
+    const initData={
+        action:"input",
+        dataType:"form",
+        form:{            
+          title:"Sign In", 
+          id:"###username###@global-input-app-story-test",           
+          fields:[{
+            label:"Username",
+            id:"username",
+            value:username,
+            nLines:1,
+            
+        },{
+            label:"Password",
+            id:"password",
+            value:password,
+            nLines:1,            
+        },{
+          label:"Login",
+          type:"button",
+          id:"login"           
+        }]
+    }
+ };  
+ 
+   
+   const {connectionMessage,WhenConnected, WhenDisconnected,field,setInitData, setFieldValueById}=useGlobalInputApp({initData});
+   
+   
+   
+    useEffect(()=>{
+        if(!field){
+            return;
+        }
+        switch(field.id){
+             case 'login':
+                const initData={
+                    action:"input",
+                    dataType:"form",
+                form:{            
+                  title:"Sign In Complete",            
+                  fields:[{
+                    type:"info",            
+                    value:"Test Completed",                        
+                }]
+                }
+              };          
+              setInitData(initData);
+              break;
+            case 'username':
+                setUsername(field.value);
+                break;
+            case 'password':
+                setPassword(field.value);
+                break;    
+
+        }
+        
+    },[field]);
+   
+
+            return(
+                <>
+                    <div>Multiple Steps</div>
+                    <div>{connectionMessage}
+                    <WhenConnected>
+                        <div>Username:<input value={username} onChange={evt=>{
+                            setUsername(evt.target.value);
+                            setFieldValueById('username',evt.target.value);
+                        }}/> </div>
+                        <div>Password:<input value={password} onChange={evt=>{
+                            setPassword(evt.target.value);
+                            setFieldValueById('password', evt.target.value);
+                        }}/> </div>
+                        <div>Password:{password}</div>
+                    </WhenConnected>
+                    <WhenDisconnected>
+                        Reload the page to try again
+                    </WhenDisconnected>
+
+                    
+                    </div>
+                </>
+                );
+        
+    
+};
 
 
 storiesOf('UseGlobalInputApp', module)
   .addDecorator(story => <div style={{ textAlign: 'center', marginTop:0 }}>{story()}</div>)     
-  .add("Simple Test",()=><SimpleTest/>)
-  .add("Two UIs Test",()=><TwoUITest/>);
+  .add("Mobile To Device Only",()=><MobileToDeviceOnly/>)
+  .add("Use Setters",()=><UseSetters/>)
+  .add('Use setFieldValueById',()=><UseSetFieldValueById/>);
+  
+  
   
 
