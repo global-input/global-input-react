@@ -40,7 +40,7 @@ const doProcessConnect=(state, action)=>{
     const {mobile}=state;    
     let {mobileState}=state;
 
-    const {initData,mobileConfig,fields,values}=action; 
+    const {initData,mobileConfig,fields,values,setters}=action; 
     if(!initData){
         console.warn("ignored empty InitData");
         return state;
@@ -48,7 +48,7 @@ const doProcessConnect=(state, action)=>{
     if(mobile.isConnected()){
         if(mobileState===MobileState.MOBILE_CONNECTED){            
             mobile.sendInitData(initData);
-            return {...state,errorMessage:'',fields,values};
+            return {...state,errorMessage:'',fields,values, setters};
         }
         else{
             mobileState=MobileState.DISCONNECTED;
@@ -62,7 +62,7 @@ const doProcessConnect=(state, action)=>{
     mobileConfig.initData=initData;  
     mobileState=MobileState.INITIALIZING;
     mobile.connect(mobileConfig);
-    return {...state,mobileState,errorMessage:'',fields,values};
+    return {...state,mobileState,errorMessage:'',fields,values, setters};
 };
 const doProcessSetProcessConnectionCode=(state, action)=>{
     const {mobile}=state;                    
@@ -126,8 +126,11 @@ const doProcessSendInputStream=(state,action)=>{
         return state;
     }
     values[index]=value;    
-    fields[index].value=value;    
-    mobile.sendInputMessage(value,index);
+    fields[index].value=value;   
+    if(mobile){
+        mobile.sendInputMessage(value,index);     
+    } 
+    
     return {...state};
 }
 
@@ -204,8 +207,8 @@ export default ({initData, options, renders}, dependencies)=>{
             onError,
             ...options
         };
-        const {fields,values}=buildFieldsAndValuesFromInitData({dispatch,initData});        
-        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values});
+        const {fields,values, setters}=buildFieldsAndValuesFromInitData({dispatch,initData});
+        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values,setters});
     }
     
     useEffect(()=>{               
@@ -216,20 +219,7 @@ export default ({initData, options, renders}, dependencies)=>{
         return ()=>disconnect();        
     },[]);
     
-    useEffect(()=>{
-        const setters=[];
-        if(fields && fields.length){
-            fields.forEach((f,index)=>{
-                const s= (value)=>{
-                    if(mobile){
-                        dispatch({type:ACTION_TYPES.SEND_INPUT_STREAM,value,index});
-                    }
-                };
-                setters.push(s);                
-            });            
-        };        
-        dispatch({type:ACTION_TYPES.SET_SETTERS,setters});        
-    },[mobile,fields]);
+    
 
     
     const connectionMessage=useMemo(()=>{                                        
@@ -353,14 +343,20 @@ export default ({initData, options, renders}, dependencies)=>{
 
 const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
         let fields=[];
-        let values=[];        
+        let values=[];
+        let setters=[];
+
         if(!initData || !initData.form || !initData.form.fields || !initData.form.fields.length){
-            return {fields,values};            
+            return {fields,values, setters};            
         };        
         initData.form.fields.forEach((f,index)=>{
             const field={id:f.id,label:f.label,value:f.value};
             fields.push(field);
             values.push(f.value);
+            const s= (value)=>{                
+                dispatch({type:ACTION_TYPES.SEND_INPUT_STREAM,value,index});                
+            };
+            setters.push(s);
             if(f.operations && f.operations.onInput){                                     
                 return;
             }
@@ -374,7 +370,7 @@ const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
                 dispatch({type:ACTION_TYPES.INPUT_RECEIVED,value,index});
             }            
         });
-        return {fields,values};
+        return {fields,values, setters};
 }
 
 
