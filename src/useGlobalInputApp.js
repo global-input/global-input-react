@@ -358,7 +358,7 @@ const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
             return {fields,values};            
         };        
         initData.form.fields.forEach((f,index)=>{
-            const field={...f,operations:null};            
+            const field={id:f.id,label:f.label,value:f.value};
             fields.push(field);
             values.push(f.value);
             if(f.operations && f.operations.onInput){                                     
