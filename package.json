@@ -38,7 +38,7 @@
     "transform": {
       ".*": "<rootDir>/node_modules/jest-css-modules"
     },
-    "testEnvironment": "node"    
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -60,16 +60,16 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "jest-canvas-mock": "^2.1.2",
     "prettier": "^1.18.2",
+    "react": "^16.12.0",
     "react-dom": "^16.9.0",
     "webpack": "^4.39.3",
-    "webpack-dev-server": "^3.8.0",
-    "react": "^16.12.0"
+    "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
-    "global-input-message": "^1.7.7",
+    "global-input-message": "^1.7.8",
     "qrcode.react": "^0.9.3"
   }
 }
