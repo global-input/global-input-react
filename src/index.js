@@ -1,5 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { createMessageConnector, encrypt, decrypt } from "global-input-message";
+import { generatateRandomString, encrypt, decrypt } from "global-input-message";
+
+export const generateRandomString=generatateRandomString;
 import DisplayQRCode from './DisplayQRCode';
 import globalInputController from "./globalInputController";
 

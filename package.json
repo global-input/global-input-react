@@ -38,7 +38,7 @@
     "transform": {
       ".*": "<rootDir>/node_modules/jest-css-modules"
     },
-    "testEnvironment": "node"
+    "testEnvironment": "node"    
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
