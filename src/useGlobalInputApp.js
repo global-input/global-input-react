@@ -176,7 +176,10 @@ export default ({initData, options, renders}, dependencies)=>{
     const [state, dispatch] = useReducer(reducer, initialState);    
     const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;
     
-    const disconnect = () => {         
+    const disconnect = () => {
+        if(state.mobile){
+            state.mobile.disconnect();
+        }
         dispatch({type:ACTION_TYPES.DISCONNECT});            
     };
     const setInitData= (initData,options) => {
