@@ -37,7 +37,7 @@ const initialState={
 
 
 const doProcessConnect=(state, action)=>{
-    const {mobile}=state;    
+    const {mobile}=state;
     let {mobileState}=state;
 
     const {initData,mobileConfig,fields,values,setters}=action; 
@@ -171,7 +171,7 @@ const DefaultLabelContainer=({children})=>(
     </div>                  
 );
 
-export default ({initData, options, renders}, dependencies)=>{
+export default (configData, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
     const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;
@@ -214,7 +214,14 @@ export default ({initData, options, renders}, dependencies)=>{
         dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values,setters});
     }
     
-    useEffect(()=>{               
+    useEffect(()=>{
+        if(typeof configData ==='function'){
+            configData=configData();            
+        }
+        if(!configData){
+            return;
+        } 
+        const {initData, options} = configData             
         setInitData(initData, options);        
     },dependencies?dependencies:[]);
 
@@ -230,14 +237,8 @@ export default ({initData, options, renders}, dependencies)=>{
         if(qrCodeSize>400){
                 qrCodeSize=400;
         }
-        let QRCodeContainer=DefaultQRCodeContainer;
-        if(renders && renders.QRCodeContainer){
-            QRCodeContainer=renders.QRCodeContainer;                
-        }
-        let LabelContainer=DefaultLabelContainer;
-        if(renders && renders.LabelContainer){
-                LabelContainer=renders.LabelContainer;                
-        }
+        let QRCodeContainer=DefaultQRCodeContainer;            
+        let LabelContainer=DefaultLabelContainer;        
         if(mobileState===MobileState.INITIALIZING){
             return (
                 <QRCodeContainer>  
