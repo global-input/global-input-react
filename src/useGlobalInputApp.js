@@ -355,7 +355,7 @@ const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
         };        
         initData.form.fields.forEach((f,index)=>{
             if(!f){
-                console.error("The form contains a null field:"+index+" in "+form.title);
+                console.error("The form contains a null field:"+index+" in "+initData.form.title);
                 return;
             }
             const field={id:f.id,label:f.label,value:f.value};
