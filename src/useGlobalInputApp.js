@@ -48,7 +48,7 @@ const doProcessConnect=(state, action)=>{
     if(mobile.isConnected()){
         if(mobileState===MobileState.MOBILE_CONNECTED){            
             mobile.sendInitData(initData);
-            return {...state,errorMessage:'',fields,values, setters};
+            return {...state,errorMessage:'',fields,values, field:null,setters};
         }
         else{
             mobileState=MobileState.DISCONNECTED;
@@ -62,7 +62,7 @@ const doProcessConnect=(state, action)=>{
     mobileConfig.initData=initData;  
     mobileState=MobileState.INITIALIZING;
     mobile.connect(mobileConfig);
-    return {...state,mobileState,errorMessage:'',fields,values, setters};
+    return {...state,mobileState,errorMessage:'',fields,values, field:null,setters};
 };
 const doProcessSetProcessConnectionCode=(state, action)=>{
     const {mobile}=state;                    
