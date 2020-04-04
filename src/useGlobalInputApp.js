@@ -118,11 +118,11 @@ const doProcessSendInputStream=(state,action)=>{
     const {index,value}=action;  
     const  {values,fields,mobile}=state;    
     if(!values || values.length<=index || index<0){
-        console.log("index out of range, ignored for sending inputstream:"+index);        
+        console.log("index out of range, ignored for sending input stream:"+index);        
         return state;
     }
     if(!fields || fields.length<=index){
-        console.log("index out of range, ignored for sending inputstream:"+index);        
+        console.log("index out of range, ignored for sending input stream:"+index);        
         return state;
     }
     values[index]=value;    
