@@ -98,17 +98,21 @@ const doProcessMobileConnected=(state, action)=>{
 };
 
 const doProcessInputReceived=(state, action)=>{
-    const {index,value}=action;    
+    const {index,value,field}=action;    
     const  {values,fields}=state;
     
-    if(!values || values.length<=index || index<0){
-        console.log("index out of range, ignored:"+index);        
+    if(!fields || fields.length<=index || index<0){
+        console.warn("index out of range, ignored:"+index);        
         return state;
     }
+    if(field.id && fields[index].id !==field.id){
+        console.warn("field is does not match:"+field.id+":"+fields[index].id);
+        return;
+    }
     const newValues=values.map((v,ind)=>ind===index?value:v);
-    const field={...fields[index],value};
-    const newFields=fields.map((f,ind)=>ind===index?field:f);
-    return {...state,values:newValues,field, fields:newFields};
+    const nf={...fields[index],value};
+    const newFields=fields.map((f,ind)=>ind===index?nf:f);
+    return {...state,values:newValues,field:nf, fields:newFields};
 };
 const doProcessSetSetters=(state, action)=>{
     const {setters}=action; 
@@ -175,44 +179,18 @@ export default (configData, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
     const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;
-    
+
+
     const disconnect = () => {
-        if(state.mobile){
-            state.mobile.disconnect();
+        if(mobile){
+            mobile.disconnect();
         }
         dispatch({type:ACTION_TYPES.DISCONNECT});            
     };
-    const setInitData= (initData,options) => {
-        if(typeof initData ==='function'){
-            initData=initData();            
-        }
-        if(!initData){
-            return;
-        }        
-        const waitForMobileToConnect = ()=> dispatch({type:ACTION_TYPES.SET_CONNECTION_CODE});
-        const onSenderConnected = (sender, senders) => {
-            dispatch({type:ACTION_TYPES.MOBILE_CONNECTED, senders});
-        };
-        const onSenderDisconnected = (sender, senders) => {            
-            disconnect();
-        };
-        const onError = errorMessage => {                   
-            dispatch({type:ACTION_TYPES.SET_ERROR,errorMessage});
-        }; 
-        const mobileConfig={            
-            onRegistered: next => {
-                next();
-                waitForMobileToConnect();
-            },
-            onRegisterFailed:onError,
-            onSenderConnected,
-            onSenderDisconnected,
-            onError,
-            ...options
-        };
-        const {fields,values, setters}=buildFieldsAndValuesFromInitData({dispatch,initData});
-        dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values,setters});
-    }
+
+    const setInitData= (initData,options)=>{
+        processInitData({receivedInitData:initData,options,mobile,dispatch});
+    }        
     
     useEffect(()=>{
         if(typeof configData ==='function'){
@@ -345,40 +323,73 @@ export default (configData, dependencies)=>{
 };
 
 
-const buildFieldsAndValuesFromInitData = ({initData,dispatch}) => {
-        let fields=[];
-        let values=[];
-        let setters=[];
 
-        if(!initData || !initData.form || !initData.form.fields || !initData.form.fields.length){
-            return {fields,values, setters};            
-        };        
-        initData.form.fields.forEach((f,index)=>{
-            if(!f){
-                console.error("The form contains a null field:"+index+" in "+initData.form.title);
-                return;
+const processInitData= ({receivedInitData,options,mobile,dispatch}) => {
+    if(typeof receivedInitData ==='function'){
+        receivedInitData=receivedInitData();            
+    }
+    if(!receivedInitData || !receivedInitData.form || !receivedInitData.form.fields || !receivedInitData.form.fields.length){            
+        console.warn("will not send empty form");
+        return;
+    };
+    const fields=[];
+    const values=[];
+    const setters=[];
+    const formFields=receivedInitData.form.fields.map((f,index)=>{
+        if(!f){
+            console.error("The form contains a null field:"+index+" in "+receivedInitData.form.title);
+            return f;
+        }
+        const field={id:f.id,label:f.label,value:f.value};
+        fields.push(field);
+        values.push(f.value);
+        const s= (value)=>{                
+            dispatch({type:ACTION_TYPES.SEND_INPUT_STREAM,value,index});                
+        };
+        setters.push(s);
+        if(f.type==='info'){                
+            return f;
+        }
+        if(f.operations && f.operations.onInput){                                     
+            return f;
+        }
+        return {
+            ...f,
+            operations:{
+                onInput:value=>{
+                    dispatch({type:ACTION_TYPES.INPUT_RECEIVED,value,index, field:f});
+                }
             }
-            const field={id:f.id,label:f.label,value:f.value};
-            fields.push(field);
-            values.push(f.value);
-            const s= (value)=>{                
-                dispatch({type:ACTION_TYPES.SEND_INPUT_STREAM,value,index});                
-            };
-            setters.push(s);
-            if(f.operations && f.operations.onInput){                                     
-                return;
+        }                                                    
+    });
+
+    const waitForMobileToConnect = ()=> dispatch({type:ACTION_TYPES.SET_CONNECTION_CODE});
+    const onSenderConnected = (sender, senders) => {
+        dispatch({type:ACTION_TYPES.MOBILE_CONNECTED, senders});
+    };
+    const onSenderDisconnected = (sender, senders) => {                    
+            if(mobile){
+               mobile.disconnect();
             }
-            if(f.type==='info'){                
-                return;
-            }
-            if(!f.operations){
-                f.operations={};                
-            }
-            f.operations.onInput=value=>{                
-                dispatch({type:ACTION_TYPES.INPUT_RECEIVED,value,index});
-            }            
-        });
-        return {fields,values, setters};
+            dispatch({type:ACTION_TYPES.DISCONNECT});                    
+    };
+    const onError = errorMessage => {                   
+        dispatch({type:ACTION_TYPES.SET_ERROR,errorMessage});
+    }; 
+    const mobileConfig={            
+        onRegistered: next => {
+            next();
+            waitForMobileToConnect();
+        },
+        onRegisterFailed:onError,
+        onSenderConnected,
+        onSenderDisconnected,
+        onError,
+        ...options
+    };            
+    const form={...receivedInitData.form,fields:formFields};
+    const initData={...receivedInitData,form};
+    dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values,setters});        
 }
 
 
