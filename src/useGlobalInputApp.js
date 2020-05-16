@@ -189,9 +189,9 @@ export default (configData, dependencies)=>{
         dispatch({type:ACTION_TYPES.DISCONNECT});            
     },[mobile]);
 
-    const setInitData= (initData,options)=>{
+    const setInitData= useCallback((initData,options)=>{
         processInitData({receivedInitData:initData,options,mobile,dispatch});
-    }        
+    },[mobile]);
     
     useEffect(()=>{
         if(typeof configData ==='function'){
