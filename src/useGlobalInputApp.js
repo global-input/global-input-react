@@ -175,18 +175,19 @@ const DefaultLabelContainer=({children})=>(
     </div>                  
 );
 
+
 export default (configData, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
     const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;
 
 
-    const disconnect = () => {
+    const disconnect = useCallback(() => {
         if(mobile){
             mobile.disconnect();
         }
         dispatch({type:ACTION_TYPES.DISCONNECT});            
-    };
+    },[mobile]);
 
     const setInitData= (initData,options)=>{
         processInitData({receivedInitData:initData,options,mobile,dispatch});
