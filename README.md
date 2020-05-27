@@ -46,19 +46,15 @@ export default ({login}){
       }]
     }  
  };
- const globalInputApp=useGlobalInputApp({initData});
-    
-    useEffect(()=>{
-      const {field}=globalInputApp;
-      if(!field){
-        return;
-      }
+ const onFieldChanged=({field})=>{
       switch(field.id){
           case 'username': setUsername(field.value); break;
           case 'password': setPassword(field.value); break;
           case 'login': login(username,password);
       }
-    },[globalInputApp.field])
+ };
+ const globalInputApp=useGlobalInputApp({initData,onFieldChanged});
+    
 
     const {connectionMessage,WhenConnected} = globalInputApp;
     return (
