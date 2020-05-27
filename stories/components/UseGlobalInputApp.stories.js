@@ -35,30 +35,27 @@ const MobileToDeviceOnly = ()=>{
         }]
     }
  };  
+ const loginInitData={
+    action:"input",
+    dataType:"form",
+    form:{            
+    title:"Sign In Complete",            
+    fields:[{
+        type:"info",            
+        value:"Test Completed",                        
+    }]
+   }
+};
  
+ const onFieldChanged=({field,setInitData})=>{
+    if(field.id==='login'){
+        setInitData(loginInitData);
+    }
+ }
  
-   const {connectionMessage,WhenConnected, WhenDisconnected,field,values,setInitData}=useGlobalInputApp({initData});
-   const [username, password]=values;
+   const {connectionMessage,WhenConnected, WhenDisconnected,values}=useGlobalInputApp({initData, onFieldChanged});
+   const [username, password]=values;    
    
-   
-    useEffect(()=>{
-        if(field && field.id=='login'){
-            const initData={
-                action:"input",
-                dataType:"form",
-            form:{            
-              title:"Sign In Complete",            
-              fields:[{
-                type:"info",            
-                value:"Test Completed",                        
-            }]
-            }
-          };          
-          setInitData(initData);
-        }
-    },[field]);
-   
-
             return(
                 <>
                     <div>Multiple Steps</div>

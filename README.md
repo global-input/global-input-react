@@ -1,4 +1,4 @@
-This is a [Global Input App](https://globalinput.co.uk) React JS library for applications that are running on computers, SmartTV, IoT and other smart devices to have mobile integration without the need to develop a separate mobile app or a separate integration module if you already have a mobile app. The mobile integration enables users to use their mobiles to operate on applications to enjoy many mobile-related features such as 
+This is a [Global Input App](https://globalinput.co.uk) React JS module for applications running devices like computers, SmartTV, IoT devices to have mobile integration. It allows users to use their mobiles to operate on applications, enjoying mobile-related features like
 [Mobile Encryption](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
 [Mobile Authentication](https://globalinput.co.uk/global-input-app/mobile-authentication), 
 [Mobile Input & Control](https://globalinput.co.uk/global-input-app/mobile-input-control), 

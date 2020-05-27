@@ -40,7 +40,7 @@ const doProcessConnect=(state, action)=>{
     const {mobile}=state;
     let {mobileState}=state;
 
-    const {initData,mobileConfig,fields,values,setters}=action; 
+    const {initData,mobileConfig,fields,values,setters}=action;
     if(!initData){
         console.warn("ignored empty InitData");
         return state;
@@ -128,8 +128,8 @@ const doProcessSendInputStream=(state,action)=>{
     if(!fields || fields.length<=index){
         console.log("index out of range, ignored for sending input stream:"+index);        
         return state;
-    }
-    values[index]=value;    
+    }    
+    values[index]=value;        
     fields[index].value=value;   
     if(mobile){
         mobile.sendInputMessage(value,index);     
@@ -140,7 +140,7 @@ const doProcessSendInputStream=(state,action)=>{
 
 
 const reducer= (state, action)=>{
-    
+
     switch(action.type){   
         case ACTION_TYPES.DISCONNECT:      
                 return doProcessDisconnect(state, action);
@@ -179,9 +179,10 @@ const DefaultLabelContainer=({children})=>(
 export default (configData, dependencies)=>{
             
     const [state, dispatch] = useReducer(reducer, initialState);    
-    const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;
-
-
+    const {connectionCode, mobile,mobileState,errorMessage,values,fields,field,setters}=state;    
+    if(typeof configData ==='function'){
+        configData=configData();            
+    }
     const disconnect = useCallback(() => {
         if(mobile){
             mobile.disconnect();
@@ -194,22 +195,13 @@ export default (configData, dependencies)=>{
     },[mobile]);
     
     useEffect(()=>{
-        if(typeof configData ==='function'){
-            configData=configData();            
-        }
         if(!configData){
             return;
         } 
         const {initData, options} = configData             
         setInitData(initData, options);        
-    },dependencies?dependencies:[]);
-
-    useEffect(()=>{
         return ()=>disconnect();        
-    },[]);
-    
-    
-
+    },dependencies?dependencies:[]);
     
     const connectionMessage=useMemo(()=>{                                        
         let  qrCodeSize = window.innerWidth-10;
@@ -302,6 +294,13 @@ export default (configData, dependencies)=>{
             };
         }                                           
     };
+
+    useEffect(()=>{
+        if(configData && configData.onFieldChanged && field){
+            configData.onFieldChanged({field,values,setFieldValueById,setInitData});            
+        }
+    },[field]);
+    
     return {
             mobileState,
             connectionCode,
@@ -389,7 +388,7 @@ const processInitData= ({receivedInitData,options,mobile,dispatch}) => {
         ...options
     };            
     const form={...receivedInitData.form,fields:formFields};
-    const initData={...receivedInitData,form};
+    const initData={...receivedInitData,form};    
     dispatch({type:ACTION_TYPES.CONNECT,initData,mobileConfig,fields,values,setters});        
 }
 
