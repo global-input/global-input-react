@@ -203,7 +203,7 @@ export default (configData, dependencies)=>{
     },dependencies?dependencies:[]);
     useEffect(()=>{
         return ()=>disconnect();
-    });
+    },[]);
     
     const connectionMessage=useMemo(()=>{                                        
         let  qrCodeSize = window.innerWidth-10;
