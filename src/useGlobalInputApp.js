@@ -200,8 +200,10 @@ export default (configData, dependencies)=>{
         } 
         const {initData, options} = configData             
         setInitData(initData, options);        
-        return ()=>disconnect();        
     },dependencies?dependencies:[]);
+    useEffect(()=>{
+        return ()=>disconnect();
+    });
     
     const connectionMessage=useMemo(()=>{                                        
         let  qrCodeSize = window.innerWidth-10;

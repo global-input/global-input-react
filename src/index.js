@@ -1,12 +1,11 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { generatateRandomString, encrypt, decrypt } from "global-input-message";
-
-export const generateRandomString=generatateRandomString;
 import DisplayQRCode from './DisplayQRCode';
 import globalInputController from "./globalInputController";
 
 import useGlobalInputApp, {MobileState} from './useGlobalInputApp';
 
+export const generateRandomString=generatateRandomString;
 
 const _GlobalInputConnect =  ({ mobileConfig, connectingMessage, connectedMessage, qrCodeSize, renderSenderConnected, senderConnectedMessage, renderSenderDisconnected, senderDisconnectedMessage, multiSenders, reconnectOnDisconnect,children}, ref) => {        
     const [giaStatus, setGIAStatus] = useState(globalInputController.STATUS.CONNECTING);
