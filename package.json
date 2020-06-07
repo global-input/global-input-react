@@ -65,8 +65,7 @@
     "prettier": "^1.19.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "webpack": "^4.39.3",
-    "webpack-dev-server": "^3.10.3"
+    "webpack": "^4.39.3"
   },
   "dependencies": {
     "global-input-message": "^1.7.9",
