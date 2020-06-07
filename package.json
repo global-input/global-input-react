@@ -68,7 +68,7 @@
     "webpack": "^4.39.3"
   },
   "dependencies": {
-    "global-input-message": "^1.7.9",
+    "global-input-message": "^1.7.10",
     "qrcode.react": "^0.9.3"
   }
 }
