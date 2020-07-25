@@ -1,25 +1,85 @@
 
-declare module 'global-input-react' {
-    export function useGlobalInputApp(configData:any, dependencies?:[any]|[]):any;
-    export const generateRandomString: (length?:number) => string;
-    export const encrypt:(content:string, password:string) => string;
-    export const decrypt:(content:string, password:string) => string;
-
-    type QRCodeInput={
+declare module 'global-input-react' {    
+    function useGlobalInputApp(configData?:ConfigData|ConfigDataCreator, dependencies?:ReadonlyArray<any>):GlobalInputData;
+    type ConfigDataCreator=()=>ConfigData;
+    interface ConfigData {
+        initData?:InitData|InitDataCreator;
+        onFieldChanged?:(evt:FieldChanged)=>void;
+        options?:ConnectOptions;
+    }
+    interface ConnectOptions {
+        apikey?:string;
+        securityGroup?:string;
+        client?:string;
+        url?:string;        
+    }
+    interface FieldChanged {
+        field:FormField
+    }
+    type InitDataCreator=()=>InitData;
+    interface InitData {
+        form:{
+            title?:string;
+            label?:string;
+            fields:FormField[];
+            views?:{
+                viewId:{
+                    [id:string]:object;
+                }
+            };
+        }        
+    }
+    interface FormField{
+        id?:string;        
+        type?:string;
         label?:string;
-        code?:string;
-        level?:'L'|'M'|'Q'|'H';        
-        size?:number;
-    };
-    export const DisplayQRCode:(props:QRCodeInput)=>any;
+        value?:GlobalInputValue;        
+        nLines?:number;
+        icon?:string;
+        viewId?:string;
+        iconText?:string|object;
+        operations?:FormOperation;        
+        options?:object[];
+        index?:number;
+    }
+    
+    
 
-    export const MobileState:{    
-        INITIALIZING:1,      
-        DISCONNECTED:2,
-        ERROR:3, 
-        WAITING_FOR_MOBILE:4,
-        MOBILE_CONNECTED:5           
-    };
+    interface FormOperation{
+        onInput:(value:any) => void
+    }
+
+    interface GlobalInputData {
+            mobileState:1|2|3|4|5;
+            connectionCode:string;
+            errorMessage:string;            
+            mobile:object;           
+            disconnect:()=>void;            
+            setInitData:(initData:InitData,options?:ConnectOptions)=>void; 
+            connectionMessage:()=>GlobalInputValue;
+            values:GlobalInputValue[];
+            field:FormField;
+            fields:FormField[];
+            setters:((value:any)=>void)[];
+            WhenWaiting:WhenFunction; 
+            WhenConnected:WhenFunction;
+            WhenDisconnected:WhenFunction;
+            WhenError:WhenFunction;
+            setFieldValueById:(fieldId:string, valueToSet:GlobalInputValue)=>void;
+    }
+
+    type WhenFunction=(props:any)=>any;
+
+    
+
+    
+    function generateRandomString(length?:number):string;
+    function encrypt(content:string, password:string):string;
+    
+    function decrypt(content:string, password:string):string;
+
+    
+    type GlobalInputValue=any; //todo
 
     
 }

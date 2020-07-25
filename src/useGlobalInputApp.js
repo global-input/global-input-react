@@ -285,7 +285,7 @@ export default (configData, dependencies)=>{
     
     const setFieldValueById=(fieldId, valueToSet)=>{ 
         if(mobileState!==MobileState.MOBILE_CONNECTED){
-            return null;
+            return;
         }
         if(fields && fields.length){
             for(let [index,field] of fields.entries()){                    

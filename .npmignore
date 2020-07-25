@@ -24,3 +24,5 @@ jest.config.js
 /scripts/
 setupJest.js
 webpack.config.babel.js
+testUtil.js
+src/__tests__

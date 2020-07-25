@@ -1,17 +1,24 @@
 import React from 'react';
 
-let codeResolve=null;
+export default ({value,level,size})=>{
+    console.log("-----------:mock is called--------");
+    return(
+    <div data-testid="qrcode">
+      <div data-testid="level">{level}</div>
+      <div data-testid="size">{size}</div>
+      <div data-testid="code">{value}</div>      
+    </div>
+      );
+};
 
-const codePromise=new Promise(resolve => {codeResolve = resolve});
-
-const QRCode = ({value,level,size})=>{ 
-    if(value){
-        codeResolve({value,level,size});
-    }    
-    return (<div data-testid="mock-qr-code">{value}</div>);
-}
-const getDisplayedQRCodeProperties=async ()=>codePromise;
-export {getDisplayedQRCodeProperties};
-export default QRCode 
-
+export const getQRCodeValues=async ({findByTestId})=>{
+    const size=(await findByTestId('size')).textContent;
+    const level=(await findByTestId('level')).textContent;
+    const code=(await findByTestId('code')).textContent; //Mocked qrcode.react will display code as text instead of QR Code
+    return {
+        level,
+        code,
+        size
+    }
+};
 
