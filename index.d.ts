@@ -1,7 +1,21 @@
 
-declare module 'global-input-react' {    
-    function useGlobalInputApp(configData?:ConfigData|ConfigDataCreator, dependencies?:ReadonlyArray<any>):GlobalInputData;
+
+declare module 'global-input-react' {  
+    export * from 'global-input-message';
+    import {InitData,FormField,MessageReceiver,FieldValue} from 'global-input-message';
+    
     type ConfigDataCreator=()=>ConfigData;
+    export const MobileState:MobileState;
+    export enum MobileState {
+        INITIALIZING=1,
+        DISCONNECTED,
+        ERROR,
+        WAITING_FOR_MOBILE,
+        MOBILE_CONNECTED
+    }
+
+    export function useGlobalInputApp(configData?:ConfigData|ConfigDataCreator, dependencies?:ReadonlyArray<any>):GlobalInputData;
+    
     interface ConfigData {
         initData?:InitData|InitDataCreator;
         onFieldChanged?:(evt:FieldChanged)=>void;
@@ -17,31 +31,8 @@ declare module 'global-input-react' {
         field:FormField
     }
     type InitDataCreator=()=>InitData;
-    interface InitData {
-        form:{
-            title?:string;
-            label?:string;
-            fields:FormField[];
-            views?:{
-                viewId:{
-                    [id:string]:object;
-                }
-            };
-        }        
-    }
-    interface FormField{
-        id?:string;        
-        type?:string;
-        label?:string;
-        value?:GlobalInputValue;        
-        nLines?:number;
-        icon?:string;
-        viewId?:string;
-        iconText?:string|object;
-        operations?:FormOperation;        
-        options?:object[];
-        index?:number;
-    }
+    
+    
     
     
 
@@ -56,8 +47,8 @@ declare module 'global-input-react' {
             mobile:object;           
             disconnect:()=>void;            
             setInitData:(initData:InitData,options?:ConnectOptions)=>void; 
-            connectionMessage:()=>GlobalInputValue;
-            values:GlobalInputValue[];
+            connectionMessage:React.FC<void>;
+            values:FieldValue[];
             field:FormField;
             fields:FormField[];
             setters:((value:any)=>void)[];
@@ -65,7 +56,7 @@ declare module 'global-input-react' {
             WhenConnected:WhenFunction;
             WhenDisconnected:WhenFunction;
             WhenError:WhenFunction;
-            setFieldValueById:(fieldId:string, valueToSet:GlobalInputValue)=>void;
+            setFieldValueById:(fieldId:string, valueToSet:FieldValue)=>void;
     }
 
     type WhenFunction=(props:any)=>any;
@@ -73,13 +64,10 @@ declare module 'global-input-react' {
     
 
     
-    function generateRandomString(length?:number):string;
-    function encrypt(content:string, password:string):string;
+    export function generateRandomString(length?:number):string;
+    export function encrypt(content:string, password:string):string;
     
-    function decrypt(content:string, password:string):string;
-
-    
-    type GlobalInputValue=any; //todo
+    export function decrypt(content:string, password:string):string;
 
     
 }

@@ -8,7 +8,6 @@
 .eslintrc
 npm-debug.log
 lib
-/src/
 .storybook/
 ./storybook/
 *.tgz
@@ -26,3 +25,4 @@ setupJest.js
 webpack.config.babel.js
 testUtil.js
 src/__tests__
+/package
