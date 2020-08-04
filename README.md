@@ -1,11 +1,11 @@
-This is a [Global Input App](https://globalinput.co.uk) React JS module for applications running devices like computers, SmartTV, IoT devices to have mobile integration. It allows users to use their mobiles to operate on applications, enjoying mobile-related features like
+This React JS library allows React applications to achieve mobile integration without the need to develop a separate mobile app for each application. Each application can implement their own specific mobile business logic through defining mobile interface declaratively and communicating them to the universal mobile app component securely, so users can use their mobile devices to connect and operate on those device applications. The feature that the device applications can provide through the connected mobile apps to enhance user experience include but not limited to
 [Mobile Encryption](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
 [Mobile Authentication](https://globalinput.co.uk/global-input-app/mobile-authentication), 
 [Mobile Input & Control](https://globalinput.co.uk/global-input-app/mobile-input-control), 
 [Second Screen Experience](https://globalinput.co.uk/global-input-app/second-screen-experience), 
  [Mobile Personal Storage](https://globalinput.co.uk/global-input-app/mobile-personal-storage), 
  [Mobile Encryption & Signing](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
-[Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer) etc. 
+[Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer.  
 
 
 ## Setup
@@ -16,20 +16,16 @@ npm i global-input-react
 
 ## Usage
 
-You just need to pass a configuration to the ```useGlobalInputApp``` function, specifying the user interface elements that the mobile app should display to the user. The device application receives the mobile events as the user interacts with the user interface elements and the communication takes place with end-to-end encryption.
+The custom React hook ```useGlobalInputApp``` allows a React component specify a mobile user interface declaratively.
 
-For example, following will display a Sign In form on the connected mobile device, and the application will receive the mobile events:
+The following example application defines a login screen allowing user to use their mobile to carry out login operation using their mobile.
 
 ```JavaScript
 
 import {useGlobalInputApp} from 'global-input-react';
 import React, {useState} from 'react';
 
-export default ({login}){  
-  const [username,setUser] = useState('');
-  const [password,setPassword] = useState('');
-
-  const initData={                              
+const initData={                              
      form:{
        title: 'Sign In',
        id: '###username###@mycompany.com',  
@@ -46,32 +42,33 @@ export default ({login}){
       }]
     }  
  };
- const onFieldChanged=({field})=>{
+export default ({login}){  
+  const [username,setUser] = useState('');
+  const [password,setPassword] = useState('');
+  
+ 
+ const {connectionMessage}=useGlobalInputApp({initData,onFieldChanged:({field})=>{
+      const fds=initData.form.fields;
       switch(field.id){
-          case 'username': setUsername(field.value); break;
-          case 'password': setPassword(field.value); break;
-          case 'login': login(username,password);
+          case fds[0].id: setUsername(field.value); break;
+          case fds[1].id: setPassword(field.value); break;
+          case fds[2].id: login(username,password);
       }
- };
- const globalInputApp=useGlobalInputApp({initData,onFieldChanged});
-    
-
-    const {connectionMessage,WhenConnected} = globalInputApp;
+ }});    
     return (
         <>
-           {connectionMessage}
-          <WhenConnected>
-            Now operate on your mobile to login
-          </WhenConnected>             
+           {connectionMessage}                    
         </>
     );
   };
 ```
-The application displays an encrypted QR code in the place of ```{connectionMessage}``` while it is waiting for a mobile user to connect. Having connected, the mobile app displays the user interface that is defined by ```initData```. As the user interacts with the user interface elements on the mobile app, the application receives the events timely via the  ```field``` variable that is returned as part of object returned by ```useGlobalInputApp```.  The ```id``` attribute of the form is useful for the mobile app to locate an existing data in its encrypted storage to facilitate autofill operations.
+The content of  ```{connectionMessage}```  returned by the custom hook contains an encrypted QR Code that you can scan to connect to the application. Having connected, your mobile displays the user interface specified in the ```initData``` variable, allowing you to operate on the application. The ```onFieldChanged``` parameter is for callback function to receive the form events through the ```field``` variable.  
 
-The type of a field defines the related operation as well as the type of the corresponding user interface element. For example, if the type is "encrypt"/"decrypt", the mobile app initiates the encrypt/decrypt workflow. This is remarkably useful if you would like to secure data without worrying about how to secure the master encryption keys themselves. For more information, please visit [Global Input Website](https://globalinput.co.uk/).
+The ```initData``` specifies a form, in which  ```id``` is used for autofill operation inside the connected mobile app through filtering the existing data in its encrypted storage. The form contain a set of fields, representing data that device application and the connected mobile need to collaborate on composing. The type of each field defines the related data operation. For example, if the type is "encrypt"/"decrypt", the mobile app initiates the encrypt/decrypt workflow inside the mobile app. This is useful when you would like to secure data stored on other devices or cloud.
 
-Some of the useful attribute values returned by  ```useGlobalInputApp``` are listed in the table below:
+
+
+Other values returned by  the ```useGlobalInputApp``` function are listed in the table below:
 
 | Attributes | Description |
 | ------ | ------ |
@@ -86,3 +83,6 @@ Some of the useful attribute values returned by  ```useGlobalInputApp``` are lis
 | WhenError | A container React component that you can use it to wrap content that you would like to display when there is an error, you can use {errorMessage} to find out what has happened, for example ```<WhenError>{errorMessage}</WhenError>``` |
 | errorMessage | This value wil be populated when an error is raised by the library |
 
+## TypeScript support
+
+The type definition file is included within the module.
