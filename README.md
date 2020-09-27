@@ -1,11 +1,11 @@
-This React JS library allows React applications to achieve mobile integration without the need to develop a separate mobile app for each application. Each application can implement their own specific mobile business logic through defining mobile interface declaratively and communicating them to the universal mobile app component securely, so users can use their mobile devices to connect and operate on those device applications. The feature that the device applications can provide through the connected mobile apps to enhance user experience include but not limited to
+This React JS library allows you to introduce interoperability between your mobile app and your React applications. With this library, you will be able to receive mobile events from within your React applications, implementing interoperability logic in your device application instead of separating it across the  two interacting applications. This mechanism offers a range of features that include
 [Mobile Encryption](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
 [Mobile Authentication](https://globalinput.co.uk/global-input-app/mobile-authentication), 
 [Mobile Input & Control](https://globalinput.co.uk/global-input-app/mobile-input-control), 
 [Second Screen Experience](https://globalinput.co.uk/global-input-app/second-screen-experience), 
  [Mobile Personal Storage](https://globalinput.co.uk/global-input-app/mobile-personal-storage), 
  [Mobile Encryption & Signing](https://globalinput.co.uk/global-input-app/mobile-content-encryption), 
-[Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer.  
+[Mobile Content Transfer](https://globalinput.co.uk/global-input-app/mobile-content-transfer).  
 
 
 ## Setup
@@ -45,16 +45,17 @@ const initData={
 export default ({login}){  
   const [username,setUser] = useState('');
   const [password,setPassword] = useState('');
-  
- 
- const {connectionMessage}=useGlobalInputApp({initData,onFieldChanged:({field})=>{
+
+  const onFieldChanged=({field})=>{
       const fds=initData.form.fields;
       switch(field.id){
           case fds[0].id: setUsername(field.value); break;
           case fds[1].id: setPassword(field.value); break;
           case fds[2].id: login(username,password);
       }
- }});    
+  };
+ 
+ const {connectionMessage}=useGlobalInputApp({initData,onFieldChanged});    
     return (
         <>
            {connectionMessage}                    
@@ -62,7 +63,7 @@ export default ({login}){
     );
   };
 ```
-The content of  ```{connectionMessage}```  returned by the custom hook contains an encrypted QR Code that you can scan to connect to the application. Having connected, your mobile displays the user interface specified in the ```initData``` variable, allowing you to operate on the application. The ```onFieldChanged``` parameter is for callback function to receive the form events through the ```field``` variable.  
+The content of  ```{connectionMessage}```  returned by the hook contains an encrypted QR Code that you can scan to connect to the application. Having connected, your mobile displays the user interface specified in the ```initData``` variable, allowing you to operate on the application. The ```onFieldChanged``` parameter is for callback function to receive the form events through the ```field``` variable.  
 
 The ```initData``` specifies a form, in which  ```id``` is used for autofill operation inside the connected mobile app through filtering the existing data in its encrypted storage. The form contain a set of fields, representing data that device application and the connected mobile need to collaborate on composing. The type of each field defines the related data operation. For example, if the type is "encrypt"/"decrypt", the mobile app initiates the encrypt/decrypt workflow inside the mobile app. This is useful when you would like to secure data stored on other devices or cloud.
 
@@ -85,4 +86,4 @@ Other values returned by  the ```useGlobalInputApp``` function are listed in the
 
 ## TypeScript support
 
-The type definition file is included within the module.
+The type definition file is included within the module. You can obtain more information from [this](https://github.com/global-input/test-global-input-app-libs/blob/master/src/test-global-input-react/mobile-and-device-app.test.tsx) end-to-end test example on how to use this library within a TypeScript application. 
