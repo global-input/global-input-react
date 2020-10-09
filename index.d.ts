@@ -15,10 +15,11 @@ declare module 'global-input-react' {
     }
 
     export function useGlobalInputApp(configData?:ConfigData|ConfigDataCreator, dependencies?:ReadonlyArray<any>):GlobalInputData;
-    
+    type OnFieldChangedFunction=(evt:FieldChanged)=>void;
+
     interface ConfigData {
         initData?:InitData|InitDataCreator;
-        onFieldChanged?:(evt:FieldChanged)=>void;
+        onFieldChanged?:OnFieldChangedFunction;
         options?:ConnectOptions;
     }
     interface ConnectOptions {
@@ -28,7 +29,10 @@ declare module 'global-input-react' {
         url?:string;        
     }
     interface FieldChanged {
-        field:FormField
+        field:FormField,
+        values:FieldValue[],
+        setFieldValueById:SetFieldValueByIdFunction,
+        setInitData:SetInitDataFunction
     }
     type InitDataCreator=()=>InitData;
     
@@ -39,14 +43,16 @@ declare module 'global-input-react' {
     interface FormOperation{
         onInput:(value:any) => void
     }
-
+    
+    type SetFieldValueByIdFunction=(fieldId:string, valueToSet:FieldValue)=>void;
+    type SetInitDataFunction=(initData:InitData,options?:ConnectOptions)=>void;
     interface GlobalInputData {
             mobileState:1|2|3|4|5;
             connectionCode:string;
             errorMessage:string;            
             mobile:object;           
             disconnect:()=>void;            
-            setInitData:(initData:InitData,options?:ConnectOptions)=>void; 
+            setInitData:SetInitDataFunction; 
             connectionMessage:React.FC<void>;
             values:FieldValue[];
             field:FormField;
@@ -56,7 +62,10 @@ declare module 'global-input-react' {
             WhenConnected:WhenFunction;
             WhenDisconnected:WhenFunction;
             WhenError:WhenFunction;
-            setFieldValueById:(fieldId:string, valueToSet:FieldValue)=>void;
+            DisplayMobileConnect:WhenFunction;
+            setFieldValueById:SetFieldValueByIdFunction;
+            setOnFieldChanged:(onFieldChanged:OnFieldChangedFunction)=>void;
+            initData:InitData;
     }
 
     type WhenFunction=(props:any)=>any;
