@@ -47,8 +47,10 @@ export default (state, action)=>{
                           errorMessage:action.errorMessage,
                           mobileState:MobileState.ERROR
                     };    
-        case ACTION_TYPES.SET_FIELD:
+        case ACTION_TYPES.RECEIVED_FIELD:
                 return {...state,field:action.field};        
+        case ACTION_TYPES.SEND_FIELD:
+                return {...state};            
         default: 
               return state;
     };    

@@ -6,7 +6,10 @@ export const ACTION_TYPES = {
     SENDER_CONNECTED:5,
     SENDER_DISCONNECTED:6,
     ON_CONNECTION_ERROR:7,
-    SET_FIELD:8
+    RECEIVED_FIELD:8,
+    SEND_FIELD:9
+    
+    
 };
 
 export const MobileState = {        

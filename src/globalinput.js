@@ -4,14 +4,15 @@ import QRCode from "qrcode.react";
 import {ACTION_TYPES, MobileState} from './constants';
 import { createMessageConnector } from 'global-input-message';
 
-export const initialData={    
-    connector:null,
-    data:{
+const createInitialData=()=>({    
         fields:[],
         values:[], 
         setters:[],
-        initData:null,        
-    },    
+        initData:null    
+});
+export const initialData={    
+    connector:null,
+    data:createInitialData(),    
     onFieldChanged:()=>{},
 
 };
@@ -27,8 +28,8 @@ export const setOnFieldChanged=(mobile,onFieldChanged)=>{
 export const closeConnection=(mobile)=>{
     if(mobile.current.connector){
         mobile.current.connector.disconnect();
-        mobile.current.connector=null;
-        mobile.current.data=null;         
+        mobile.current.connector=null;        
+        mobile.current.data=createInitialData();        
     }
 };
 
@@ -147,7 +148,8 @@ const processInitData=(mobile,dispatch, initData)=>{
         values.push(f.value);
         const s= (value)=>{ 
             values[index]=value;        
-            fields[index].value=value;              
+            fields[index].value=value;
+            dispatch({type:ACTION_TYPES.SEND_FIELD});              
             mobile.current.connector.sendInputMessage(value,index);            
         };
         fieldSetters.push(s);
@@ -164,7 +166,7 @@ const processInitData=(mobile,dispatch, initData)=>{
                     values[index]=value;        
                     fields[index].value=value;  
                     const nf={...fields[index],value};                                                                                                                   
-                    dispatch({type:ACTION_TYPES.SET_FIELD,field:nf});
+                    dispatch({type:ACTION_TYPES.RECEIVED_FIELD,field:nf});
                 }
             }
         }                                                    
