@@ -43,19 +43,19 @@ const initData={
     }  
  };
 export default ({login}){  
+  
   const [username,setUser] = useState('');
   const [password,setPassword] = useState('');
-
-  const onFieldChanged=({field})=>{
+  const {connectionMessage,setOnFieldChanged}=useGlobalInputApp({initData});     
+  
+  setOnFieldChanged(({field})=>{
       const fds=initData.form.fields;
       switch(field.id){
           case fds[0].id: setUsername(field.value); break;
           case fds[1].id: setPassword(field.value); break;
           case fds[2].id: login(username,password);
-      }
-  };
- 
- const {connectionMessage}=useGlobalInputApp({initData,onFieldChanged});    
+      }    
+  });
     return (
         <>
            {connectionMessage}                    
@@ -63,7 +63,7 @@ export default ({login}){
     );
   };
 ```
-The content of  ```{connectionMessage}```  returned by the hook contains an encrypted QR Code that you can scan to connect to the application. Having connected, your mobile displays the user interface specified in the ```initData``` variable, allowing you to operate on the application. The ```onFieldChanged``` parameter is for callback function to receive the form events through the ```field``` variable.  
+The content of  ```{connectionMessage}```  returned by the hook contains an encrypted QR Code that you can scan to connect to the application. Having connected, your mobile displays the user interface specified in the ```initData``` variable, allowing you to operate on the application. You can use  ```setOnFieldChanged``` function to set your callback function to receive the form events through the ```field``` variable.  
 
 The ```initData``` specifies a form, in which  ```id``` is used for autofill operation inside the connected mobile app through filtering the existing data in its encrypted storage. The form contain a set of fields, representing data that device application and the connected mobile need to collaborate on composing. The type of each field defines the related data operation. For example, if the type is "encrypt"/"decrypt", the mobile app initiates the encrypt/decrypt workflow inside the mobile app. This is useful when you would like to secure data stored on other devices or cloud.
 
@@ -73,16 +73,14 @@ Other values returned by  the ```useGlobalInputApp``` function are listed in the
 
 | Attributes | Description |
 | ------ | ------ |
-| connectionMessage | The connection information that the mobile app scans to establish a secure connection to the application |
-| values | An array of values that corresponds to the fields in the form |
-|setters | An array of functions that you can use it set the value of the matching field |
-|setFieldValueById | this function is mostly useful if you have a large number of fields in form and you would like set value by field id. The first parameter is the id of the field, and the second parameter is the value that you would like to |
-|field |  The field that contains the id and value of the field corresponding to last event received from the mobile app |
+| connectionMessage | The variable containing the QR Code for the mobile app to scan to obtain the connection information securely|
+|setFieldValueById |  The function you can use interact with the form displayed on the connected mobile app.|
+|field |  The field that contains the id and value of the field sent by the mobile app |
 | WhenWaiting | A container React component that you can use it to wrap content that you would like to display only when the application waiting for the user to connect |
 | WhenConnected |  A container React component that you can use it to wrap content that you would like to display only when a user has connected to the application  |
 | WhenDisconnected | A container React component that you can use it to wrap content that you would like to display only when a user has connected and then disconnected |
 | WhenError | A container React component that you can use it to wrap content that you would like to display when there is an error, you can use {errorMessage} to find out what has happened, for example ```<WhenError>{errorMessage}</WhenError>``` |
-| errorMessage | This value wil be populated when an error is raised by the library |
+| errorMessage | This value wil be populated when an error is raised |
 
 ## TypeScript support
 
