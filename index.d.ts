@@ -29,10 +29,11 @@ declare module 'global-input-react' {
         url?:string;        
     }
     interface FieldChanged {
-        field:FormField,
-        values:FieldValue[],
-        setFieldValueById:SetFieldValueByIdFunction,
-        setInitData:SetInitDataFunction
+        field:FormField;
+        values:FieldValue[];
+        setFieldValueById:SetFieldValueByIdFunction;
+        setInitData:SetInitDataFunction;
+        initDataID:string;
     }
     type InitDataCreator=()=>InitData;
     
@@ -41,7 +42,7 @@ declare module 'global-input-react' {
     
 
     interface FormOperation{
-        onInput:(value:any) => void
+        onInput:(value:any) => void;
     }
     
     type SetFieldValueByIdFunction=(fieldId:string, valueToSet:FieldValue)=>void;

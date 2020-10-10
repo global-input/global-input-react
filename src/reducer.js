@@ -9,8 +9,7 @@ export const initialState={
 };
 
 
-export default (state, action)=>{
-    console.log("-------****type:"+action.type);
+export default (state, action)=>{    
     switch(action.type){   
         case ACTION_TYPES.START_CONNECT:
                return {...state,
@@ -50,7 +49,9 @@ export default (state, action)=>{
         case ACTION_TYPES.RECEIVED_FIELD:
                 return {...state,field:action.field};        
         case ACTION_TYPES.SEND_FIELD:
-                return {...state};            
+                return {...state};  
+        case ACTION_TYPES.ATTACH_CONNECT:
+                return {...state};
         default: 
               return state;
     };    

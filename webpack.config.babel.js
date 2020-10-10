@@ -23,4 +23,4 @@ var webpackconfig={
   };
 module.exports = webpackconfig;
 
-  console.log("----**----:"+webpackconfig.output.path+":****"+__dirname);
+  

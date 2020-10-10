@@ -51,7 +51,7 @@ export default (configData, dependencies)=>{
         connectionCode,
         errorMessage,
         initData:mobile.current.data && mobile.current.data.initData,            
-        mobile:mobile.current.connector,
+        mobile:mobile.current,
         disconnect,    
         setInitData, 
         connectionMessage,

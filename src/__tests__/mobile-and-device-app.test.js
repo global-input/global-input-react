@@ -45,8 +45,6 @@ it("Device App and Mobile App should be able to communicate", async function () 
   };
   let fields=createWaitForFieldMessages(initData.form.fields);
   const {result,waitForNextUpdate,unmount}=renderHook(()=>useGlobalInputApp({ initData }));
-  ;
-console.log("------:"+result.current.mobileState);
   await waitForNextUpdate();
   expect(result.current.mobileState).toBe(MobileState.WAITING_FOR_MOBILE);
   

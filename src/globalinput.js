@@ -14,8 +14,9 @@ export const initialData={
     connector:null,
     data:createInitialData(),    
     onFieldChanged:()=>{},
-
 };
+
+
 export const getValues         = mobile => mobile.current.data && mobile.current.data.values;
 export const getFields         = mobile => mobile.current.data && mobile.current.data.fields;
 export const getSetters        = mobile => mobile.current.data && mobile.current.data.setters;
@@ -29,8 +30,14 @@ export const closeConnection=(mobile)=>{
     if(mobile.current.connector){
         mobile.current.connector.disconnect();
         mobile.current.connector=null;        
-        mobile.current.data=createInitialData();        
+        mobile.current.data=createInitialData();   
+        mobile.current.onFieldChanged=()=>{};     
     }
+};
+export const setConnector=(mobile,connector)=>{
+        mobile.current.connector=connector;        
+        mobile.current.data=createInitialData();   
+        mobile.current.onFieldChanged=()=>{};     
 };
 
 
@@ -42,7 +49,8 @@ export const onFieldChanged=(mobile,field,setFieldValueById,setInitData)=>{
                                       field,
                                       values: getValues(mobile),
                                       setFieldValueById,
-                                      setInitData
+                                      setInitData,
+                                      initDataID:getInitDataID(mobile)
                                     });             
     }
 };
@@ -84,6 +92,7 @@ export const startConnect =(mobile,dispatch,configData) => {
     if(!data){
         return null;
     }
+
     const mobileConfig={
         initData:data.initData,            
         onRegistered: next => {
@@ -119,13 +128,24 @@ export const startConnect =(mobile,dispatch,configData) => {
         aes:options && options.aes,
         onInput:options && options.onInput,
         onInputPermissionResult:options && options.onInputPermissionResult 
-    };  
-    closeConnection(mobile);
-    mobile.current.data=data;  
-    mobile.current.onFieldChanged=configData.onFieldChanged;            
-    dispatch({type:ACTION_TYPES.START_CONNECT});          
-    mobile.current.connector=createMessageConnector();        
-    mobile.current.connector.connect(mobileConfig);
+    }; 
+    if(configData.mobile && configData.mobile.connector){        
+        setConnector(mobile,configData.mobile.connector);
+        mobile.current.data=data;  
+        mobile.current.onFieldChanged=configData.onFieldChanged;            
+        dispatch({type:ACTION_TYPES.ATTACH_CONNECT});
+        mobile.current.connector.sendInitData(data.initData);
+    }
+    else{
+        closeConnection(mobile,configData);    
+        mobile.current.data=data;  
+        mobile.current.onFieldChanged=configData.onFieldChanged;            
+        dispatch({type:ACTION_TYPES.START_CONNECT});          
+        mobile.current.connector=createMessageConnector();        
+        mobile.current.connector.connect(mobileConfig);
+    }
+    
+    
 }
 
 const processInitData=(mobile,dispatch, initData)=>{
