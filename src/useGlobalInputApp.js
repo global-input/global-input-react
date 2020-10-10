@@ -64,7 +64,8 @@ export default (configData, dependencies)=>{
         WhenWaiting, 
         WhenConnected,
         WhenDisconnected,            
-        WhenError,  
+        WhenError,
+        initDataID:globalInput.getInitDataID(mobile)
     };
 };
 

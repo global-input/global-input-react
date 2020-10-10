@@ -10,13 +10,15 @@ export const initialData={
         fields:[],
         values:[], 
         setters:[],
-        initData:null,
-    },               
-    onFieldChanged:()=>{},    
+        initData:null,        
+    },    
+    onFieldChanged:()=>{},
+
 };
-export const getValues         = mobile => mobile.current.data.values;
-export const getFields         = mobile => mobile.current.data.fields;
-export const getSetters        = mobile => mobile.current.data.setters;
+export const getValues         = mobile => mobile.current.data && mobile.current.data.values;
+export const getFields         = mobile => mobile.current.data && mobile.current.data.fields;
+export const getSetters        = mobile => mobile.current.data && mobile.current.data.setters;
+export const getInitDataID     = mobile => mobile.current.data && mobile.current.data.initData && mobile.current.data.initData.id;
 
 export const setOnFieldChanged=(mobile,onFieldChanged)=>{
     mobile.current.onFieldChanged=onFieldChanged;
@@ -26,9 +28,10 @@ export const closeConnection=(mobile)=>{
     if(mobile.current.connector){
         mobile.current.connector.disconnect();
         mobile.current.connector=null;
-        mobile.current.data=null;        
+        mobile.current.data=null;         
     }
 };
+
 
 
 
@@ -99,10 +102,12 @@ export const startConnect =(mobile,dispatch,configData) => {
             }
         },
         onSenderConnected:(sender, senders) => {
-            dispatch({type:ACTION_TYPES.SENDER_CONNECTED, senders,sender});
+            dispatch({type:ACTION_TYPES.SENDER_CONNECTED, senders,sender});            
         },
-        onSenderDisconnected:(sender, senders) => {
-            dispatch({type:ACTION_TYPES.SENDER_DISCONNECTED, senders,sender});            
+        onSenderDisconnected:(sender, senders) => {            
+            closeConnection(mobile);
+            dispatch({type:ACTION_TYPES.SENDER_DISCONNECTED});
+            
         },
         onError:errorMessage => {                   
             dispatch({type:ACTION_TYPES.ON_CONNECTION_ERROR,errorMessage});
@@ -252,3 +257,17 @@ export const displayWhen = (children,mobileState,st)=>{
 
 
 
+const styles={
+    barcode:{
+        backgroundColor:"white",        
+        padding:20,
+        display:"flex",
+        flexDirection:"column",
+        justifyContent:"flex-start",
+        alignItems:"center"      
+    },
+    label:{
+        paddingTop:20,
+        color:"#A9C8E6", //#4880ED
+    }
+}

@@ -65,7 +65,7 @@ declare module 'global-input-react' {
             DisplayMobileConnect:WhenFunction;
             setFieldValueById:SetFieldValueByIdFunction;
             setOnFieldChanged:(onFieldChanged:OnFieldChangedFunction)=>void;
-            initData:InitData;
+            initDataID:string;
     }
 
     type WhenFunction=(props:any)=>any;

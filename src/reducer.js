@@ -5,7 +5,7 @@ export const initialState={
     connectionCode:null,
     errorMessage:null,        
     senders:null,    
-    field:null    
+    field:null        
 };
 
 
@@ -37,11 +37,11 @@ export default (state, action)=>{
         case ACTION_TYPES.SENDER_CONNECTED:                    
                 return {...state,senders:action.senders, mobileState:MobileState.MOBILE_CONNECTED};
         
-        case ACTION_TYPES.SENDER_DISCONNECTED:
-                        {
-                            const mobileState=action.senders && action.senders.length >0 ? state.mobileState:MobileState.WAITING_FOR_MOBILE;
-                            return {...state,senders:action.senders,mobileState};
-                        }
+        case ACTION_TYPES.SENDER_DISCONNECTED:                                                    
+                            return {...state,
+                                senders:null,
+                                mobileState:MobileState.DISCONNECTED
+                            };                        
         case ACTION_TYPES.ON_CONNECTION_ERROR:
                     return {...state,
                           errorMessage:action.errorMessage,
