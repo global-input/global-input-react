@@ -14,29 +14,19 @@ export default (configData, dependencies) => {
         errorMessage
     }, dispatch] = useReducer(reducer, initialState);
     
-    const mobile = useRef(globalInput.initialData);
-
-    const setOnFieldChanged = useCallback((onFieldChanged) => {
-        globalInput.setOnFieldChanged(mobile, onFieldChanged);
-    },[]);
-    const disconnect = useCallback(() => {
-        globalInput.closeConnection(mobile);
-    },[]);
-
-    const setFieldValueById = useCallback((fieldId, valueToSet) => {
-        globalInput.setFieldValueById(mobile, mobileState, fieldId, valueToSet);
-    }, [mobile, mobileState]);
-
-    const setInitData = useCallback((initData) => {
-        globalInput.sendInitData(mobile, dispatch, initData);
-    }, [mobile, dispatch]);
+    const shared = useRef(globalInput.initialData);
     
+        
     useEffect(() => {
-        globalInput.startConnect(mobile, dispatch, configData);
+        globalInput.startConnect(shared, dispatch, configData);
     }, dependencies ? dependencies : []); //default connect once for the component
 
+    useEffect(()=>{
+        globalInput.updateMobileData(dispatch,mobileState,errorMessage,shared);
+    },[mobileState,errorMessage,dispatch]);
+    
     useEffect(() => {
-        globalInput.onFieldChanged(mobile, field, setFieldValueById, setInitData); //should only executed when the field is changed
+        globalInput.onFieldChanged(shared, field); //should only executed when the field is changed
     }, [field]);
 
 
@@ -47,40 +37,27 @@ export default (configData, dependencies) => {
         ConnectQR,
         connectionCode,
         field,
-        mobile: { 
-            isLoading: mobileState === MobileState.INITIALIZING,
-            isReady: mobileState === MobileState.WAITING_FOR_MOBILE,
-            isError: mobileState === MobileState.ERROR,
-            isDisconnected: mobileState === MobileState.DISCONNECTED,
-            isConnected: mobileState === MobileState.MOBILE_CONNECTED,
-            initDataID: globalInput.getInitDataID(mobile),
-            error:errorMessage,
-            sendInitData:setInitData,           
-            sendValue:setFieldValueById,            
-            setOnchange:setOnFieldChanged,
-            disconnect,
-            connector:mobile.current.connector,
-        },
+        mobile:shared.current.mobile,        
         /* @deprecated Use mobile.disconnect() instead */
-        disconnect,
+        disconnect:shared.current.mobile.disconnect,
         /* @deprecated Use mobile.sendInitData instead */
-        setInitData,        
+        setInitData:shared.current.mobile.sendInitData,        
         /* @deprecated Use mobile.sendValue() instead */
-        setFieldValueById,
+        setFieldValueById:shared.current.mobile.sendValue,
         /* @deprecated Use mobile.error instead */
         errorMessage,
         /* @deprecated Use mobile.sendValue() instead */
-        setters: globalInput.getSetters(mobile),
+        setters: globalInput.getSetters(shared),
         /* @deprecated Use the boolean variables provided in the mobile object instead */
         mobileState,
         /* @deprecated Use ConnectQR component instead */
         connectionMessage: useMemo(() => globalInput.displayCodeDeprecated(mobileState, connectionCode), [connectionCode, mobileState]),
         /* @deprecated Use field instead */
-        values: globalInput.getValues(mobile),
+        values: globalInput.getValues(shared),
         /* @deprecated Use field instead */
-        fields: globalInput.getFields(mobile),
+        fields: globalInput.getFields(shared),
         /* @deprecated Use mobile.initDataID instead */
-        initData: mobile.current.data && mobile.current.data.initData,
+        initData: shared.current.data && shared.current.data.initData,
         /* @deprecated */
         WhenWaiting: useCallback(({ children }) => globalInput.displayWhen2Deprecated(children, mobileState, MobileState.WAITING_FOR_MOBILE, MobileState.INITIALIZING), [mobileState === MobileState.WAITING_FOR_MOBILE || mobileState === MobileState.INITIALIZING]),
         /* @deprecated */

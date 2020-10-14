@@ -10,58 +10,91 @@ const createInitialData=()=>({
         setters:[],
         initData:null    
 });
-export const initialData={    
-    session:null,
+export const initialData={        
     data:createInitialData(),    
     onFieldChanged:()=>{},
+    mobile:{
+        session:null,
+        isLoading: true,
+        isReady:false,
+        isError: false,
+        isDisconnected: false,
+        isConnected: false,
+        initDataID: null,
+        error:'',
+        sendInitData:()=>{},           
+        sendValue:()=>{},            
+        setOnchange:()=>{},
+        disconnect:()=>{},
+        connector:null
+    }
+
 };
 
 
-export const getValues         = mobile => mobile.current.data && mobile.current.data.values;
-export const getFields         = mobile => mobile.current.data && mobile.current.data.fields;
-export const getSetters        = mobile => mobile.current.data && mobile.current.data.setters;
-export const getInitDataID     = mobile => mobile.current.data && mobile.current.data.initData && mobile.current.data.initData.id;
+export const getValues         = shared => shared.current.data && shared.current.data.values;
+export const getFields         = shared => shared.current.data && shared.current.data.fields;
+export const getSetters        = shared => shared.current.data && shared.current.data.setters;
+export const getInitDataID     = shared => shared.current.data && shared.current.data.initData && shared.current.data.initData.id;
 
-export const setOnFieldChanged=(mobile,onFieldChanged)=>{
-    mobile.current.onFieldChanged=onFieldChanged;
+export const updateMobileData=(dispatch,mobileState,errorMessage,shared)=>{
+    shared.current.mobile.isLoading= mobileState === MobileState.INITIALIZING;
+    shared.current.mobile.isReady= mobileState === MobileState.WAITING_FOR_MOBILE;
+    shared.current.mobile.isError= mobileState === MobileState.ERROR;
+    shared.current.mobile.isDisconnected= mobileState === MobileState.DISCONNECTED;
+    shared.current.mobile.isConnected= mobileState === MobileState.MOBILE_CONNECTED;    
+    shared.current.mobile.initDataID= shared.current.data && shared.current.data.initData && shared.current.data.initData.id;
+    shared.current.mobile.error=errorMessage; 
+    
+    shared.current.mobile.setOnchange = (onFieldChanged) => {
+        shared.current.onFieldChanged=onFieldChanged;        
+    };
+    shared.current.mobile.disconnect =()=>{
+        closeConnection(shared);
+    };
+    shared.current.mobile.sendInitData = (initData) => {
+        sendInitData(shared, dispatch, initData);
+    };
+    shared.current.mobile.sendValue=(fieldId, valueToSet) => {
+        setFieldValueById(shared, mobileState, fieldId, valueToSet);
+    };
 }
 
-export const closeConnection=(mobile)=>{
-    if(mobile.current.session){
-        mobile.current.session.disconnect();
-        mobile.current.session=null;        
-        mobile.current.data=createInitialData();   
-        mobile.current.onFieldChanged=()=>{};     
+
+const closeConnection=(shared)=>{
+    if(shared.current.mobile.session){
+        shared.current.mobile.session.disconnect();
+        shared.current.mobile.session=null;        
+        shared.current.data=createInitialData();   
+        shared.current.onFieldChanged=()=>{};     
     }
 };
-const setSession=(mobile,session)=>{
-        mobile.current.session=session;        
-        mobile.current.data=createInitialData();   
-        mobile.current.onFieldChanged=()=>{};     
+const setSession=(shared,session)=>{
+    shared.current.mobile.session=session;        
+    shared.current.data=createInitialData();   
+    shared.current.onFieldChanged=()=>{};     
 };
 
 
 
 
-export const onFieldChanged=(mobile,field,setFieldValueById,setInitData)=>{
-    if(field && mobile.current.onFieldChanged){
-        mobile.current.onFieldChanged({
+export const onFieldChanged=(shared,field)=>{
+    if(field && shared.current.onFieldChanged){
+        shared.current.onFieldChanged({
                                       field,
-                                      values: getValues(mobile),
-                                      setFieldValueById,
-                                      setInitData,
-                                      initDataID:getInitDataID(mobile)
+                                      values: getValues(shared),
+                                      mobile:shared.current.mobile                                      
                                     });             
     }
 };
 
 
 
-export const setFieldValueById=(mobile,mobileState,fieldId, valueToSet)=>{
+const setFieldValueById=(shared,mobileState,fieldId, valueToSet)=>{
     if(mobileState!==MobileState.MOBILE_CONNECTED){
         return;
     }
-    const {setters,fields}=mobile.current.data;
+    const {setters,fields}=shared.current.data;
     if(fields && fields.length){
         for(let [index,field] of fields.entries()){                    
             if(field.id===fieldId){
@@ -71,16 +104,16 @@ export const setFieldValueById=(mobile,mobileState,fieldId, valueToSet)=>{
         };
     }
 }
-export const sendInitData=(mobile,dispatch,initData)=>{
-    const data=processInitData(mobile,dispatch, initData);
+const sendInitData=(shared,dispatch,initData)=>{
+    const data=processInitData(shared,dispatch, initData);
     if(!data){
         return null;
     }
-    mobile.current.data=data;
+    shared.current.data=data;
     dispatch({type:ACTION_TYPES.SEND_INIT_DATA});
-    mobile.current.session.sendInitData(data.initData);         
+    shared.current.mobile.session.sendInitData(data.initData);         
 };
-export const startConnect =(mobile,dispatch,configData) => {
+export const startConnect =(shared,dispatch,configData) => {
     if(typeof configData ==='function'){
         configData=configData();            
     }
@@ -88,7 +121,7 @@ export const startConnect =(mobile,dispatch,configData) => {
         return;
     }
     const options=configData.options;
-    const data=processInitData(mobile,dispatch, configData.initData);
+    const data=processInitData(shared,dispatch, configData.initData);
     if(!data){
         return null;
     }
@@ -97,7 +130,7 @@ export const startConnect =(mobile,dispatch,configData) => {
         initData:data.initData,            
         onRegistered: next => {
             next();  
-            const connectionCode = mobile.current.session.buildInputCodeData();
+            const connectionCode = shared.current.mobile.session.buildInputCodeData();
             console.log("getting[[" + connectionCode + "]]");
             dispatch({type:ACTION_TYPES.REGISTERED,connectionCode});
             if(options && options.onRegistered){
@@ -106,7 +139,7 @@ export const startConnect =(mobile,dispatch,configData) => {
         },
         onRegisterFailed:errorMessage => {                   
             dispatch({type:ACTION_TYPES.REGISTER_FAILED,errorMessage});
-            closeConnection(mobile);
+            closeConnection(shared);
             if(options && options.onRegisterFailed){
                 options.onRegisterFailed();                
             }
@@ -115,7 +148,7 @@ export const startConnect =(mobile,dispatch,configData) => {
             dispatch({type:ACTION_TYPES.SENDER_CONNECTED, senders,sender});            
         },
         onSenderDisconnected:(sender, senders) => {            
-            closeConnection(mobile);
+            closeConnection(shared);
             dispatch({type:ACTION_TYPES.SENDER_DISCONNECTED});
             
         },
@@ -130,25 +163,25 @@ export const startConnect =(mobile,dispatch,configData) => {
         onInputPermissionResult:options && options.onInputPermissionResult 
     }; 
     if(configData.session){
-        setSession(mobile,configData.session);
-        mobile.current.data=data;  
-        mobile.current.onFieldChanged=configData.onFieldChanged;
+        setSession(shared,configData.session);
+        shared.current.data=data;  
+        shared.current.onFieldChanged=configData.onFieldChanged;
         dispatch({type:ACTION_TYPES.ATTACH_CONNECT});
-        mobile.current.session.sendInitData(data.initData);
+        shared.current.mobile.session.sendInitData(data.initData);
     }
     else{
-        closeConnection(mobile,configData);    
-        mobile.current.data=data;  
-        mobile.current.onFieldChanged=configData.onFieldChanged;            
+        closeConnection(shared,configData);    
+        shared.current.data=data;  
+        shared.current.onFieldChanged=configData.onFieldChanged;            
         dispatch({type:ACTION_TYPES.START_CONNECT});          
-        mobile.current.session=createMessageConnector();        
-        mobile.current.session.connect(mobileConfig);
+        shared.current.mobile.session=createMessageConnector();        
+        shared.current.mobile.session.connect(mobileConfig);
     }
     
     
 }
 
-const processInitData=(mobile,dispatch, initData)=>{
+const processInitData=(shared,dispatch, initData)=>{
     if(typeof initData ==='function'){
         initData=initData();            
     }
@@ -170,7 +203,7 @@ const processInitData=(mobile,dispatch, initData)=>{
             values[index]=value;        
             fields[index].value=value;
             dispatch({type:ACTION_TYPES.SEND_FIELD});              
-            mobile.current.session.sendInputMessage(value,index);            
+            shared.current.mobile.session.sendInputMessage(value,index);            
         };
         fieldSetters.push(s);
         if(f.type==='info'){                

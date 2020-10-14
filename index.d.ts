@@ -31,10 +31,8 @@ declare module 'global-input-react' {
     }
     interface FieldChanged {
         field: FormField;
-        values: FieldValue[];
-        setFieldValueById: SetFieldValueByIdFunction;
-        setInitData: SetInitDataFunction;
-        initDataID: string;
+        mobile: Mobile;
+        values: FieldValue[];        
     }
     type InitDataCreator = () => InitData;
 
