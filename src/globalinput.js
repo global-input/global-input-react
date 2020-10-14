@@ -11,7 +11,7 @@ const createInitialData=()=>({
         initData:null    
 });
 export const initialData={    
-    connector:null,
+    session:null,
     data:createInitialData(),    
     onFieldChanged:()=>{},
 };
@@ -27,15 +27,15 @@ export const setOnFieldChanged=(mobile,onFieldChanged)=>{
 }
 
 export const closeConnection=(mobile)=>{
-    if(mobile.current.connector){
-        mobile.current.connector.disconnect();
-        mobile.current.connector=null;        
+    if(mobile.current.session){
+        mobile.current.session.disconnect();
+        mobile.current.session=null;        
         mobile.current.data=createInitialData();   
         mobile.current.onFieldChanged=()=>{};     
     }
 };
-export const setConnector=(mobile,connector)=>{
-        mobile.current.connector=connector;        
+const setSession=(mobile,session)=>{
+        mobile.current.session=session;        
         mobile.current.data=createInitialData();   
         mobile.current.onFieldChanged=()=>{};     
 };
@@ -78,7 +78,7 @@ export const sendInitData=(mobile,dispatch,initData)=>{
     }
     mobile.current.data=data;
     dispatch({type:ACTION_TYPES.SEND_INIT_DATA});
-    mobile.current.connector.sendInitData(data.initData);         
+    mobile.current.session.sendInitData(data.initData);         
 };
 export const startConnect =(mobile,dispatch,configData) => {
     if(typeof configData ==='function'){
@@ -97,7 +97,7 @@ export const startConnect =(mobile,dispatch,configData) => {
         initData:data.initData,            
         onRegistered: next => {
             next();  
-            const connectionCode = mobile.current.connector.buildInputCodeData();
+            const connectionCode = mobile.current.session.buildInputCodeData();
             console.log("getting[[" + connectionCode + "]]");
             dispatch({type:ACTION_TYPES.REGISTERED,connectionCode});
             if(options && options.onRegistered){
@@ -129,20 +129,20 @@ export const startConnect =(mobile,dispatch,configData) => {
         onInput:options && options.onInput,
         onInputPermissionResult:options && options.onInputPermissionResult 
     }; 
-    if(configData.mobile && configData.mobile.connector){        
-        setConnector(mobile,configData.mobile.connector);
+    if(configData.session){
+        setSession(mobile,configData.session);
         mobile.current.data=data;  
-        mobile.current.onFieldChanged=configData.onFieldChanged;            
+        mobile.current.onFieldChanged=configData.onFieldChanged;
         dispatch({type:ACTION_TYPES.ATTACH_CONNECT});
-        mobile.current.connector.sendInitData(data.initData);
+        mobile.current.session.sendInitData(data.initData);
     }
     else{
         closeConnection(mobile,configData);    
         mobile.current.data=data;  
         mobile.current.onFieldChanged=configData.onFieldChanged;            
         dispatch({type:ACTION_TYPES.START_CONNECT});          
-        mobile.current.connector=createMessageConnector();        
-        mobile.current.connector.connect(mobileConfig);
+        mobile.current.session=createMessageConnector();        
+        mobile.current.session.connect(mobileConfig);
     }
     
     
@@ -170,7 +170,7 @@ const processInitData=(mobile,dispatch, initData)=>{
             values[index]=value;        
             fields[index].value=value;
             dispatch({type:ACTION_TYPES.SEND_FIELD});              
-            mobile.current.connector.sendInputMessage(value,index);            
+            mobile.current.session.sendInputMessage(value,index);            
         };
         fieldSetters.push(s);
         if(f.type==='info'){                
@@ -221,7 +221,7 @@ const DefaultLabelContainer=({children})=>(
     </div>                  
 );
 
-export const  displayCode = (mobileState,connectionCode) => {
+export const  displayCodeDeprecated = (mobileState,connectionCode) => {
         let  qrCodeSize = window.innerWidth-10;
         if(qrCodeSize>400){
                     qrCodeSize=400;
@@ -260,7 +260,7 @@ export const  displayCode = (mobileState,connectionCode) => {
 };
 
 
-export const displayWhen2 = (children,mobileState,st1,st2)=>{
+export const displayWhen2Deprecated = (children,mobileState,st1,st2)=>{
     if(mobileState!==st1 && mobileState !== st2){
         return null;
     }
@@ -268,7 +268,7 @@ export const displayWhen2 = (children,mobileState,st1,st2)=>{
         {children}
     </React.Fragment>);
 };
-export const displayWhen = (children,mobileState,st)=>{
+export const displayWhenDeprecated = (children,mobileState,st)=>{
     if(mobileState!==st){
         return null;
     }
@@ -276,7 +276,51 @@ export const displayWhen = (children,mobileState,st)=>{
         {children}
     </React.Fragment>);
 };
+const getDefaultQRCodeSize=()=>{
+    if(!window){
+        return 400;        
+    }
+    let  size = window.innerWidth-10;
+    return size>400?400:size;    
+}
+export const displayQRCode=({mobileState,connectionCode,children,size,level})=>{
+    const qrCodeSize=size?size:getDefaultQRCodeSize();
+    const qrCodeLevel=level?level:'H';
 
+        let QRCodeContainer=DefaultQRCodeContainer;            
+        let LabelContainer=DefaultLabelContainer;        
+        if(mobileState===MobileState.INITIALIZING){
+                return (
+                    <QRCodeContainer>                  
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                            <path fill="#C779D0" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
+                                <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite"/>
+                            </path>
+                        </svg>                
+                    </QRCodeContainer>
+                );
+        } 
+        if(mobileState===MobileState.WAITING_FOR_MOBILE){
+                if(!connectionCode){
+                    return(
+                        <QRCodeContainer>Empty connection code</QRCodeContainer>
+                    );
+                }
+            return (
+            <QRCodeContainer>                    
+                <QRCode value={connectionCode} level={qrCodeLevel} size={qrCodeSize}/>
+                {children?children:(
+                    <LabelContainer>
+                    Scan with 
+                        <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a>
+                    </LabelContainer>
+                )}                
+            </QRCodeContainer>
+        );
+
+    }    
+    return null; 
+}
 
 
 const styles={

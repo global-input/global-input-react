@@ -46,7 +46,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
   let fields=createWaitForFieldMessages(initData.form.fields);
   const {result,waitForNextUpdate,unmount}=renderHook(()=>useGlobalInputApp({ initData }));
   await waitForNextUpdate();
-  expect(result.current.mobileState).toBe(MobileState.WAITING_FOR_MOBILE);
+  expect(result.current.mobile.isReady).toBe(true);
   
   //const {findByTestId}=render(<div>{connectionMessage}</div>);  //display QR Code here
   // const {code, level,size}=await getQRCodeValues({findByTestId}); //qrcode.react module is mocked
