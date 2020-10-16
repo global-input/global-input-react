@@ -16,21 +16,23 @@ export default (configData, dependencies) => {
     
     const shared = useRef(globalInput.initialData);
     
-        
+    
+    useEffect(()=>{
+        globalInput.updateMobileData(dispatch,mobileState,errorMessage,shared);
+    },[mobileState,errorMessage,dispatch]);
+    
+    
     useEffect(() => {
         globalInput.startConnect(shared, dispatch, configData);
     }, dependencies ? dependencies : []); //default connect once for the component
 
-    useEffect(()=>{
-        globalInput.updateMobileData(dispatch,mobileState,errorMessage,shared);
-    },[mobileState,errorMessage,dispatch]);
     
     useEffect(() => {
         globalInput.onFieldChanged(shared, field); //should only executed when the field is changed
     }, [field]);
 
 
-    const ConnectQR = ({ children, size, level }) => globalInput.displayQRCode({ mobileState, connectionCode, children, size, level });
+    const ConnectQR = ({ children, size, level,container }) => globalInput.displayQRCode({shared,connectionCode, children, size, level,container });
 
 
     return {

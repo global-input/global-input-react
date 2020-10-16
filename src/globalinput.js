@@ -10,10 +10,8 @@ const createInitialData=()=>({
         setters:[],
         initData:null    
 });
-export const initialData={        
-    data:createInitialData(),    
-    onFieldChanged:()=>{},
-    mobile:{
+const createInitialMobile=()=>{
+    return {
         session:null,
         isLoading: true,
         isReady:false,
@@ -26,11 +24,22 @@ export const initialData={
         sendValue:()=>{},            
         setOnchange:()=>{},
         disconnect:()=>{},
-        connector:null
+        session:null
     }
-
+}
+export const initialData={        
+    data:createInitialData(),    
+    onchange:()=>{},
+    mobile:createInitialMobile()
 };
-
+const closeConnection=(shared)=>{
+    if(shared.current.mobile.session){
+        shared.current.mobile.session.disconnect();        
+        shared.current.data=createInitialData();   
+        shared.current.onchange=()=>{};     
+        shared.current.mobile=createInitialMobile();
+    }
+};
 
 export const getValues         = shared => shared.current.data && shared.current.data.values;
 export const getFields         = shared => shared.current.data && shared.current.data.fields;
@@ -45,9 +54,9 @@ export const updateMobileData=(dispatch,mobileState,errorMessage,shared)=>{
     shared.current.mobile.isConnected= mobileState === MobileState.MOBILE_CONNECTED;    
     shared.current.mobile.initDataID= shared.current.data && shared.current.data.initData && shared.current.data.initData.id;
     shared.current.mobile.error=errorMessage; 
-    
-    shared.current.mobile.setOnchange = (onFieldChanged) => {
-        shared.current.onFieldChanged=onFieldChanged;        
+    console.log("------mobileState:"+mobileState);
+    shared.current.mobile.setOnchange = (onchange) => {
+        shared.current.onchange=onchange;        
     };
     shared.current.mobile.disconnect =()=>{
         closeConnection(shared);
@@ -56,42 +65,34 @@ export const updateMobileData=(dispatch,mobileState,errorMessage,shared)=>{
         sendInitData(shared, dispatch, initData);
     };
     shared.current.mobile.sendValue=(fieldId, valueToSet) => {
-        setFieldValueById(shared, mobileState, fieldId, valueToSet);
+        setFieldValueById(shared, fieldId, valueToSet);
     };
 }
 
 
-const closeConnection=(shared)=>{
-    if(shared.current.mobile.session){
-        shared.current.mobile.session.disconnect();
-        shared.current.mobile.session=null;        
-        shared.current.data=createInitialData();   
-        shared.current.onFieldChanged=()=>{};     
-    }
-};
+
 const setSession=(shared,session)=>{
     shared.current.mobile.session=session;        
     shared.current.data=createInitialData();   
-    shared.current.onFieldChanged=()=>{};     
+    shared.current.onchange=()=>{};     
 };
 
 
 
 
 export const onFieldChanged=(shared,field)=>{
-    if(field && shared.current.onFieldChanged){
-        shared.current.onFieldChanged({
-                                      field,
-                                      values: getValues(shared),
-                                      mobile:shared.current.mobile                                      
-                                    });             
+    if(field && shared.current.onchange){
+        shared.current.onchange({
+                                    field,                                      
+                                    values: getValues(shared)
+                                });             
     }
 };
 
 
 
-const setFieldValueById=(shared,mobileState,fieldId, valueToSet)=>{
-    if(mobileState!==MobileState.MOBILE_CONNECTED){
+const setFieldValueById=(shared,fieldId, valueToSet)=>{
+    if(!shared.current.mobile.isConnected){
         return;
     }
     const {setters,fields}=shared.current.data;
@@ -165,14 +166,14 @@ export const startConnect =(shared,dispatch,configData) => {
     if(configData.session){
         setSession(shared,configData.session);
         shared.current.data=data;  
-        shared.current.onFieldChanged=configData.onFieldChanged;
+        shared.current.onchange=configData.onchange;
         dispatch({type:ACTION_TYPES.ATTACH_CONNECT});
         shared.current.mobile.session.sendInitData(data.initData);
     }
     else{
         closeConnection(shared,configData);    
         shared.current.data=data;  
-        shared.current.onFieldChanged=configData.onFieldChanged;            
+        shared.current.onchange=configData.onchange;            
         dispatch({type:ACTION_TYPES.START_CONNECT});          
         shared.current.mobile.session=createMessageConnector();        
         shared.current.mobile.session.connect(mobileConfig);
@@ -316,41 +317,40 @@ const getDefaultQRCodeSize=()=>{
     let  size = window.innerWidth-10;
     return size>400?400:size;    
 }
-export const displayQRCode=({mobileState,connectionCode,children,size,level})=>{
-    const qrCodeSize=size?size:getDefaultQRCodeSize();
-    const qrCodeLevel=level?level:'H';
+export const displayQRCode=({
+    shared,
+    connectionCode="empty code",        
+    level='H',
+    size=getDefaultQRCodeSize(),
+    container=DefaultQRCodeContainer,
+    children=(<DefaultLabelContainer> Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a></DefaultLabelContainer>)
+    })=>{
+    
+    
 
-        let QRCodeContainer=DefaultQRCodeContainer;            
-        let LabelContainer=DefaultLabelContainer;        
-        if(mobileState===MobileState.INITIALIZING){
-                return (
-                    <QRCodeContainer>                  
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+        
+        
+        if(shared.current.mobile.isLoading){
+            console.log("---------------Loading......");
+            return container({children:(
+                <>
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
                             <path fill="#C779D0" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
                                 <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite"/>
                             </path>
                         </svg>                
-                    </QRCodeContainer>
-                );
+                
+                </>
+            )});               
         } 
-        if(mobileState===MobileState.WAITING_FOR_MOBILE){
-                if(!connectionCode){
-                    return(
-                        <QRCodeContainer>Empty connection code</QRCodeContainer>
-                    );
-                }
-            return (
-            <QRCodeContainer>                    
-                <QRCode value={connectionCode} level={qrCodeLevel} size={qrCodeSize}/>
-                {children?children:(
-                    <LabelContainer>
-                    Scan with 
-                        <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a>
-                    </LabelContainer>
-                )}                
-            </QRCodeContainer>
-        );
-
+        else if(shared.current.mobile.isReady){ 
+            console.log("---------------isReady......");               
+            return container({children:(
+                <>
+                <QRCode value={connectionCode} level={level} size={size}/>
+                {children}
+                </>
+            )});
     }    
     return null; 
 }

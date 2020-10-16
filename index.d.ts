@@ -5,23 +5,15 @@ declare module 'global-input-react' {
     import { InitData, FormField, MessageReceiver, FieldValue } from 'global-input-message';
 
     type ConfigDataCreator = () => ConfigData;
-    export const MobileState: MobileState;
-    export enum MobileState {
-        INITIALIZING = 1,
-        DISCONNECTED,
-        ERROR,
-        WAITING_FOR_MOBILE,
-        MOBILE_CONNECTED
-    }
-
+    
     export function useGlobalInputApp(configData?: ConfigData | ConfigDataCreator, dependencies?: ReadonlyArray<any>): GlobalInputData;
-    type OnFieldChangedFunction = (evt: FieldChanged) => void;
+    type OnchangeFunction = (evt: FieldChanged) => void;
 
     interface ConfigData {
         initData?: InitData | InitDataCreator;
-        onFieldChanged?: OnFieldChangedFunction;
+        onchange?: OnchangeFunction;
         options?: ConnectOptions;
-        mobile?: object;
+        session?: object;
     }
     interface ConnectOptions {
         apikey?: string;
@@ -30,19 +22,10 @@ declare module 'global-input-react' {
         url?: string;
     }
     interface FieldChanged {
-        field: FormField;
-        mobile: Mobile;
+        field: FormField;        
         values: FieldValue[];        
     }
     type InitDataCreator = () => InitData;
-
-
-
-
-
-    interface FormOperation {
-        onInput: (value: any) => void;
-    }
 
     type SetFieldValueByIdFunction = (fieldId: string, valueToSet: FieldValue) => void;
     type SetInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
@@ -62,7 +45,7 @@ declare module 'global-input-react' {
         error: string;
         sendInitData:SetInitDataFunction;
         sendValue:SetFieldValueByIdFunction;
-        setOnchange: (onFieldChanged: OnFieldChangedFunction) => void;
+        setOnchange: (onchange: OnchangeFunction) => void;
         disconnect: () => void;
         connector:object;
     }

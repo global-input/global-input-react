@@ -5,7 +5,7 @@ export const initialState={
     connectionCode:null,
     errorMessage:null,        
     senders:null,    
-    field:null        
+    field:null,    
 };
 
 
