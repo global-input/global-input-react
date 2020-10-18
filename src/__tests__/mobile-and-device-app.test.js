@@ -46,7 +46,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
   let fields=createWaitForFieldMessages(initData.form.fields);
   const {result,waitForNextUpdate,unmount}=renderHook(()=>useGlobalInputApp({ initData }));
   await waitForNextUpdate();
-  expect(result.current.mobile.isReady).toBe(true);
+  expect(result.current.isReady).toBe(true);
   
   //const {findByTestId}=render(<div>{connectionMessage}</div>);  //display QR Code here
   // const {code, level,size}=await getQRCodeValues({findByTestId}); //qrcode.react module is mocked
@@ -73,7 +73,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
   fields[0].reset();
 
   const contentSendByDevice="send by device app";
-  result.current.mobile.sendValue(initData.form.fields[0].id,contentSendByDevice);
+  result.current.sendValue(initData.form.fields[0].id,contentSendByDevice);
   const inputMessageOnMobile=await input.get();
   expect(inputMessageOnMobile.data.value).toEqual(contentSendByDevice);
   expect(inputMessageOnMobile.data.index).toEqual(0);
@@ -102,7 +102,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
         }
     };
     fields=createWaitForFieldMessages(initData2.form.fields);
-    result.current.mobile.sendInitData(initData2);
+    result.current.sendInitData(initData2);
     const initDataMessage=await input.get();    
 
     initDataMessage.initData && assertInitData(initDataMessage.initData,initData2);

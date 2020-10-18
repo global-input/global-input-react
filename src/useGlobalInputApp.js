@@ -1,73 +1,58 @@
 import React, { useReducer, useEffect, useRef, useMemo, useCallback } from "react";
 
 
-import { MobileState } from './constants';
-import reducer, { initialState } from './reducer';
-import * as globalInput from './globalinput';
+import { MobileState,reducer,
+        initialState,startConnect,
+        displayQRCode,mobileData} from './globalinput';
+
+
 export { MobileState };
 
 export default (configData, dependencies) => {
     const [{
-        mobileState,
         connectionCode,
+        errorMessage,    
         field,
-        errorMessage
+        isLoading,
+        isReady,
+        isError,
+        isDisconnected,
+        isConnected,
     }, dispatch] = useReducer(reducer, initialState);
     
-    const shared = useRef(globalInput.initialData);
-    
-    
-    useEffect(()=>{
-        globalInput.updateMobileData(dispatch,mobileState,errorMessage,shared);
-    },[mobileState,errorMessage,dispatch]);
-    
-    
     useEffect(() => {
-        globalInput.startConnect(shared, dispatch, configData);
+        startConnect(dispatch, configData);
     }, dependencies ? dependencies : []); //default connect once for the component
 
-    
-    useEffect(() => {
-        globalInput.onFieldChanged(shared, field); //should only executed when the field is changed
-    }, [field]);
+    useEffect(()=>{
+        if(field && mobileData.onchange){                         
+                mobileData.onchange({
+                field,
+                initData:mobileData.initData,
+                sendInitData:mobileData.sendInitData,
+                sendValue:mobileData.sendValue});                         
+        }
+    },[field]);
 
-
-    const ConnectQR = ({ children, size, level,container }) => globalInput.displayQRCode({shared,connectionCode, children, size, level,container });
+    const ConnectQR=useCallback(({level,size,container,children})=>displayQRCode({connectionCode,isReady,isLoading,children}),[connectionCode,isReady,isLoading]);
 
 
     return {
         ConnectQR,
         connectionCode,
-        field,
-        mobile:shared.current.mobile,        
-        /* @deprecated Use mobile.disconnect() instead */
-        disconnect:shared.current.mobile.disconnect,
-        /* @deprecated Use mobile.sendInitData instead */
-        setInitData:shared.current.mobile.sendInitData,        
-        /* @deprecated Use mobile.sendValue() instead */
-        setFieldValueById:shared.current.mobile.sendValue,
-        /* @deprecated Use mobile.error instead */
+        field,        
         errorMessage,
-        /* @deprecated Use mobile.sendValue() instead */
-        setters: globalInput.getSetters(shared),
-        /* @deprecated Use the boolean variables provided in the mobile object instead */
-        mobileState,
-        /* @deprecated Use ConnectQR component instead */
-        connectionMessage: useMemo(() => globalInput.displayCodeDeprecated(mobileState, connectionCode), [connectionCode, mobileState]),
-        /* @deprecated Use field instead */
-        values: globalInput.getValues(shared),
-        /* @deprecated Use field instead */
-        fields: globalInput.getFields(shared),
-        /* @deprecated Use mobile.initDataID instead */
-        initData: shared.current.data && shared.current.data.initData,
-        /* @deprecated */
-        WhenWaiting: useCallback(({ children }) => globalInput.displayWhen2Deprecated(children, mobileState, MobileState.WAITING_FOR_MOBILE, MobileState.INITIALIZING), [mobileState === MobileState.WAITING_FOR_MOBILE || mobileState === MobileState.INITIALIZING]),
-        /* @deprecated */
-        WhenConnected: useCallback(({ children }) => globalInput.displayWhenDeprecated(children, mobileState, MobileState.MOBILE_CONNECTED), [mobileState === MobileState.MOBILE_CONNECTED]),
-        /* @deprecated */
-        WhenDisconnected: useCallback(({ children }) => globalInput.displayWhenDeprecated(children, mobileState, MobileState.DISCONNECTED), [mobileState === MobileState.DISCONNECTED]),
-        /* @deprecated */
-        WhenError: useCallback(({ children }) => globalInput.displayWhenDeprecated(children, mobileState, MobileState.ERROR), [mobileState === MobileState.ERROR])
+        isLoading,
+        isReady,
+        isError,
+        isDisconnected,
+        isConnected,
+        initData:mobileData.mobileConfig.initData,
+        sendValue:mobileData.sendValue,
+        sendInitData:mobileData.sendInitData,
+        setOnchange:mobileData.setOnchange,
+        disconnect:mobileData.disconnect
+        
     };
 };
 

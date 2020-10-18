@@ -23,7 +23,9 @@ declare module 'global-input-react' {
     }
     interface FieldChanged {
         field: FormField;        
-        values: FieldValue[];        
+        initData:InitData;
+        sendInitData:SetInitDataFunction;       
+        sendValue:SetFieldValueByIdFunction
     }
     type InitDataCreator = () => InitData;
 
@@ -34,60 +36,22 @@ declare module 'global-input-react' {
         size: number,
         level: "L" | "M" | "Q" | "H"
     };
-
-    interface Mobile {
+    interface GlobalInputData {
+        ConnectQR: FunctionComponent<ConnectQRProps>,        
+        connectionCode: string;
+        field: FormField;        
+        errorMessage: string;    
         isLoading: boolean;
         isReady: boolean;
         isError: boolean;
         isDisconnected: boolean;
         isConnected: boolean;
-        initDataID: string;        
-        error: string;
-        sendInitData:SetInitDataFunction;
+        initData:InitData;
         sendValue:SetFieldValueByIdFunction;
+        sendInitData:SetInitDataFunction;        
         setOnchange: (onchange: OnchangeFunction) => void;
-        disconnect: () => void;
-        connector:object;
+        disconnect: () => void;        
     }
-
-
-    interface GlobalInputData {
-        ConnectQR: FunctionComponent<ConnectQRProps>,        
-        connectionCode: string;
-        field: FormField;        
-        mobile: Mobile;
-        /* @deprecated Use mobile.disconnect() instead */
-        disconnect: () => void;
-        /* @deprecated Use mobile.sendInitData() instead */
-        setInitData: SetInitDataFunction;                
-        /* @deprecated Use mobile.sendValue() instead */
-        setFieldValueById: SetFieldValueByIdFunction;
-        /* @deprecated Use mobile.error instead */
-        errorMessage: string;
-        /* @deprecated Use mobile.sendValue() instead */
-        setters: ((value: any) => void)[];
-        /* @deprecated Use the boolean variables provided in the mobile object instead */
-        mobileState: 1 | 2 | 3 | 4 | 5;
-        /* @deprecated Use ConnectQR component instead */
-        connectionMessage: React.FC<void>;
-        /* @deprecated Use field instead */
-        values: FieldValue[];
-        /* @deprecated Use field instead */
-        fields: FormField[];
-        /* @deprecated */
-        WhenWaiting: WhenFunction;
-        /* @deprecated */
-        WhenConnected: WhenFunction;
-        /* @deprecated */
-        WhenDisconnected: WhenFunction;
-        /* @deprecated */
-        WhenError: WhenFunction;
-    }
-
-    type WhenFunction = (props: any) => any;
-
-
-
 
     export function generateRandomString(length?: number): string;
     export function encrypt(content: string, password: string): string;
