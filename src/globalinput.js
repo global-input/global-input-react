@@ -169,7 +169,7 @@ export const startConnect = (dispatch,configData) => {
         onRegistered: next => {
             next();  
             const connectionCode = mobileData.session.buildInputCodeData();
-            console.log("encrypted one-time session code [[" + connectionCode + "]]");
+            //console.log("encrypted one-time session code [[" + connectionCode + "]]");
             dispatch({type:ACTION_TYPES.REGISTERED,connectionCode});
             if(options && options.onRegistered){
                 options.onRegistered();
