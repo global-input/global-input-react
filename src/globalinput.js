@@ -4,7 +4,7 @@ import QRCode from "qrcode.react";
 
 import { createMessageConnector } from 'global-input-message';
 
-export const ACTION_TYPES = { 
+const ACTION_TYPES = { 
     START_CONNECT:1,
     SEND_INIT_DATA:2,
     REGISTERED:3,
@@ -17,7 +17,7 @@ export const ACTION_TYPES = {
     CLOSE:10    
 };
 
-export const MobileState = {        
+const MobileState = {        
     INITIALIZING:1,      
     DISCONNECTED:2,
     ERROR:3, 
@@ -28,49 +28,79 @@ export const MobileState = {
 export const initialState={        
     connectionCode:null,
     errorMessage:null,    
-    field:null,
-    isLoading: true,
-    isReady:false,
-    isError: false,
-    isDisconnected: false,
-    isConnected: false,   
+    field:null    
 };
 
 
-export const mobileData={
+const mobileData={
     session:null,
     mobileState:MobileState.INITIALIZING,    
     fields:[],
     values:[], 
     setters:[],    
     clients:[],
-    mobileConfig:{initData:{}},
+    mobileConfig:null,
     sendInitData:()=>{},
     disconnect:()=>{},
-    onchange:()=>{},    
-    setOnchange:onchange => mobileData.onchange=onchange,    
-    sendValue:(fieldId, valueToSet) => {
-        if(mobileData.mobileState!==MobileState.MOBILE_CONNECTED){
-            return;
-        }        
-        if(mobileData.fields && mobileData.fields.length){
-            for(let [index,field] of mobileData.fields.entries()){                    
-                if(field.id===fieldId){
-                    mobileData.setters[index](valueToSet);                            
-                    break;
-                }
-            };
-        }
-    },
-    closeConnection:function(){
-        if(mobileData.session){
-            mobileData.session.disconnect();        
-            mobileData.session=null;        
-            mobileData.mobileState=MobileState.DISCONNECTED;
-        }        
-    }    
+    onchange:()=>{}        
 };
 
+const sendValue = (fieldId, valueToSet) => {
+    if(mobileData.mobileState!==MobileState.MOBILE_CONNECTED){
+        return;
+    }        
+    if(mobileData.fields && mobileData.fields.length){
+        for(let [index,field] of mobileData.fields.entries()){                    
+            if(field.id===fieldId){
+                mobileData.setters[index](valueToSet);                            
+                break;
+            }
+        };
+    }
+};
+
+const closeConnection =()=>{
+    if(mobileData.session){
+        mobileData.session.disconnect();        
+        mobileData.session=null;        
+        mobileData.mobileState=MobileState.DISCONNECTED;
+    }        
+};
+
+const setOnchange=onchange => mobileData.onchange=onchange;  
+
+
+export const getFlags = ()=>{
+    return {
+        isLoading: mobileData.mobileState===MobileState.INITIALIZING,
+        isReady: mobileData.mobileState===MobileState.WAITING_FOR_MOBILE,
+        isError: mobileData.mobileState===MobileState.ERROR,
+        isDisconnected: mobileData.mobileState===MobileState.DISCONNECTED,
+        isConnected:    mobileData.mobileState===MobileState.MOBILE_CONNECTED
+
+    };
+};
+export const getExposed = () => {
+    return {
+        initData:mobileData.mobileConfig && mobileData.mobileConfig.initData,
+        sendValue,
+        sendInitData:mobileData.sendInitData,
+        setOnchange,
+        disconnect:mobileData.disconnect
+    }
+
+};
+
+export const invokeOnChange=(field)=>{
+    if(field && mobileData.onchange){ 
+        const {initData,sendValue,sendInitData}=getExposed();
+        mobileData.onchange({
+        field,
+        initData,
+        sendInitData,
+        sendValue});                         
+    }
+}
 
 const isValidInitData=initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
 
@@ -99,13 +129,13 @@ const buildMessageHandlers=(dispatch, initData)=>{
         if(f.type==='info'){                
             return f;
         }
-        if(f.operations && f.operations.onInput){                                     
+        if(f.operations && f.operations.onInput){
             return f;
         }
         return {
             ...f,
             operations:{
-                onInput:value => dispatch({type:ACTION_TYPES.RECEIVED_FIELD,values,fields,value,index})              
+                onInput:value => dispatch({type:ACTION_TYPES.RECEIVED_FIELD,values,fields,value,index})
             }
         }                                                    
     });       
@@ -122,7 +152,7 @@ const buildMessageHandlers=(dispatch, initData)=>{
     };
 };
 
-export const startConnect =(dispatch,configData) => {
+export const startConnect = (dispatch,configData) => {
     if(typeof configData ==='function'){
         configData=configData();            
     }
@@ -151,11 +181,12 @@ export const startConnect =(dispatch,configData) => {
                 options.onRegisterFailed();                
             }
         },
-        onSenderConnected:(client, clients) => {
+        onSenderConnected:(client, clients) => {            
             dispatch({type:ACTION_TYPES.SENDER_CONNECTED, clients,client});            
         },
-        onSenderDisconnected:(client, clients) => {                        
+        onSenderDisconnected:(client, clients) => {                                    
             dispatch({type:ACTION_TYPES.SENDER_DISCONNECTED,client, clients});            
+            
         },
         onError:errorMessage => {                   
             dispatch({type:ACTION_TYPES.CONNECTION_ERROR,errorMessage});
@@ -168,8 +199,8 @@ export const startConnect =(dispatch,configData) => {
         onInputPermissionResult:options && options.onInputPermissionResult 
     };
     
-    if(mobileData.mobileState===MobileState.MOBILE_CONNECTED){            
-            dispatch({type:ACTION_TYPES.SEND_INIT_DATA,setters,fields,values,initData});
+    if(mobileData.mobileState===MobileState.MOBILE_CONNECTED){  
+            dispatch({type:ACTION_TYPES.SEND_INIT_DATA,setters,fields,values,mobileConfig});
             return;
     }
     mobileData.sendInitData=(initDataToSet)=>{
@@ -177,13 +208,15 @@ export const startConnect =(dispatch,configData) => {
             return null;
         }        
         const {setters,fields,values,initData}=buildMessageHandlers(dispatch, initDataToSet); 
-        dispatch({type:ACTION_TYPES.SEND_INIT_DATA, setters,fields,values,initData});        
+        const mobileConfig=mobileData.mobileConfig;
+        mobileConfig.initData=initData;
+        dispatch({type:ACTION_TYPES.SEND_INIT_DATA, setters,fields,values,mobileConfig});        
     };
     mobileData.disconnect=()=>{
-        mobileData.closeConnection();
+        closeConnection();
         dispatch({type:ACTION_TYPES.CLOSE});                      
     };
-    mobileData.closeConnection();    
+    closeConnection();    
     dispatch({type:ACTION_TYPES.START_CONNECT,mobileConfig,setters,fields,values});                  
 };
 
@@ -217,12 +250,12 @@ const processSendInitData = (state, action)=>{
         console.error("sendInitData:requires MOBILE_CONNECTED");
         return state;
     }
-    const {setters,fields,values,initData}=action;            
-    mobileData.mobileConfig.initData=initData;
+    const {mobileConfig,setters,fields,values}=action;              
     mobileData.setters=setters;
     mobileData.fields=fields;
     mobileData.values=values;    
-    mobileData.session.sendInitData(initData);    
+    mobileData.mobileConfig=mobileConfig;
+    mobileData.session.sendInitData(mobileConfig.initData);    
     return {...state,
         field:null        
     };
@@ -270,7 +303,7 @@ const processSenderConnected = (state, action) => {
             };           
 }
 const processSenderDisconnected = (state, action) => {
-    mobileData.closeConnection();
+    closeConnection();
     mobileData.mobileState=MobileState.INITIALIZING;    
     mobileData.session=createMessageConnector();        
     mobileData.session.connect(mobileData.mobileConfig);    
@@ -288,7 +321,7 @@ const processSenderDisconnected = (state, action) => {
 const processReceivedField = (state, action)=>{
     
     if(mobileData.mobileState!==MobileState.MOBILE_CONNECTED){
-        console.error("RECEIVED_FIELD:requires isConnected");
+        console.error("RECEIVED_FIELD:requires isConnected:"+mobileData.mobileState);
         return state;
     }
     const {values,fields,value,index}=action;    
@@ -308,7 +341,7 @@ const processSendField=(state, action)=>{
         state;
     }
     if(mobileData.mobileState!==MobileState.MOBILE_CONNECTED){
-        console.error("SEND_FIELD:requires isConnected");
+        console.error("SEND_FIELD:requires isConnected:"+mobileData.mobileState);
         return state;
     }
     values[index] = value;
@@ -318,7 +351,7 @@ const processSendField=(state, action)=>{
 };
 const processClose=(state, action)=>{     
     mobileData.mobileState=MobileState.DISCONNECTED;    
-    mobileData.closeConnection();    
+    closeConnection();    
     return {...state,        
         isError:false,
         isLoading:false,
@@ -329,7 +362,7 @@ const processClose=(state, action)=>{
     };    
 
 }
-export const reducer = (state, action)=>{       
+export const reducer = (state, action)=>{
     switch(action.type){   
         case ACTION_TYPES.START_CONNECT:
                     return processStartConnect(state, action);        
