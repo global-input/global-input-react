@@ -96,26 +96,28 @@ it("Device App and Mobile App should be able to communicate", async function () 
     };
     const deviceApp = {
         receiver: createInputReceivers(deviceConfig),//message receivers on the device side      
-        ui: deviceConfig.initData
-    }
-    const { result, waitForNextUpdate, unmount } = renderHook(() => useGlobalInputApp(deviceConfig));
-    await waitForNextUpdate();
-    expect(result.current.isReady).toBe(true);
+        ui: deviceConfig.initData,
+        hook:renderHook(() => useGlobalInputApp(deviceConfig)) //calls the hook
+    }    
+    await deviceApp.hook.waitForNextUpdate();
+    expect(deviceApp.hook.result.current.isReady).toBe(true); //deviceApp is ready to accept connection from a mobile app.
 
     //const {findByTestId}=render(<div>{connectionMessage}</div>);  //display QR Code here
     // const {code, level,size}=await getQRCodeValues({findByTestId}); //qrcode.react module is mocked
-    const connectionCode = result.current.connectionCode;
-
+    
     /** Here the device app displays a QR Code that contains the value of connectionCode, which is 
     *  an encrypted string containing information on how to connect to your device app
     **/
+
+    const connectionCode = deviceApp.hook.result.current.connectionCode; 
+    
     const mobileApp = {
         con: createMessageConnector(), //creates a connector
         receiver: createInputReceivers(), //create promise objects inside callbacks to make testing more intuitive.
     };
     const { initData: initDataReceivedByMobile } = await mobileApp.con.connect(mobileApp.receiver.config, connectionCode) //mobile app connects to the device using the connectionCode that is obtained from the QR Code
     mobileApp.ui = initDataReceivedByMobile;  //mobile app display user interface from the initData obtained
-    expect(mobileApp.ui).toBeSameInitData(deviceApp.ui);
+    expect(mobileApp.ui).toBeSameInitData(deviceApp.ui); //initData received should match what was sent
 
     mobileApp.message = "content1"
     mobileApp.con.sendValue(mobileApp.ui.form.fields[0].id, mobileApp.message); //mobile sends a message
@@ -124,10 +126,10 @@ it("Device App and Mobile App should be able to communicate", async function () 
 
 
     deviceApp.message = "content2";
-    result.current.sendValue(deviceApp.ui.form.fields[0].id, deviceApp.message);
-    mobileApp.message = await mobileApp.receiver.input.get();
-    expect(mobileApp.message.data.value).toEqual(deviceApp.message);
-    expect(mobileApp.message.data.fieldId).toEqual(deviceApp.ui.form.fields[0].id);
+    deviceApp.result.current.sendValue(deviceApp.ui.form.fields[0].id, deviceApp.message); //device app sends a message
+    mobileApp.message = await mobileApp.receiver.input.get();          //mobile app receives the message
+    expect(mobileApp.message.data.value).toEqual(deviceApp.message);  //received message should match what was sent
+    expect(mobileApp.message.data.fieldId).toEqual(deviceApp.ui.form.fields[0].id); //id received should match the if of the targeted field.
 
 
     const deviceConfig2 = {
@@ -154,13 +156,13 @@ it("Device App and Mobile App should be able to communicate", async function () 
             }
         }
     };
-    deviceApp.receiver = createInputReceivers(deviceConfig2);
+    deviceApp.receiver = createInputReceivers(deviceConfig2); //create promise objects inside callbacks to make testing more intuitive.
     deviceApp.ui = deviceConfig2.initData;
 
-    result.current.sendInitData(deviceApp.ui);
-    mobileApp.message = await mobileApp.receiver.input.get();
-    mobileApp.ui = mobileApp.message.initData;
-    expect(mobileApp.ui).toBeSameInitData(deviceApp.ui);
+    deviceApp.result.current.sendInitData(deviceApp.ui); //device app sends a new mobile user interface
+    mobileApp.message = await mobileApp.receiver.input.get(); //mobile app receives the message
+    mobileApp.ui = mobileApp.message.initData;   //mobile displays a user interface from the initData received.
+    expect(mobileApp.ui).toBeSameInitData(deviceApp.ui); //initData received should match what was sent
 
     mobileApp.message = "firstName1";
     mobileApp.con.sendValue(mobileApp.ui.form.fields[0].id, mobileApp.message); //mobile sends information to the device
@@ -173,8 +175,8 @@ it("Device App and Mobile App should be able to communicate", async function () 
     expect(deviceApp.message).toEqual(mobileApp.message);
 
     mobileApp.con.disconnect();
-    result.current.disconnect();
-    unmount();
+    deviceApp.hook.result.current.disconnect();
+    deviceApp.hook.unmount();
 });
 
 
