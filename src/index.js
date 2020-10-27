@@ -1,7 +1,7 @@
 
-export * from  "global-input-message";
+export * from "global-input-message";
 
-import useGlobalInputApp, {MobileState} from './useGlobalInputApp';
+import useGlobalInputApp from './useGlobalInputApp';
 
-export {useGlobalInputApp,MobileState};
+export { useGlobalInputApp };
 
