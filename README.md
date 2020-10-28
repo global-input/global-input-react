@@ -217,6 +217,15 @@ const informationField={
 
 ````
 
+When  ```useGlobalInputApp``` is invoked for the first time, the module will start to initialize itself. In this phase, ```mobile.isLoading``` is set to true, and ```<mobile.ConnectQR/>``` displays a loading symbol. After the initialization is completed, if the application is ready to accept connection, ```mobile.isReady``` is set to true, and ```<mobile.ConnectQR/>``` displays an encrypted QR Code. When a mobile app has connected to your application, ```mobile.isConnected``` is set to true, and ```<mobile.ConnectQR/>``` displays nothing. Those variables are useful if you would like to control what to display during different phases:
+```JavaScript
+{mobile.isConnected && (<>
+<h1>Mobile Connected</h1>
+<div>Please operate on your mobile to provide your credential!</div>
+</>)}
+```
+
+
 Finally, the examples in the [website](https://globalinput.co.uk/), and tests in the [test project](https://github.com/global-input/test-global-input-app-libs) contain more information about various use cases that you can implement in your Typescript/JavaScript applications. 
 
 ## On Mobile App Side
@@ -243,15 +252,7 @@ You can also send messages to the device application, responding to the events g
 ```
 There are two input parameters required for calling  ```mobileConnector.sendValue()``` function: the first one identifies the target element that the value is being sent to, while the second parameter holds the value needs to be sent across.
 
-## More Details
 
-When  ```useGlobalInputApp``` is invoked for the first time, the module will start to initialize itself. In this phase, ```mobile.isLoading``` is set to true, and ```<mobile.ConnectQR/>``` displays a loading symbol. After the initialization is completed, if the application is ready to accept connection, ```mobile.isReady``` is set to true, and ```<mobile.ConnectQR/>``` displays an encrypted QR Code. When a mobile app has connected to your application, ```mobile.isConnected``` is set to true, and ```<mobile.ConnectQR/>``` displays nothing. Those variables are useful if you would like to control what to display during different phases:
-```JavaScript
-{mobile.isConnected && (<>
-<h1>Mobile Connected</h1>
-<div>Please operate on your mobile to provide your credential!</div>
-</>)}
-```
 
 
 
