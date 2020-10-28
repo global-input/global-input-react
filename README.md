@@ -3,7 +3,6 @@ This React module allows you to introduce a mobile interoperability into React a
 
 This module is particularly useful in the current new normal established by the COVID-19 pandemic, where businesses require visiting customers to communicate accurately with customer representatives while enforcing the rules of wearing masks and social distancing. Thanks to this library, you will be able to establish an instant and secure communication right within the business software you are using, allowing your customers to collaborate effectively, securely and safely. For example, you may provide one-click subscriptions through user mobiles by leveraging the [mobile secure storage](https://globalinput.co.uk/global-input-app/mobile-authentication). Alternative, you do not even have to collect users' personal data thanks to the ability to request data on-demand from the mobile app at the point of service, freeing yourself from the pains of privacy regulations. You may also choose to allow your customers to encrypt their own data using their mobiles, giving users full control over the security and privacy of their personal data.
 
-
 ## Setup
 
 ```shell
@@ -18,27 +17,27 @@ import {useGlobalInputApp} from  'global-input-react';
 Then, ```useGlobalInputApp()``` function (which is a React hook) can be called with a parameter, defining a mobile user interface. For example, the following code displays a login screen on the user's mobile screen when connected to your application:
 
 ```JavaScript
-const  usernameField={
-	id:  'username',
-	label:  'Username',
+const  usernameField = {
+  id:  'username',
+  label:  'Username',
 };
 
-const  passwordField={
-	id:'password',
-	label:  'Password'
+const  passwordField = {
+  id:'password',
+  label:  'Password'
 };
 
-const  loginButton={
-	id:  'login',
-	label:  'Sign In',
-	type:  'button'
+const  loginButton = {
+  id:  'login',
+  label:  'Sign In',
+  type:  'button'
 };
 
-const  mobile=useGlobalInputApp({initData:{
-    form:{
-       title:  'Sign In',
-       fields: [usernameField,passwordField,loginButton]
-     }
+const  mobile = useGlobalInputApp( {initData : {
+   form: {
+      title:  'Sign In',
+      fields: [usernameField,passwordField,loginButton]
+   }
 }});
 ```
 The ```initData``` contains a ```form``` with a set of fields: ```usernameField```,```passwordField```, and ```loginButton```.
@@ -53,9 +52,9 @@ It displays an encrypted QR Code for mobile apps to scan to connect to your appl
 
 When connected to your application, the mobile app displays a ```form``` specified in ```initData```. Also, when the user interacts with elements in the ```form```, your application can receive mobile events through ```mobile.field``` variable, with the ```mobile.field.id``` identifying the element that the user has interacted with, and with ```mobile.field.value``` holding the value that the user has entered. Actually, you can simply pass your callback function into the ```mobile.setOnchange()```  function to receive those mobile events instead of implementing the logic for monitoring the changes in the  ```mobile.field``` variable:
 ```JavaScript
-mobile.setOnchange(({field})=>{
-    const {id, value}=field;
-	switch(id){
+mobile.setOnchange( ( {field} ) => {
+    const {id, value} = field;
+	switch(id) {
 	  case usernameField.id: 
 	     setUsername(value); 
 	     break;
@@ -72,22 +71,22 @@ In the above code, You can implement the ```setUsername()``` and ```setPassword(
 ```JavaScript
 import React, { useState } from 'react';
 ...
-const [username, setUsername]=useState('');
-const [password, setPassword]=useState('');
+const [username, setUsername] = useState('');
+const [password, setPassword] = useState('');
 ```
 
 You can also send values from your application to the mobile app responding to local or remote events:
 
 ```JavaScript
 Username: 
-<input onChange={event=>{
+<input onChange = { (event) => {
 	setUsername(event.target.value);
-	mobile.sendValue(usernameField.id,event.target.value);
+	mobile.sendValue(usernameField.id, event.target.value);
 } value={username} type="text"/>
 
-<input onChange={event=>{
+<input onChange={ (event) => {
 	setPassword(event.target.value);
-	mobile.sendValue(passwordField.id,event.target.value);
+	mobile.sendValue(passwordField.id, event.target.value);
 } value={username} type="password"/>
 
 ```
@@ -98,15 +97,17 @@ Using this approach, you can turn a simple password-based authentication into a 
  When ```mobile.sendInitData()``` function is called with a ```InitData``` parameter, the connected mobile app will switch to the user interface specified:
 
 ```JavaScript
-const login=(username,password)=>{
-		const initData={					
-         };
-         mobile.sendInitData(initData:{
-			form: {
-							title:  "Welcome " +username,
-							fields: [{type:  "info", value:  "Test Completed",}]
-            }
-         }); 
+const infoField = {
+   type:  "info", 
+   value:  "Test Completed"
+};
+const login = (username,password) => {	
+   mobile.sendInitData({
+	  form: {
+				title:  "Welcome " +username,
+				fields: [infoField]
+	  }
+   }); 
 }
 ```
 Another way is to place another instance of  ```useGlobalInputApp```  in a component, and then switch to that component.
@@ -124,22 +125,22 @@ When  ```useGlobalInputApp``` is invoked for the first time, the module will sta
 For an element in a ```form```, ```type``` attribute defines how to process/display the data contained in it. For example, if it is set to ```button```, the mobile app display a ```Button```:
 
 ```JavaScript
-  const  loginButton={
-    id:  'login',
-    label:  'Sign In',
-    type:  'button'
-  };
+const  loginButton = {
+  id:  'login',
+  label:  'Sign In',
+  type:  'button'
+};
 ```
 
 The default value of the ```type``` attribute is "text". In this case, it display either a text input or a text area, depending on the value of ```nLines```, which represents how many number of lines is visible:  
 
 ```JavaScript
-  const  contentField={
-      id:  'content',
-      label:  'Content',
-      type:  "text",
-      nLines:5,
-      value:"This is a content in the text box"
+const  contentField = {
+   id:  'content',
+   label:  'Content',
+   type:  "text",
+   nLines:5,
+   value:"This is a content in the text box"
   };
 ```
 If the ```value``` attribute is set, it will be sent along with the form to pre-populate the the field when being displayed on the mobile screen.
@@ -151,24 +152,22 @@ If the ```value``` attribute is set, it will be sent along with the form to pre-
 If you set the value of ```type``` of element in a ```form``` to ```"encrypt"```, the connected mobile app encrypts the ```value``` of the element and send back the result to your application:
 
 ```JavaScript
-const  contentToEncrypt="...";
-const  encryptField={
-    id:  'content',
-    label:  'Content',
-    type:  "encrypt",
-    value:contentToEncrypt
+const  encryptField = {
+   id:  'content',
+   label:  'Content',
+   type:  "encrypt",
+   value: contentToEncrypt
 };
 ```
 
 In a similar way, setting ```type``` to ```"decrypt"``` will lead to decryption:
 
 ```JavaScript
-const  contentToDecrypt="...";
-const  decryptField={
+const  decryptField = {
     id:  'content',
     label:  'Content',
     type:  "decrypt",
-    value:contentToDecrypt
+    value: contentToDecrypt
 };
 
 ```
@@ -178,7 +177,7 @@ const  decryptField={
 The value attribute in an element can also be an object containing some styling information:
 
 ```JavaScript
-const infoField={
+const infoField = {
     id:   "title",    
     type: "info",
     value: {
@@ -194,12 +193,12 @@ const infoField={
 You can display a multi-line text using an array for ```content```:
 
 ```JavaScript
-const informationField={
-        id: "informationText",
-        type: "info",
-        value:  {
-            type: "view",
-            style: {
+const informationField = {
+   id: "informationText",
+   type: "info",
+   value: {
+      type: "view",
+      style: {
                 borderColor: "#rgba(72,128,237,0.5)",
                 backgroundColor: "#rgba(72,128,237,0.5)",
                 borderWidth: 1,
@@ -238,20 +237,20 @@ Finally, the examples in the [website](https://globalinput.co.uk/), and tests in
 As discussed previously, in order to connect to a device application, your mobile app needs to obtain the value of ```connectionCode``` through scanning a QR Code. Then, you can pass it to the ```connect()``` function to connect to your device application as its second parameter:
 
 ```JavaScript
-      const  mobileConnector=createMessageConnector();
-      const {initData} = await  mobileConnector.connect({
-          onInput:(inputMessage)=>{
+  const  mobileConnector = createMessageConnector();
+  const {initData} = await  mobileConnector.connect( {
+          onInput:(inputMessage) => {
           ....
           }
-      },connectionCode);
+      }, connectionCode);
 ```
 In the above code, ```initData``` contains a ```form``` provided by the connected device application, while ```onInput()``` function is called whenever a message is received from the device application.
 
 You can also send messages to the device application, responding to the events generated when the user interacts with form elements:
 
 ```JavaScript
- const sendUsername=(username) => {
-	mobileConnector.sendValue(initData.form.fields[0].id,username);
+ const sendUsername = (username) => {
+	mobileConnector.sendValue(initData.form.fields[0].id, username);
  }    
 ```
 There are two input parameters required for calling  ```mobileConnector.sendValue()``` function: the first one identifies the target element that the value is being sent to, while the second parameter holds the value needs to be sent across.

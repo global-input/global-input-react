@@ -32,7 +32,7 @@ declare module 'global-input-react' {
     type ConnectQRProps = {
         size: number,
         level: "L" | "M" | "Q" | "H",
-        container?:
+        container?:React.FC
     };
     interface GlobalInputData {
         ConnectQR: FunctionComponent<ConnectQRProps>,
