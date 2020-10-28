@@ -102,12 +102,12 @@ const infoField = {
    value:  "Test Completed"
 };
 const login = (username,password) => {	
-   mobile.sendInitData({
-	  form: {
-				title:  "Welcome " +username,
-				fields: [infoField]
-	  }
-   }); 
+  mobile.sendInitData( {
+    form: {
+	   title:  "Welcome " + username,
+	   fields: [infoField]
+    }
+  }); 
 }
 ```
 Another way is to place another instance of  ```useGlobalInputApp```  in a component, and then switch to that component.
