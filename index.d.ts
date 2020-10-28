@@ -4,16 +4,14 @@ declare module 'global-input-react' {
     export * from 'global-input-message';
     import { InitData, FormField, MessageReceiver, FieldValue } from 'global-input-message';
 
-    type ConfigDataCreator = () => ConfigData;
-    
-    export function useGlobalInputApp(configData?: ConfigData | ConfigDataCreator, dependencies?: ReadonlyArray<any>): GlobalInputData;
+    export function useGlobalInputApp(configData: ConfigData | (() => ConfigData), dependencies?: ReadonlyArray<any>): GlobalInputData;
+
     type OnchangeFunction = (evt: FieldChanged) => void;
 
     interface ConfigData {
-        initData?: InitData | InitDataCreator;
+        initData: InitData | (() => InitData);
         onchange?: OnchangeFunction;
         options?: ConnectOptions;
-        session?: object;
     }
     interface ConnectOptions {
         apikey?: string;
@@ -22,35 +20,35 @@ declare module 'global-input-react' {
         url?: string;
     }
     interface FieldChanged {
-        field: FormField;        
-        initData:InitData;
-        sendInitData:SetInitDataFunction;       
-        sendValue:SetFieldValueByIdFunction
+        field: FormField;
+        initData: InitData;
+        sendInitData: SendInitDataFunction;
+        sendValue: SendValueFunction
     }
-    type InitDataCreator = () => InitData;
-
-    type SetFieldValueByIdFunction = (fieldId: string, valueToSet: FieldValue) => void;
-    type SetInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
+    
+    type SendValueFunction = (fieldId: string, valueToSet: FieldValue) => void;
+    type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
 
     type ConnectQRProps = {
         size: number,
-        level: "L" | "M" | "Q" | "H"
+        level: "L" | "M" | "Q" | "H",
+        container?:
     };
     interface GlobalInputData {
-        ConnectQR: FunctionComponent<ConnectQRProps>,        
+        ConnectQR: FunctionComponent<ConnectQRProps>,
         connectionCode: string;
-        field: FormField;        
-        errorMessage: string;    
+        field: FormField;
+        errorMessage: string;
         isLoading: boolean;
         isReady: boolean;
         isError: boolean;
         isDisconnected: boolean;
         isConnected: boolean;
-        initData:InitData;
-        sendValue:SetFieldValueByIdFunction;
-        sendInitData:SetInitDataFunction;        
+        initData: InitData;
+        sendValue: SendValueFunction;
+        sendInitData: SendInitDataFunction;
         setOnchange: (onchange: OnchangeFunction) => void;
-        disconnect: () => void;        
+        disconnect: () => void;
     }
 
     export function generateRandomString(length?: number): string;

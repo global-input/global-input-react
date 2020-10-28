@@ -126,7 +126,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
 
 
     deviceApp.message = "content2";
-    deviceApp.result.current.sendValue(deviceApp.ui.form.fields[0].id, deviceApp.message); //device app sends a message
+    deviceApp.hook.result.current.sendValue(deviceApp.ui.form.fields[0].id, deviceApp.message); //device app sends a message
     mobileApp.message = await mobileApp.receiver.input.get();          //mobile app receives the message
     expect(mobileApp.message.data.value).toEqual(deviceApp.message);  //received message should match what was sent
     expect(mobileApp.message.data.fieldId).toEqual(deviceApp.ui.form.fields[0].id); //id received should match the if of the targeted field.
@@ -159,7 +159,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
     deviceApp.receiver = createInputReceivers(deviceConfig2); //create promise objects inside callbacks to make testing more intuitive.
     deviceApp.ui = deviceConfig2.initData;
 
-    deviceApp.result.current.sendInitData(deviceApp.ui); //device app sends a new mobile user interface
+    deviceApp.hook.result.current.sendInitData(deviceApp.ui); //device app sends a new mobile user interface
     mobileApp.message = await mobileApp.receiver.input.get(); //mobile app receives the message
     mobileApp.ui = mobileApp.message.initData;   //mobile displays a user interface from the initData received.
     expect(mobileApp.ui).toBeSameInitData(deviceApp.ui); //initData received should match what was sent
@@ -177,7 +177,7 @@ it("Device App and Mobile App should be able to communicate", async function () 
     mobileApp.con.disconnect();
     deviceApp.hook.result.current.disconnect();
     deviceApp.hook.unmount();
-});
+},10000);
 
 
 

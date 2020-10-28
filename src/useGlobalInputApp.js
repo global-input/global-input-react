@@ -16,7 +16,7 @@ export default (configData, dependencies) => {
 
     useEffect(() => {
         if (field && globalInput.mobileData.onchange) {
-            mobileData.onchange({
+            globalInput.mobileData.onchange({
                 field,
                 initData,
                 sendInitData: globalInput.mobileData.sendInitData,
