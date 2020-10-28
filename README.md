@@ -50,7 +50,7 @@ The object returned by ```useGlobalInputApp()``` function is stored into the  ``
 ```
 It displays an encrypted QR Code for mobile apps to scan to connect to your application. It contains the content of ```mobile.connectionCode```, which holds an encrypted string value. When decrypted, it provides information on how to connect to your application, including a one-time-use encryption key for initiating an end-to-end encryption process between your application and a mobile app. 
 
-When connected to your application, the mobile app displays a ```form``` specified in ```initData```. Also, when the user interacts with elements in the ```form```, your application can receive mobile events through ```mobile.field``` variable, with the ```mobile.field.id``` identifying the element that the user has interacted with, and with ```mobile.field.value``` holding the value that the user has entered. Actually, you can simply pass your callback function into the ```mobile.setOnchange()```  function to receive those mobile events instead of implementing the logic for monitoring the changes in the  ```mobile.field``` variable:
+When connected to your application, the mobile app displays a ```form``` specified in ```initData```. Also, when the user interacts with elements in the ```form```, your application can receive mobile input events through ```mobile.field``` variable, with ```mobile.field.id``` identifying the element that the user has interacted with, and with ```mobile.field.value``` holding the value that the user has entered. Actually, you can simply pass your callback function into the ```mobile.setOnchange()```  function to receive those mobile input events instead of implementing the logic for monitoring the changes in the  ```mobile.field``` variable:
 ```JavaScript
 mobile.setOnchange( ( {field} ) => {
     const {id, value} = field;
@@ -75,7 +75,8 @@ const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
 ```
 
-You can also send values from your application to the mobile app responding to local or remote events:
+
+You can use ```mobile.sendValue()``` to send values to the connected mobile app. It accepts two parameters: the first parameter is for providing the id of the target element in the form, and the second parameter is for providing value to be sent:
 
 ```JavaScript
 Username: 
@@ -90,9 +91,8 @@ Username:
 } value={username} type="password"/>
 
 ```
- You can use ```mobile.sendValue()``` to send values to the connected mobile app. It accepts two parameters: the first parameter is for providing the id of the target element in the form, and the second parameter is for providing value to be sent.
-
-Using this approach, you can turn a simple password-based authentication into a one-click mobile authentication or you can implement any other password-less authentication or add an extra security layer without affecting the usability of your application.
+ 
+Using this approach, you can turn a simple password-based authentication into a one-click mobile authentication or implement a password-less authentication or add an extra security layer to the existing authentication mechanism without affecting the usability of your application.
 
  When ```mobile.sendInitData()``` function is called with a ```InitData``` parameter, the connected mobile app will switch to the user interface specified:
 
@@ -110,7 +110,7 @@ const login = (username,password) => {
   }); 
 }
 ```
-Another way is to place another instance of  ```useGlobalInputApp```  in a component, and then switch to that component.
+Another way is to place another instance of  ```useGlobalInputApp```  in a React component, then render the component when you need to replace mobile user interface.
 
 
 When  ```useGlobalInputApp``` is invoked for the first time, the module will start to initialize itself. In this phase, ```mobile.isLoading``` is set to true, and ```<mobile.ConnectQR/>``` displays a loading symbol. After the initialization is completed, if the application is ready to accept connection, ```mobile.isReady``` is set to true, and ```<mobile.ConnectQR/>``` displays an encrypted QR Code. When a mobile app has connected to your application, ```mobile.isConnected``` is set to true, and ```<mobile.ConnectQR/>``` displays nothing. Those variables are useful if you would like to control what to display during different phases:
@@ -132,7 +132,7 @@ const  loginButton = {
 };
 ```
 
-The default value of the ```type``` attribute is "text". In this case, it display either a text input or a text area, depending on the value of ```nLines```, which represents how many number of lines is visible:  
+The default value of the ```type``` attribute is "text". In this case, it display either a text input or a ```textarea```, depending on the value of ```nLines```, which represents how many number of lines is visible:  
 
 ```JavaScript
 const  contentField = {
@@ -226,9 +226,6 @@ const informationField = {
 
 ````
 
-
-
-
 Finally, the examples in the [website](https://globalinput.co.uk/), and tests in the [test project](https://github.com/global-input/test-global-input-app-libs) contain more information about various use cases that you can implement in your Typescript/JavaScript applications. 
 
 ## On Mobile App Side
@@ -237,28 +234,20 @@ Finally, the examples in the [website](https://globalinput.co.uk/), and tests in
 As discussed previously, in order to connect to a device application, your mobile app needs to obtain the value of ```connectionCode``` through scanning a QR Code. Then, you can pass it to the ```connect()``` function to connect to your device application as its second parameter:
 
 ```JavaScript
-  const  mobileConnector = createMessageConnector();
-  const {initData} = await  mobileConnector.connect( {
-          onInput:(inputMessage) => {
-          ....
-          }
-      }, connectionCode);
+const  mobileConnector = createMessageConnector();
+const {initData} = await  mobileConnector.connect( {
+   onInput:(inputMessage) => {
+     ....
+   }
+}, connectionCode);
 ```
 In the above code, ```initData``` contains a ```form``` provided by the connected device application, while ```onInput()``` function is called whenever a message is received from the device application.
 
 You can also send messages to the device application, responding to the events generated when the user interacts with form elements:
 
 ```JavaScript
- const sendUsername = (username) => {
-	mobileConnector.sendValue(initData.form.fields[0].id, username);
- }    
+const sendUsername = (username) => {
+   mobileConnector.sendValue(initData.form.fields[0].id, username);
+}    
 ```
 There are two input parameters required for calling  ```mobileConnector.sendValue()``` function: the first one identifies the target element that the value is being sent to, while the second parameter holds the value needs to be sent across.
-
-
-
-
-
-
-
-
