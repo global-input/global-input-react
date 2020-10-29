@@ -325,8 +325,7 @@ export const displayQRCode = ({
     container = DefaultQRCodeContainer,
     children = (<DefaultLabelContainer> Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a></DefaultLabelContainer>)
 }) => {
-    if (isReady) {
-        if (connectionCode) {
+    if (isReady && connectionCode) {
             return container({
                 children: (
                     <>
@@ -335,10 +334,6 @@ export const displayQRCode = ({
                     </>
                 )
             });
-        }
-        else {
-            console.log("connectionCode is not set yet");
-        }
     }
     else if (isLoading) {
         return container({
@@ -354,7 +349,6 @@ export const displayQRCode = ({
             )
         });
     }
-
     return null;
 }
 

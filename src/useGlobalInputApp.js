@@ -32,7 +32,7 @@ export default (configData, dependencies) => {
     }, [field]);
 
     const ConnectQR = useCallback(({ level, size, container, children }) => {
-        globalInput.displayQRCode({ level, size, container, connectionCode, isReady, isLoading, children });
+        return globalInput.displayQRCode({ level, size, container, connectionCode, isReady, isLoading, children });
     }, [connectionCode, isReady, isLoading]);
 
 
