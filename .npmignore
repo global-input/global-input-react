@@ -25,4 +25,5 @@ setupJest.js
 webpack.config.babel.js
 testUtil.js
 src/__tests__
+src/testUtil.js
 /package

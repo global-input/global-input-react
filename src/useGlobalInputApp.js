@@ -7,9 +7,15 @@ export default (configData, dependencies) => {
     const [{
         connectionCode,
         errorMessage,
-        field
-    }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);
-    const { isLoading, isReady, isError, isDisconnected, isConnected, initData } = globalInput.getMobileData();
+        field,
+        isLoading,
+        isReady,
+        isError,
+        isDisconnected,
+        isConnected,
+        initData,
+    }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);    
+    
     useEffect(() => {
         globalInput.startConnect(dispatch, configData);
     }, dependencies ? dependencies : []); //default connect once for the component

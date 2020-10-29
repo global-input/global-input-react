@@ -28,7 +28,13 @@ const MobileState = {
 export const initialState = {
     connectionCode: null,
     errorMessage: null,
-    field: null
+    field: null,
+    isLoading: true,
+    isReady: false,
+    isError: false,
+    isDisconnected: false,
+    isConnected: false,
+    initData: null,
 };
 
 
@@ -39,13 +45,14 @@ export const mobileData = {
     values: [],
     setters: [],
     clients: [],
+    client: null,
     mobileConfig: null,
     sendInitData: () => { },
     disconnect: () => { },
     onchange: () => { }
 };
 
-export const getMobileData = () => {
+const getMobileDataState = () => {
     return {
         isLoading: mobileData.mobileState === MobileState.INITIALIZING,
         isReady: mobileData.mobileState === MobileState.WAITING_FOR_MOBILE,
@@ -86,9 +93,9 @@ export const startConnect = (dispatch, configData) => {
     const mobileConfig = {
         initData,
         onRegistered: (connectionCode) => {
-            //console.log("encrypted one-time session code [[" + connectionCode + "]]");            
+            //console.log("encrypted one-time session code [[" + connectionCode + "]]");
             mobileData.mobileState = MobileState.WAITING_FOR_MOBILE;
-            options && options.onRegistered && options.onRegistered();
+            options && options.onRegistered && options.onRegistered(connectionCode);
             dispatch({ type: ACTION_TYPES.REGISTERED, connectionCode });
         },
         onRegisterFailed: errorMessage => {
@@ -101,15 +108,17 @@ export const startConnect = (dispatch, configData) => {
         onSenderConnected: (client, clients) => {
             mobileData.mobileState = MobileState.MOBILE_CONNECTED;
             mobileData.clients = clients;
+            mobileData.client = client;
             dispatch({ type: ACTION_TYPES.SENDER_CONNECTED });
         },
         onSenderDisconnected: (client, clients) => {
+            mobileData.clients = clients;
+            mobileData.client = client;
             closeConnection();
             mobileData.mobileState = MobileState.INITIALIZING;
             mobileData.session = createMessageConnector();
             mobileData.session.connect(mobileData.mobileConfig);
-            dispatch({ type: ACTION_TYPES.SENDER_DISCONNECTED, client, clients });
-
+            dispatch({ type: ACTION_TYPES.SENDER_DISCONNECTED });
         },
         onError: errorMessage => {
             closeConnection();
@@ -200,7 +209,25 @@ const buildMessageHandlers = (dispatch, initData) => {
         const field = { id: f.id, label: f.label, value: f.value };
         fields.push(field);
         values.push(f.value);
-        const s = (value) => dispatch({ type: ACTION_TYPES.SEND_FIELD, value, fields, values, index });
+        const s = (value) => {
+            if (mobileData.fields !== fields) {
+                console.error("SEND_FIELD:fields array is expected to stay unchanged");
+                return;
+            }
+            if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
+                console.error("SEND_FIELD:requires isConnected:" + mobileData.mobileState);
+                return state;
+            }
+            values[index] = value;
+            fields[index].value = value;
+            if (fields[index].id) {
+                mobileData.session.sendValue(fields[index].id, value);
+            }
+            else {
+                mobileData.session.sendValue(null, value, index);
+            }
+            dispatch({ type: ACTION_TYPES.SEND_FIELD });
+        }
         fieldSetters.push(s);
         if (f.type === 'info') {
             return f;
@@ -211,7 +238,20 @@ const buildMessageHandlers = (dispatch, initData) => {
         return {
             ...f,
             operations: {
-                onInput: value => dispatch({ type: ACTION_TYPES.RECEIVED_FIELD, values, fields, value, index })
+                onInput: value => {
+                    if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
+                        console.error("RECEIVED_FIELD:requires isConnected:" + mobileData.mobileState);
+                        return;
+                    }
+                    if (mobileData.fields !== fields) {
+                        console.error("RECEIVED_FIELD:fields array is expected to stay unchanged");
+                        return;
+                    }
+                    values[index] = value;
+                    fields[index].value = value;
+                    const field = { ...fields[index], value };
+                    dispatch({ type: ACTION_TYPES.RECEIVED_FIELD, field });
+                }
             }
         }
     });
@@ -231,131 +271,29 @@ const buildMessageHandlers = (dispatch, initData) => {
 
 
 
-
-
-
-
-
-const processStartConnect = (state, action) => {
-    return {
-        ...state,
-        errorMessage: '',
-        field: null
-    };
-}
-const processSendInitData = (state, action) => {
-    return {
-        ...state,
-        field: null
-    };
-}
-
-
-
-const processRegistered = (state, action) => {
-    const { connectionCode } = action;
-    return {
-        ...state,
-        connectionCode,
-        isLoading: false,
-        isReady: true,
-        isError: false,
-        isDisconnected: false,
-        isConnected: false,
-    };
-};
-const processError = (state, action) => {
-    const { errorMessage } = action;
-    return {
-        ...state,
-        errorMessage,
-        isError: true,
-        isLoading: false,
-        isReady: false,
-        isDisconnected: true,
-        isConnected: false,
-        field: null
-    };
-};
-const processSenderConnected = (state, action) => {
-    return { ...state };
-}
-const processSenderDisconnected = (state, action) => {
-    return {
-        ...state,
-        errorMessage: '',
-        field: null
-    };
-};
-const processReceivedField = (state, action) => {
-
-    if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-        console.error("RECEIVED_FIELD:requires isConnected:" + mobileData.mobileState);
-        return state;
-    }
-    const { values, fields, value, index } = action;
-    if (mobileData.fields !== fields) {
-        console.error("RECEIVED_FIELD:fields array is expected to stay unchanged");
-        return state;
-    }
-    values[index] = value;
-    fields[index].value = value;
-    const field = { ...fields[index], value };
-    return { ...state, field };
-};
-const processSendField = (state, action) => {
-    const { values, fields, index, value } = action;
-    if (mobileData.fields !== fields) {
-        console.error("SEND_FIELD:fields array is expected to stay unchanged");
-        state;
-    }
-    if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-        console.error("SEND_FIELD:requires isConnected:" + mobileData.mobileState);
-        return state;
-    }
-    values[index] = value;
-    fields[index].value = value;
-    if (fields[index].id) {
-        mobileData.session.sendValue(fields[index].id, value);
-    }
-    else {
-        mobileData.session.sendValue(null, value, index);
-    }
-
-    return { ...state };
-};
-const processClose = (state, action) => {
-    return {
-        ...state,
-        field: null
-    };
-
-}
 export const reducer = (state, action) => {
     switch (action.type) {
         case ACTION_TYPES.START_CONNECT:
-            return processStartConnect(state, action);
         case ACTION_TYPES.SEND_INIT_DATA:
-            return processSendInitData(state, action);
+            state = { ...state, errorMessage: '', field: null };
+            break;
         case ACTION_TYPES.REGISTERED:
-            return processRegistered(state, action);
-        case ACTION_TYPES.CONNECTION_ERROR:
-            return processError(state, action);
-        case ACTION_TYPES.REGISTER_FAILED:
-            return processError(state, action);
-        case ACTION_TYPES.SENDER_CONNECTED:
-            return processSenderConnected(state, action);
-        case ACTION_TYPES.SENDER_DISCONNECTED:
-            return processSenderDisconnected(state, action);
+            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode };
+            break;
         case ACTION_TYPES.RECEIVED_FIELD:
-            return processReceivedField(state, action);
+            state = { ...state, field: action.field };
+            break;
+        case ACTION_TYPES.CONNECTION_ERROR:
+        case ACTION_TYPES.REGISTER_FAILED:
+            state = { ...state, errorMessage: action.errorMessage };
+            break;
+        case ACTION_TYPES.SENDER_CONNECTED:
+        case ACTION_TYPES.SENDER_DISCONNECTED:
         case ACTION_TYPES.SEND_FIELD:
-            return processSendField(state, action);
         case ACTION_TYPES.CLOSE:
-            return processClose(state, action);
         default:
-            return state;
     };
+    return { ...state, ...getMobileDataState() };
 };
 
 const getDefaultQRCodeSize = () => {
