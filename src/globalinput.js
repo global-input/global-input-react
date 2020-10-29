@@ -64,17 +64,24 @@ const getMobileDataState = () => {
 };
 export const setOnchange = onchange => mobileData.onchange = onchange;
 
-export const sendValue = (fieldId, valueToSet) => {
+export const sendValue = (fieldId, valueToSet,fieldIndex=-1) => {
     if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
         return;
     }
     if (mobileData.fields && mobileData.fields.length) {
-        for (let [index, field] of mobileData.fields.entries()) {
-            if (field.id === fieldId) {
-                mobileData.setters[index](valueToSet);
-                break;
+        if(fieldId){
+            for (let [index, field] of mobileData.fields.entries()) {
+                if (field.id === fieldId) {
+                    mobileData.setters[index](valueToSet);
+                    break;
+                }
             }
-        };
+        }
+        else{
+            if(fieldIndex>=0 && fieldIndex<=mobileData.fields.length){
+                mobileData.setters[fieldIndex](valueToSet);
+            }
+        }
     }
 };
 

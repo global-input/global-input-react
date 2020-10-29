@@ -26,7 +26,7 @@ declare module 'global-input-react' {
         sendValue: SendValueFunction
     }
     
-    type SendValueFunction = (fieldId: string, valueToSet: FieldValue) => void;
+    type SendValueFunction = (fieldId: string, valueToSet: FieldValue,fieldIndex?:number) => void;
     type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
 
     type ConnectQRProps = {
