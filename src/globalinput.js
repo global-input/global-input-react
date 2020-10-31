@@ -223,7 +223,7 @@ const buildMessageHandlers = (dispatch, initData) => {
             }
             if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
                 console.error("SEND_FIELD:requires isConnected:" + mobileData.mobileState);
-                return state;
+                return;
             }
             values[index] = value;
             fields[index].value = value;
