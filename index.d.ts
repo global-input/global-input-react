@@ -1,16 +1,16 @@
-
-import { InitData, FormField, MessageReceiver, FieldValue } from 'global-input-message';
+import React from 'react';
+import { InitData, FormField, FieldValue } from 'global-input-message';
 export * from 'global-input-message';
 export function useGlobalInputApp(configData: ConfigData | (() => ConfigData), dependencies?: ReadonlyArray<any>): GlobalInputData;
 
 type OnchangeFunction = (evt: FieldChanged) => void;
 
-interface ConfigData {
+export interface ConfigData {
     initData: InitData | (() => InitData);
     onchange?: OnchangeFunction;
     options?: ConnectOptions;
 }
-interface ConnectOptions {
+export interface ConnectOptions {
     apikey?: string;
     securityGroup?: string;
     client?: string;
@@ -27,12 +27,12 @@ type SendValueFunction = (fieldId: string, valueToSet: FieldValue, fieldIndex?: 
 type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
 
 type ConnectQRProps = {
-    size: number,
-    level: "L" | "M" | "Q" | "H",
+    size?: number,
+    level?: "L" | "M" | "Q" | "H",
     container?: React.FC
 };
-interface GlobalInputData {
-    ConnectQR: FunctionComponent<ConnectQRProps>,
+export interface GlobalInputData {
+    ConnectQR: React.FC<ConnectQRProps>,
     connectionCode: string;
     field: FormField;
     errorMessage: string;
