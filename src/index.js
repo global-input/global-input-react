@@ -1,9 +1,8 @@
 
 import * as globalInput from './globalinput';
-import React, { useReducer, useEffect, useRef, useMemo, useCallback } from "react";
+import { useReducer, useRef, useEffect, useCallback } from "react";
 export * from "global-input-message";
-
-export const useGlobalInputApp = (configData, dependencies) => {
+export const useGlobalInputApp = (config) => {
     const [{
         connectionCode,
         errorMessage,
@@ -15,25 +14,52 @@ export const useGlobalInputApp = (configData, dependencies) => {
         isConnected,
         initData,
     }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);
+    const configRef = useRef(config); //ignore even if the config changes
+    const attached = useRef(true);
+    const onchange = useRef(null);
 
+    const notify = (st) => {
+        if (attached.current) {
+            dispatch(st);
+        }
+        else {
+            console.log(`${st.type} after detach`);
+        };
+    }
     useEffect(() => {
-        globalInput.startConnect(dispatch, configData);
-    }, dependencies ? dependencies : []); //default connect once for the component
+        globalInput.startConnect(notify, configRef.current);
+        return () => {
+            attached.current = false;
+        }
+    }, []);
 
+    const sendInitData = useCallback((initData) => {
+        attached.current && globalInput.sendInitData(initData, notify);
+    }, []);
+
+
+    const disconnect = useCallback(() => {
+        globalInput.disconnect(notify);
+    }, []);
+    const sendValue = globalInput.sendValue;
+
+
+    const setOnchange = (listener) => onchange.current = listener;
     useEffect(() => {
-        if (field && globalInput.mobileData.onchange) {
-            globalInput.mobileData.onchange({
+        if (field && onchange.current) {
+            onchange.current({
                 field,
                 initData,
-                sendInitData: globalInput.mobileData.sendInitData,
-                sendValue: globalInput.sendValue
+                sendInitData,
+                sendValue
             });
         }
-    }, [field]);
+    }, [field, initData, sendInitData, sendValue]);
 
     const ConnectQR = useCallback(({ level, size, container, children }) => {
         return globalInput.displayQRCode({ level, size, container, connectionCode, isReady, isLoading, children });
     }, [connectionCode, isReady, isLoading]);
+
 
 
     return {
@@ -47,12 +73,9 @@ export const useGlobalInputApp = (configData, dependencies) => {
         isDisconnected,
         isConnected,
         initData,
-        sendValue: globalInput.sendValue,
-        sendInitData: globalInput.mobileData.sendInitData,
-        disconnect: globalInput.mobileData.disconnect,
-        setOnchange: globalInput.setOnchange,
+        sendValue,
+        sendInitData,
+        disconnect,
+        setOnchange,
     };
 };
-
-
-

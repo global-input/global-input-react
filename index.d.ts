@@ -1,7 +1,7 @@
 import React from 'react';
 import { InitData, FormField, FieldValue } from 'global-input-message';
 export * from 'global-input-message';
-export function useGlobalInputApp(configData: ConfigData | (() => ConfigData), dependencies?: ReadonlyArray<any>): GlobalInputData;
+export function useGlobalInputApp(config: ConfigData | (() => ConfigData)): GlobalInputData;
 
 type OnchangeFunction = (evt: FieldChanged) => void;
 

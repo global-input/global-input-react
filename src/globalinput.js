@@ -1,7 +1,6 @@
 
 import React from "react";
 import QRCode from "qrcode.react";
-
 import { createMessageConnector } from 'global-input-message';
 
 const ACTION_TYPES = {
@@ -38,7 +37,7 @@ export const initialState = {
 };
 
 
-export const mobileData = {
+const mobileData = {
     session: null,
     mobileState: MobileState.INITIALIZING,
     fields: [],
@@ -46,138 +45,14 @@ export const mobileData = {
     setters: [],
     clients: [],
     client: null,
-    mobileConfig: null,
-    sendInitData: () => { },
-    disconnect: () => { },
-    onchange: () => { }
+    mobileConfig: null
 };
 
-const getMobileDataState = () => {
-    return {
-        isLoading: mobileData.mobileState === MobileState.INITIALIZING,
-        isReady: mobileData.mobileState === MobileState.WAITING_FOR_MOBILE,
-        isError: mobileData.mobileState === MobileState.ERROR,
-        isDisconnected: mobileData.mobileState === MobileState.DISCONNECTED,
-        isConnected: mobileData.mobileState === MobileState.MOBILE_CONNECTED,
-        initData: mobileData.mobileConfig && mobileData.mobileConfig.initData,
-    }
-};
-export const setOnchange = onchange => mobileData.onchange = onchange;
-
-export const sendValue = (fieldId, valueToSet,fieldIndex=-1) => {
-    if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-        return;
-    }
-    if (mobileData.fields && mobileData.fields.length) {
-        if(fieldId){
-            for (let [index, field] of mobileData.fields.entries()) {
-                if (field.id === fieldId) {
-                    mobileData.setters[index](valueToSet);
-                    break;
-                }
-            }
-        }
-        else{
-            if(fieldIndex>=0 && fieldIndex<=mobileData.fields.length){
-                mobileData.setters[fieldIndex](valueToSet);
-            }
-        }
-    }
-};
-
-export const startConnect = (dispatch, configData) => {
-    if (typeof configData === 'function') {
-        configData = configData();
-    }
-    if (!configData) {
-        return;
-    }
-    const options = configData.options;
-    const { setters, fields, values, initData } = buildMessageHandlers(dispatch, configData.initData);
-    if (!initData) {
-        return null;
-    }
-    const mobileConfig = {
-        initData,
-        onRegistered: (connectionCode) => {
-            //console.log("encrypted one-time session code [[" + connectionCode + "]]");
-            mobileData.mobileState = MobileState.WAITING_FOR_MOBILE;
-            options && options.onRegistered && options.onRegistered(connectionCode);
-            dispatch({ type: ACTION_TYPES.REGISTERED, connectionCode });
-        },
-        onRegisterFailed: errorMessage => {
-            closeConnection();
-            mobileData.mobileState = MobileState.ERROR;
-            options && options.onRegisterFailed && options.onRegisterFailed();
-            dispatch({ type: ACTION_TYPES.REGISTER_FAILED, errorMessage });
-
-        },
-        onSenderConnected: (client, clients) => {
-            mobileData.mobileState = MobileState.MOBILE_CONNECTED;
-            mobileData.clients = clients;
-            mobileData.client = client;
-            dispatch({ type: ACTION_TYPES.SENDER_CONNECTED });
-        },
-        onSenderDisconnected: (client, clients) => {
-            mobileData.clients = clients;
-            mobileData.client = client;
-            closeConnection();
-            mobileData.mobileState = MobileState.INITIALIZING;
-            mobileData.session = createMessageConnector();
-            mobileData.session.connect(mobileData.mobileConfig);
-            dispatch({ type: ACTION_TYPES.SENDER_DISCONNECTED });
-        },
-        onError: errorMessage => {
-            closeConnection();
-            mobileData.mobileState = MobileState.ERROR;
-            dispatch({ type: ACTION_TYPES.CONNECTION_ERROR, errorMessage });
-        },
-        url: options && options.url,
-        apikey: options && options.apikey,
-        securityGroup: options && options.securityGroup,
-        aes: options && options.aes,
-        onInput: options && options.onInput,
-        onInputPermissionResult: options && options.onInputPermissionResult
-    };
-    const sendInitData = (mobileConfig, setters, fields, values) => {
-        if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-            console.error("sendInitData:requires MOBILE_CONNECTED");
-        }
-        mobileData.setters = setters;
-        mobileData.fields = fields;
-        mobileData.values = values;
-        mobileData.mobileConfig = mobileConfig;
-        mobileData.session.sendInitData(mobileConfig.initData);
-        dispatch({ type: ACTION_TYPES.SEND_INIT_DATA });
-    }
-    if (mobileData.mobileState === MobileState.MOBILE_CONNECTED) {
-        sendInitData(mobileConfig, setters, fields, values);
-        return;
-    }
-    mobileData.sendInitData = (initDataToSet) => {
-        if (!initDataToSet) {
-            return null;
-        }
-        const { setters, fields, values, initData } = buildMessageHandlers(dispatch, initDataToSet);
-        const mobileConfig = mobileData.mobileConfig;
-        mobileConfig.initData = initData;
-        sendInitData(mobileConfig, setters, fields, values);
-    };
-    mobileData.disconnect = () => {
-        closeConnection();
-        dispatch({ type: ACTION_TYPES.CLOSE });
-    };
-    closeConnection();
-    mobileData.mobileState = MobileState.INITIALIZING;
-    mobileData.setters = setters;
+const setFieldProperties = (fields, values, setters) => {
     mobileData.fields = fields;
     mobileData.values = values;
-    mobileData.mobileConfig = mobileConfig;
-    mobileData.session = createMessageConnector();
-    mobileData.session.connect(mobileConfig);
-
-    dispatch({ type: ACTION_TYPES.START_CONNECT });
-};
+    mobileData.setters = setters;
+}
 
 
 const closeConnection = () => {
@@ -185,20 +60,41 @@ const closeConnection = () => {
         mobileData.session.disconnect();
         mobileData.session = null;
     }
+};
+export const disconnect = (notify) => {
+    closeConnection();
     mobileData.mobileState = MobileState.DISCONNECTED;
+    if (notify) {
+        notify({ type: ACTION_TYPES.CLOSE });
+    }
+}
+
+
+export const sendValue = (fieldId, valueToSet, fieldIndex = -1) => {
+    if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
+        return;
+    }
+    if (mobileData.fields && mobileData.fields.length) {
+        if (fieldId) {
+            for (let [index, field] of mobileData.fields.entries()) {
+                if (field.id === fieldId) {
+                    mobileData.setters[index](valueToSet);
+                    break;
+                }
+            }
+        }
+        else {
+            if (fieldIndex >= 0 && fieldIndex <= mobileData.fields.length) {
+                mobileData.setters[fieldIndex](valueToSet);
+            }
+        }
+    }
 };
 
 
 
 
-
-
-
-const isValidInitData = initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
-
-
-
-const buildMessageHandlers = (dispatch, initData) => {
+const buildMessageHandlersForInitData = (initData, notify) => {
     if (typeof initData === 'function') {
         initData = initData();
     }
@@ -233,7 +129,7 @@ const buildMessageHandlers = (dispatch, initData) => {
             else {
                 mobileData.session.sendValue(null, value, index);
             }
-            dispatch({ type: ACTION_TYPES.SEND_FIELD });
+            notify({ type: ACTION_TYPES.SEND_FIELD });
         }
         fieldSetters.push(s);
         if (f.type === 'info') {
@@ -257,7 +153,7 @@ const buildMessageHandlers = (dispatch, initData) => {
                     values[index] = value;
                     fields[index].value = value;
                     const field = { ...fields[index], value };
-                    dispatch({ type: ACTION_TYPES.RECEIVED_FIELD, field });
+                    notify({ type: ACTION_TYPES.RECEIVED_FIELD, field });
                 }
             }
         }
@@ -277,6 +173,93 @@ const buildMessageHandlers = (dispatch, initData) => {
 };
 
 
+const buildMobileConfig = (initData, options, notify) => {
+    return {
+        initData,
+        onRegistered: (connectionCode) => {
+            //console.log("encrypted one-time session code [[" + connectionCode + "]]");
+            mobileData.mobileState = MobileState.WAITING_FOR_MOBILE;
+            options && options.onRegistered && options.onRegistered(connectionCode);
+
+            notify({ type: ACTION_TYPES.REGISTERED, connectionCode });
+        },
+        onRegisterFailed: errorMessage => {
+            closeConnection();
+            mobileData.mobileState = MobileState.ERROR;
+            options && options.onRegisterFailed && options.onRegisterFailed();
+            notify({ type: ACTION_TYPES.REGISTER_FAILED, errorMessage });
+
+        },
+        onSenderConnected: (client, clients) => {
+            mobileData.mobileState = MobileState.MOBILE_CONNECTED;
+            mobileData.clients = clients;
+            mobileData.client = client;
+            notify({ type: ACTION_TYPES.SENDER_CONNECTED });
+        },
+        onSenderDisconnected: (client, clients) => {
+            mobileData.clients = clients;
+            mobileData.client = client;
+            closeConnection();
+            mobileData.mobileState = MobileState.INITIALIZING;
+            mobileData.session = createMessageConnector();
+            mobileData.session.connect(mobileData.mobileConfig);
+            notify({ type: ACTION_TYPES.SENDER_DISCONNECTED });
+        },
+        onError: errorMessage => {
+            closeConnection();
+            mobileData.mobileState = MobileState.ERROR;
+            notify({ type: ACTION_TYPES.CONNECTION_ERROR, errorMessage });
+        },
+        url: options && options.url,
+        apikey: options && options.apikey,
+        securityGroup: options && options.securityGroup,
+        aes: options && options.aes,
+        onInput: options && options.onInput,
+        onInputPermissionResult: options && options.onInputPermissionResult
+    };
+};
+
+export const sendInitData = (data, notify) => {
+    if (!data) {
+        return null;
+    }
+    const { setters, fields, values, initData } = buildMessageHandlersForInitData(data, notify);
+    setFieldProperties(fields, values, setters);
+    mobileData.mobileConfig.initData = initData;
+    mobileData.session.sendInitData(initData);
+    notify({ type: ACTION_TYPES.SEND_INIT_DATA });
+};
+
+
+export const startConnect = (notify, configData) => {
+    if (typeof configData === 'function') {
+        configData = configData();
+    }
+    if (!configData) {
+        console.log("configData is null");
+        return;
+    }
+    const { setters, fields, values, initData } = buildMessageHandlersForInitData(configData.initData, notify);
+    if (!initData) {
+        console.log("initData is null");
+        return;
+    }
+    mobileData.mobileConfig = buildMobileConfig(initData, configData.options, notify);
+    setFieldProperties(fields, values, setters);
+    if (mobileData.mobileState === MobileState.MOBILE_CONNECTED) {
+        mobileData.session.sendInitData(initData);
+        notify({ type: ACTION_TYPES.SEND_INIT_DATA });
+        return;
+    }
+    closeConnection();
+    mobileData.mobileState = MobileState.INITIALIZING;
+    mobileData.session = createMessageConnector();
+    mobileData.session.connect(mobileData.mobileConfig);
+    notify({ type: ACTION_TYPES.START_CONNECT });
+};
+
+
+const isValidInitData = initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
 
 export const reducer = (state, action) => {
     switch (action.type) {
@@ -300,7 +283,15 @@ export const reducer = (state, action) => {
         case ACTION_TYPES.CLOSE:
         default:
     };
-    return { ...state, ...getMobileDataState() };
+    return {
+        ...state,
+        isLoading: mobileData.mobileState === MobileState.INITIALIZING,
+        isReady: mobileData.mobileState === MobileState.WAITING_FOR_MOBILE,
+        isError: mobileData.mobileState === MobileState.ERROR,
+        isDisconnected: mobileData.mobileState === MobileState.DISCONNECTED,
+        isConnected: mobileData.mobileState === MobileState.MOBILE_CONNECTED,
+        initData: mobileData.mobileConfig && mobileData.mobileConfig.initData
+    };
 };
 
 const getDefaultQRCodeSize = () => {
@@ -333,14 +324,14 @@ export const displayQRCode = ({
     children = (<DefaultLabelContainer> Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a></DefaultLabelContainer>)
 }) => {
     if (isReady && connectionCode) {
-            return container({
-                children: (
-                    <>
-                        <QRCode value={connectionCode} level={level} size={size} />
-                        {children}
-                    </>
-                )
-            });
+        return container({
+            children: (
+                <>
+                    <QRCode value={connectionCode} level={level} size={size} />
+                    {children}
+                </>
+            )
+        });
     }
     else if (isLoading) {
         return container({
@@ -374,5 +365,3 @@ const styles = {
         color: "#A9C8E6", //#4880ED
     }
 }
-
-
