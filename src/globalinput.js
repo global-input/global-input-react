@@ -321,7 +321,7 @@ export const displayQRCode = ({
     isLoading = false,
     size = getDefaultQRCodeSize(),
     container = DefaultQRCodeContainer,
-    children = (<DefaultLabelContainer> Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" target="_blank"> Global Input App</a></DefaultLabelContainer>)
+    children = (<DefaultLabelContainer> Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" rel="noreferrer" target="_blank"> Global Input App</a></DefaultLabelContainer>)
 }) => {
     if (isReady && connectionCode) {
         return container({
