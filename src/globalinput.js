@@ -107,7 +107,7 @@ const buildMessageHandlersForInitData = (initData, notify) => {
     const fieldSetters = [];
     const formFields = initData.form.fields.map((f, index) => {
         if (!f) {
-            throw `The form contains a null field:${index} in ${initData.form.title}`;
+            throw new Error(`The form contains a null field:${index} in ${initData.form.title}`);
         }
         const field = { id: f.id, label: f.label, value: f.value };
         fields.push(field);
