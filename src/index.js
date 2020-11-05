@@ -44,7 +44,7 @@ export const useGlobalInputApp = (config) => {
     const sendValue = globalInput.sendValue;
 
 
-    const setOnchange = (listener) => onchange.current = listener;
+    const setOnchange = useCallback((listener) => onchange.current = listener,[]);
     useEffect(() => {
         if (field && onchange.current) {
             onchange.current({
