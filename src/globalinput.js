@@ -99,7 +99,7 @@ const buildMessageHandlersForInitData = (initData, notify) => {
         initData = initData();
     }
     if (!isValidInitData(initData)) {
-        console.warn("will not send empty form");
+        console.log(" empty-init-data-form ");
         return {};
     };
     const fields = [];
@@ -114,11 +114,11 @@ const buildMessageHandlersForInitData = (initData, notify) => {
         values.push(f.value);
         const s = (value) => {
             if (mobileData.fields !== fields) {
-                console.error("SEND_FIELD:fields array is expected to stay unchanged");
+                console.error(" set-field-discarded-fields-replaced ");
                 return;
             }
             if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-                console.error("SEND_FIELD:requires isConnected:" + mobileData.mobileState);
+                console.error(" set-field-discarded-state-not-connected ");
                 return;
             }
             values[index] = value;
@@ -143,11 +143,11 @@ const buildMessageHandlersForInitData = (initData, notify) => {
             operations: {
                 onInput: value => {
                     if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-                        console.error("RECEIVED_FIELD:requires isConnected:" + mobileData.mobileState);
+                        console.error(' on-input-message-discarded-not-connected ');
                         return;
                     }
                     if (mobileData.fields !== fields) {
-                        console.error("RECEIVED_FIELD:fields array is expected to stay unchanged");
+                        console.error(' on-input-message-discarded-fields-replaced ');
                         return;
                     }
                     values[index] = value;
@@ -177,10 +177,8 @@ const buildMobileConfig = (initData, options, notify) => {
     return {
         initData,
         onRegistered: (connectionCode) => {
-            //console.log("encrypted one-time session code [[" + connectionCode + "]]");
             mobileData.mobileState = MobileState.WAITING_FOR_MOBILE;
             options && options.onRegistered && options.onRegistered(connectionCode);
-
             notify({ type: ACTION_TYPES.REGISTERED, connectionCode });
         },
         onRegisterFailed: errorMessage => {
@@ -236,12 +234,12 @@ export const startConnect = (notify, configData) => {
         configData = configData();
     }
     if (!configData) {
-        console.log("configData is null");
+        console.log(" config-data-empty ");
         return;
     }
     const { setters, fields, values, initData } = buildMessageHandlersForInitData(configData.initData, notify);
     if (!initData) {
-        console.log("initData is null");
+        console.log(" init-data-empty ");
         return;
     }
     mobileData.mobileConfig = buildMobileConfig(initData, configData.options, notify);

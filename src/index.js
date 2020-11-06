@@ -23,10 +23,11 @@ export const useGlobalInputApp = (config) => {
             dispatch(st);
         }
         else {
-            console.log(`${st.type} after detach`);
+            console.log(` after-detach-${st.type} `);
         };
     }
     useEffect(() => {
+        attached.current = true;
         globalInput.startConnect(notify, configRef.current);
         return () => {
             attached.current = false;
