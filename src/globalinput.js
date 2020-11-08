@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import QRCode from "qrcode.react";
 import { createMessageConnector } from 'global-input-message';
 
@@ -90,18 +90,17 @@ export const sendValue = (fieldId, valueToSet, fieldIndex = -1) => {
         }
     }
 };
+export const isValidInitData = initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
 
-
-
+export const initDataIdentity = (initData) => {
+    if (!isValidInitData(initData)) {
+        return '';
+    }
+    return initData.id + "/" + initData.form.id;
+}
 
 const buildMessageHandlersForInitData = (initData, notify) => {
-    if (typeof initData === 'function') {
-        initData = initData();
-    }
-    if (!isValidInitData(initData)) {
-        console.log(" empty-init-data-form ");
-        return {};
-    };
+
     const fields = [];
     const values = [];
     const fieldSetters = [];
@@ -217,11 +216,8 @@ const buildMobileConfig = (initData, options, notify) => {
     };
 };
 
-export const sendInitData = (data, notify) => {
-    if (!data) {
-        return null;
-    }
-    const { setters, fields, values, initData } = buildMessageHandlersForInitData(data, notify);
+export const sendInitData = (initDataConfigured, notify) => {
+    const { setters, fields, values, initData } = buildMessageHandlersForInitData(initDataConfigured, notify);
     setFieldProperties(fields, values, setters);
     mobileData.mobileConfig.initData = initData;
     mobileData.session.sendInitData(initData);
@@ -229,20 +225,9 @@ export const sendInitData = (data, notify) => {
 };
 
 
-export const startConnect = (notify, configData) => {
-    if (typeof configData === 'function') {
-        configData = configData();
-    }
-    if (!configData) {
-        console.log(" config-data-empty ");
-        return;
-    }
-    const { setters, fields, values, initData } = buildMessageHandlersForInitData(configData.initData, notify);
-    if (!initData) {
-        console.log(" init-data-empty ");
-        return;
-    }
-    mobileData.mobileConfig = buildMobileConfig(initData, configData.options, notify);
+export const startConnect = (notify, initDataConfigured, options) => {
+    const { setters, fields, values, initData } = buildMessageHandlersForInitData(initDataConfigured, notify);
+    mobileData.mobileConfig = buildMobileConfig(initData, options, notify);
     setFieldProperties(fields, values, setters);
     if (mobileData.mobileState === MobileState.MOBILE_CONNECTED) {
         mobileData.session.sendInitData(initData);
@@ -257,7 +242,7 @@ export const startConnect = (notify, configData) => {
 };
 
 
-const isValidInitData = initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
+
 
 export const reducer = (state, action) => {
     switch (action.type) {
@@ -292,74 +277,71 @@ export const reducer = (state, action) => {
     };
 };
 
-const getDefaultQRCodeSize = () => {
-    if (!window) {
-        return 400;
-    }
-    let size = window.innerWidth - 10;
-    return size > 400 ? 400 : size;
-};
-const DefaultQRCodeContainer = ({ children }) => (
-    <div style={styles.barcode}>
-        {children}
-    </div>
-);
-
-const DefaultLabelContainer = ({ children }) => (
-    <div style={styles.label}>
-        {children}
-    </div>
-);
-
-
-export const displayQRCode = ({
-    connectionCode,
-    level = 'H',
-    isReady = false,
-    isLoading = false,
-    size = getDefaultQRCodeSize(),
-    container = DefaultQRCodeContainer,
-    children = (<DefaultLabelContainer> Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" rel="noreferrer" target="_blank"> Global Input App</a></DefaultLabelContainer>)
-}) => {
-    if (isReady && connectionCode) {
-        return container({
-            children: (
-                <>
-                    <QRCode value={connectionCode} level={level} size={size} />
-                    {children}
-                </>
-            )
-        });
-    }
-    else if (isLoading) {
-        return container({
-            children: (
-                <>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-                        <path fill="#C779D0" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
-                            <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite" />
-                        </path>
-                    </svg>
-
-                </>
-            )
-        });
-    }
-    return null;
-}
-
-
 const styles = {
-    barcode: {
-        backgroundColor: "white",
-        padding: 20,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-start",
-        alignItems: "center"
-    },
     label: {
         paddingTop: 20,
         color: "#A9C8E6", //#4880ED
+    },
+};
+
+export const loading = (
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+        <path fill="#C779D0" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
+            <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite" />
+        </path>
+    </svg>
+);
+
+
+export const qrCodeLabel = (
+    <div style={styles.label}>
+        Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" rel="noreferrer" target="_blank"> Global Input App</a>
+    </div>
+);
+
+export const displayQRCode = (connectionCode, level, size, label, maxSize, marginTop, marginLeft) => {
+    if ((!connectionCode) || size === 0) {
+        return null;
+    }
+    if (size) {
+        return (
+            <>
+                <QRCode value={connectionCode} level={level} size={size} />
+                {label}
+            </>
+        );
+    }
+    else {
+        return (
+            <>
+                <ResizeQRCode value={connectionCode} level={level} maxSize={maxSize} marginTop={marginTop} marginLeft={marginLeft} />
+                {label}
+            </>
+        );
     }
 }
+
+const ResizeQRCode = ({ value, level, maxSize, marginTop, marginLeft }) => {
+    const [size, setSize] = useState(0);
+    useEffect(() => {
+        const handleResize = () => {
+            let size = 0;
+            if (window && window.innerWidth && window.innerHeight) {
+                if (window.innerWidth < window.innerHeight) {
+                    size = window.innerWidth - marginLeft;
+                }
+                else {
+                    size = window.innerHeight - marginTop;
+                }
+            }
+            setSize(size > maxSize ? maxSize : size);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => { window.removeEventListener('resize', handleResize) }
+    });
+    if (!size) {
+        return null;
+    }
+    return (<QRCode value={value} level={level} size={size} />);
+};

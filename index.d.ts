@@ -29,7 +29,11 @@ type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => vo
 type ConnectQRProps = {
     size?: number,
     level?: "L" | "M" | "Q" | "H",
-    container?: React.FC
+    label?:React.ReactNode,
+    loading?:React.ReactNode,
+    maxSize?:number;
+    marginTop?:number;
+    marginLeft?:number;
 };
 export interface GlobalInputData {
     ConnectQR: React.FC<ConnectQRProps>,
