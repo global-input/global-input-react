@@ -69,7 +69,7 @@
     "webpack": "^5.4.0"
   },
   "dependencies": {
-    "global-input-message": "^2.0.8",
+    "global-input-message": "^2.0.9",
     "qrcode.react": "^1.0.0"
   }
 }
