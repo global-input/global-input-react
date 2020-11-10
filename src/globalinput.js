@@ -92,13 +92,6 @@ export const sendValue = (fieldId, valueToSet, fieldIndex = -1) => {
 };
 export const isValidInitData = initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
 
-export const initDataIdentity = (initData) => {
-    if (!isValidInitData(initData)) {
-        return '';
-    }
-    return initData.id + "/" + initData.form.id;
-}
-
 const buildMessageHandlersForInitData = (initData, notify) => {
 
     const fields = [];
@@ -191,16 +184,23 @@ const buildMobileConfig = (initData, options, notify) => {
             mobileData.mobileState = MobileState.MOBILE_CONNECTED;
             mobileData.clients = clients;
             mobileData.client = client;
+            options && options.onSenderConnected && options.onSenderConnected(client, clients);
             notify({ type: ACTION_TYPES.SENDER_CONNECTED });
         },
         onSenderDisconnected: (client, clients) => {
             mobileData.clients = clients;
             mobileData.client = client;
-            closeConnection();
-            mobileData.mobileState = MobileState.INITIALIZING;
-            mobileData.session = createMessageConnector();
-            mobileData.session.connect(mobileData.mobileConfig);
+            if (clients && clients.length) {
+                console.log("-multi-client-");
+            }
+            else {
+                mobileData.mobileState = MobileState.INITIALIZING;
+                mobileData.session.connect(mobileData.mobileConfig);
+                console.log("-client-disconnected-");
+            }
+            options && options.onSenderDisconnected && options.onSenderDisconnected(client, clients);
             notify({ type: ACTION_TYPES.SENDER_DISCONNECTED });
+
         },
         onError: errorMessage => {
             closeConnection();
@@ -225,18 +225,23 @@ export const sendInitData = (initDataConfigured, notify) => {
 };
 
 
-export const startConnect = (notify, initDataConfigured, options) => {
-    const { setters, fields, values, initData } = buildMessageHandlersForInitData(initDataConfigured, notify);
-    mobileData.mobileConfig = buildMobileConfig(initData, options, notify);
+export const startConnect = (config, configId, notify) => {
+    if (!isValidInitData(config.initData)) {
+        console.log(" init-data-use-empty-" + configId);
+        return;
+    }
+    const { setters, fields, values, initData } = buildMessageHandlersForInitData(config.initData, notify);
+    mobileData.mobileConfig = buildMobileConfig(initData, config.options, notify);
     setFieldProperties(fields, values, setters);
     if (mobileData.mobileState === MobileState.MOBILE_CONNECTED) {
         mobileData.session.sendInitData(initData);
         notify({ type: ACTION_TYPES.SEND_INIT_DATA });
         return;
     }
-    closeConnection();
     mobileData.mobileState = MobileState.INITIALIZING;
-    mobileData.session = createMessageConnector();
+    if (!mobileData.session) {
+        mobileData.session = createMessageConnector();
+    }
     mobileData.session.connect(mobileData.mobileConfig);
     notify({ type: ACTION_TYPES.START_CONNECT });
 };

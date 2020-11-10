@@ -24,34 +24,35 @@ export const useGlobalInputApp = (config) => {
             console.log(` after-detach-${st.type} `);
         };
     };
+    useEffect(() => {
+        attached.current = true;
+        return () => {
+            attached.current = false;
+        }
+    }, []);
 
     if (typeof config === 'function') {
         config = config();
     }
-    let intDataConfigured = null;
-    if (config) {
-        intDataConfigured = config.initData;
-        if (typeof intDataConfigured === 'function') {
-            intDataConfigured = intDataConfigured();
-        }
+    if (typeof config.initData === 'function') {
+        config.initData = config.initData();
     }
 
-    const initDataIdentity = globalInput.initDataIdentity(intDataConfigured);
-    const initDataRef = useRef(null);
-    initDataRef.current = intDataConfigured;
-    const optionsRef = useRef(null);
-    optionsRef.current = config && config.option;
+    const configRef = useRef(config);
+    configRef.current = config;
+    const configId = config.initData && config.initData.id ? config.initData.id : '';
     useEffect(() => {
-        attached.current = true;
-        if (!globalInput.isValidInitData(initDataRef.current)) {
-            console.log(" init-data-use-empty ");
+        globalInput.startConnect(configRef.current, configId, notify);
+    }, [configId]); //You don't need to memoize the input parameter of this hook.
+
+    const restart = useCallback((config) => {
+        if (!attached.current) {
             return;
         }
-        globalInput.startConnect(notify, initDataRef.current, optionsRef.current);
-        return () => {
-            attached.current = false;
-        }
-    }, [initDataIdentity]); //only execute once the identity is changed to allow the application to use simple construct to create parameter.
+        globalInput.disconnect(notify);
+        globalInput.startConnect(config ? config : configRef.current, configId, notify);
+    }, [configId])
+
 
     const sendInitData = useCallback((initData) => {
         if (!attached.current) {
@@ -71,6 +72,8 @@ export const useGlobalInputApp = (config) => {
     const disconnect = useCallback(() => {
         globalInput.disconnect(notify);
     }, []);
+
+
     const sendValue = globalInput.sendValue;
 
     const onchange = useRef(null);
@@ -114,7 +117,8 @@ export const useGlobalInputApp = (config) => {
         initData,
         sendValue,
         sendInitData,
-        disconnect,
         setOnchange,
+        disconnect,
+        restart,
     };
 };

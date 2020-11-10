@@ -29,11 +29,11 @@ type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => vo
 type ConnectQRProps = {
     size?: number,
     level?: "L" | "M" | "Q" | "H",
-    label?:React.ReactNode,
-    loading?:React.ReactNode,
-    maxSize?:number;
-    marginTop?:number;
-    marginLeft?:number;
+    label?: React.ReactNode,
+    loading?: React.ReactNode,
+    maxSize?: number;
+    marginTop?: number;
+    marginLeft?: number;
 };
 export interface GlobalInputData {
     ConnectQR: React.FC<ConnectQRProps>,
@@ -50,6 +50,7 @@ export interface GlobalInputData {
     sendInitData: SendInitDataFunction;
     setOnchange: (onchange: OnchangeFunction) => void;
     disconnect: () => void;
+    restart: (config?: ConfigData) => void;
 }
 
 export function generateRandomString(length?: number): string;
