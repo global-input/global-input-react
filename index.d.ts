@@ -9,6 +9,7 @@ export interface ConfigData {
     initData: InitData | (() => InitData);
     onchange?: OnchangeFunction;
     options?: ConnectOptions;
+    codeAES?: string;
 }
 export interface ConnectOptions {
     apikey?: string;

@@ -47,6 +47,7 @@ export const useGlobalInputApp = (config) => {
 
     const restart = useCallback((config) => {
         if (!attached.current) {
+            console.log(" -restart-not-attached- ");
             return;
         }
         globalInput.disconnect(notify);

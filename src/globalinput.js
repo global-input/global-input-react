@@ -242,6 +242,9 @@ export const startConnect = (config, configId, notify) => {
     if (!mobileData.session) {
         mobileData.session = createMessageConnector();
     }
+    if(config.codeAES){
+        mobileData.session.setCodeAES(config.codeAES);
+    }
     mobileData.session.connect(mobileData.mobileConfig);
     notify({ type: ACTION_TYPES.START_CONNECT });
 };
