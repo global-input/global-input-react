@@ -60,6 +60,11 @@ const closeConnection = () => {
     if (mobileData.session) {
         mobileData.session.disconnect();
         mobileData.session = null;
+        mobileData.senders=[];
+        mobileData.sender=null;
+        mobileData.fields=[];
+        mobileData.values=[];
+        mobileData.setters=[];
     }
 };
 export const disconnect = (notify) => {
@@ -175,7 +180,6 @@ const buildMobileConfig = (initData, options, notify) => {
             notify({ type: ACTION_TYPES.REGISTERED, connectionCode });
         },
         onRegisterFailed: errorMessage => {
-            closeConnection();
             mobileData.mobileState = MobileState.ERROR;
             options && options.onRegisterFailed && options.onRegisterFailed();
             notify({ type: ACTION_TYPES.REGISTER_FAILED, errorMessage });
@@ -217,7 +221,6 @@ const buildMobileConfig = (initData, options, notify) => {
             }
         },
         onError: errorMessage => {
-            closeConnection();
             mobileData.mobileState = MobileState.ERROR;
             notify({ type: ACTION_TYPES.CONNECTION_ERROR, errorMessage });
         },
