@@ -52,6 +52,7 @@ export interface GlobalInputData {
     isError: boolean;
     isDisconnected: boolean;
     isConnected: boolean;
+    isConnectionDenied: boolean;
     initData: InitData;
     senders: Sender[];
     sendValue: SendValueFunction;

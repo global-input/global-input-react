@@ -13,7 +13,8 @@ const ACTION_TYPES = {
     CONNECTION_ERROR: 7,
     RECEIVED_FIELD: 8,
     SEND_FIELD: 9,
-    CLOSE: 10
+    CLOSE: 10,
+    CONNECTION_DENIED:11
 };
 
 const MobileState = {
@@ -33,6 +34,7 @@ export const initialState = {
     isError: false,
     isDisconnected: false,
     isConnected: false,
+    isConnectionDenied:false,
     initData: null,
     connected: []
 };
@@ -214,6 +216,7 @@ const buildMobileConfig = (initData, options, notify) => {
             else {
                 if (mobileData.sender && mobileData.sender.client !== permissionMessage.client) {
                     deny(" only one sender (mobile app instance) is allowed for each session. You need to restart the session to allow for a new client to connect. If you are the application developer, you can override this behaviour.");
+                    notify({ type: ACTION_TYPES.CONNECTION_DENIED });
                 }
                 else {
                     allow();
@@ -272,22 +275,27 @@ export const reducer = (state, action) => {
     switch (action.type) {
         case ACTION_TYPES.START_CONNECT:
         case ACTION_TYPES.SEND_INIT_DATA:
-            state = { ...state, errorMessage: '', field: null };
+            state = { ...state, errorMessage: '', field: null, isConnectionDenied: false };
             break;
         case ACTION_TYPES.REGISTERED:
-            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode };
+            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode, isConnectionDenied: false };
             break;
         case ACTION_TYPES.RECEIVED_FIELD:
-            state = { ...state, field: action.field };
+            state = { ...state, field: action.field, isConnectionDenied: false };
             break;
         case ACTION_TYPES.CONNECTION_ERROR:
         case ACTION_TYPES.REGISTER_FAILED:
-            state = { ...state, errorMessage: action.errorMessage };
+            state = { ...state, errorMessage: action.errorMessage, isConnectionDenied: false };
+            break;
+        case ACTION_TYPES.CONNECTION_DENIED:
+            state = { ...state, isConnectionDenied: true };
             break;
         case ACTION_TYPES.SENDER_CONNECTED:
         case ACTION_TYPES.SENDER_DISCONNECTED:
         case ACTION_TYPES.SEND_FIELD:
         case ACTION_TYPES.CLOSE:
+            state = { ...state, isConnectionDenied: false };
+            break;
         default:
     };
     return {
