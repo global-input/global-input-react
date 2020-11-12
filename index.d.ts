@@ -1,5 +1,5 @@
 import React from 'react';
-import { InitData, FormField, FieldValue } from 'global-input-message';
+import { InitData, FormField, FieldValue, Sender, PermissionRequestMessage } from 'global-input-message';
 export * from 'global-input-message';
 export function useGlobalInputApp(config: ConfigData | (() => ConfigData)): GlobalInputData;
 
@@ -13,9 +13,15 @@ export interface ConfigData {
 }
 export interface ConnectOptions {
     apikey?: string;
+    url?: string;
     securityGroup?: string;
     client?: string;
-    url?: string;
+    onRegistered?: (connectionCode: string) => void;
+    onRegisterFailed?: () => void;
+    onSenderConnected?: (sender: Sender, senders: Sender[]) => void;
+    onSenderDisconnected?: (sender: Sender, senders: Sender[]) => void;
+    onInputPermission?: (permissionMessage: PermissionRequestMessage, senders: Sender[], deny: (reason?: string) => void) => void;
+    onError?: (message: string) => void;
 }
 interface FieldChanged {
     field: FormField;
@@ -38,6 +44,7 @@ type ConnectQRProps = {
 };
 export interface GlobalInputData {
     ConnectQR: React.FC<ConnectQRProps>,
+    PairingQR: React.FC<ConnectQRProps>,
     connectionCode: string;
     field: FormField;
     errorMessage: string;
@@ -47,6 +54,7 @@ export interface GlobalInputData {
     isDisconnected: boolean;
     isConnected: boolean;
     initData: InitData;
+    senders: Sender[];
     sendValue: SendValueFunction;
     sendInitData: SendInitDataFunction;
     setOnchange: (onchange: OnchangeFunction) => void;

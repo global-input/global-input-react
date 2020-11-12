@@ -1,6 +1,6 @@
 {
   "name": "global-input-react",
-  "version": "4.2.3",
+  "version": "4.3.0",
   "description": "global input react component",
   "main": "./dist/index",
   "repository": {
@@ -69,7 +69,7 @@
     "webpack": "^5.4.0"
   },
   "dependencies": {
-    "global-input-message": "^2.0.9",
+    "global-input-message": "^2.1.0",
     "qrcode.react": "^1.0.0"
   }
 }

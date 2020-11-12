@@ -13,6 +13,7 @@ export const useGlobalInputApp = (config) => {
         isDisconnected,
         isConnected,
         initData,
+        senders
     }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);
 
     const attached = useRef(true);
@@ -102,11 +103,24 @@ export const useGlobalInputApp = (config) => {
         }
         return globalInput.displayQRCode(connectionCode, level, size, label, maxSize, marginTop, marginLeft);
     }, [connectionCode, isReady, isLoading]);
-
+    const PairingQR = useCallback(({ level = 'H', size, label = globalInput.qrCodeLabel, loading = globalInput.loading, maxSize = 400, marginTop = 90, marginLeft = 10 }) => {
+        if (isLoading) {
+            return loading;
+        }
+        if (!isReady) {
+            return null;
+        }
+        const pairingCode = globalInput.getParingCode();
+        if ((!pairingCode) || size === 0) {
+            return null;
+        }
+        return globalInput.displayQRCode(pairingCode, level, size, label, maxSize, marginTop, marginLeft);
+    }, [isReady, isLoading]);
 
 
     return {
         ConnectQR,
+        PairingQR,
         connectionCode,
         field,
         errorMessage,
@@ -116,6 +130,7 @@ export const useGlobalInputApp = (config) => {
         isDisconnected,
         isConnected,
         initData,
+        senders,
         sendValue,
         sendInitData,
         setOnchange,

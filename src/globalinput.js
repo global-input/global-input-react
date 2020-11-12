@@ -34,6 +34,7 @@ export const initialState = {
     isDisconnected: false,
     isConnected: false,
     initData: null,
+    connected: []
 };
 
 
@@ -43,8 +44,8 @@ const mobileData = {
     fields: [],
     values: [],
     setters: [],
-    clients: [],
-    client: null,
+    senders: [],
+    sender: null,
     mobileConfig: null
 };
 
@@ -180,27 +181,32 @@ const buildMobileConfig = (initData, options, notify) => {
             notify({ type: ACTION_TYPES.REGISTER_FAILED, errorMessage });
 
         },
-        onSenderConnected: (client, clients) => {
+        onSenderConnected: (sender, senders) => {
             mobileData.mobileState = MobileState.MOBILE_CONNECTED;
-            mobileData.clients = clients;
-            mobileData.client = client;
-            options && options.onSenderConnected && options.onSenderConnected(client, clients);
+            mobileData.senders = senders;
+            mobileData.sender = sender;
+            options && options.onSenderConnected && options.onSenderConnected(sender, senders);
             notify({ type: ACTION_TYPES.SENDER_CONNECTED });
         },
-        onSenderDisconnected: (client, clients) => {
-            mobileData.clients = clients;
-            mobileData.client = client;
-            if (clients && clients.length) {
-                console.log("-multi-client-");
+        onSenderDisconnected: (sender, senders) => {
+            mobileData.senders = senders;
+            mobileData.sender = sender;
+            if (senders && senders.length) {
+                console.log("-multi-senders-");
             }
             else {
                 mobileData.mobileState = MobileState.INITIALIZING;
                 mobileData.session.connect(mobileData.mobileConfig);
-                console.log("-client-disconnected-");
+                console.log("-sender-disconnected-");
             }
-            options && options.onSenderDisconnected && options.onSenderDisconnected(client, clients);
+            options && options.onSenderDisconnected && options.onSenderDisconnected(sender, senders);
             notify({ type: ACTION_TYPES.SENDER_DISCONNECTED });
 
+        },
+        onInputPermission: (permissionMessage, senders, deny) => {
+            if (options && options.onInputPermission) {
+                options.onInputPermission(permissionMessage, senders, deny);
+            }
         },
         onError: errorMessage => {
             closeConnection();
@@ -209,10 +215,7 @@ const buildMobileConfig = (initData, options, notify) => {
         },
         url: options && options.url,
         apikey: options && options.apikey,
-        securityGroup: options && options.securityGroup,
-        aes: options && options.aes,
-        onInput: options && options.onInput,
-        onInputPermissionResult: options && options.onInputPermissionResult
+        securityGroup: options && options.securityGroup
     };
 };
 
@@ -242,14 +245,16 @@ export const startConnect = (config, configId, notify) => {
     if (!mobileData.session) {
         mobileData.session = createMessageConnector();
     }
-    if(config.codeAES){
+    if (config.codeAES) {
         mobileData.session.setCodeAES(config.codeAES);
     }
     mobileData.session.connect(mobileData.mobileConfig);
     notify({ type: ACTION_TYPES.START_CONNECT });
 };
 
-
+export const getParingCode = () => {
+    return mobileData.session && mobileData.session.buildPairingData();
+};
 
 
 export const reducer = (state, action) => {
@@ -281,7 +286,8 @@ export const reducer = (state, action) => {
         isError: mobileData.mobileState === MobileState.ERROR,
         isDisconnected: mobileData.mobileState === MobileState.DISCONNECTED,
         isConnected: mobileData.mobileState === MobileState.MOBILE_CONNECTED,
-        initData: mobileData.mobileConfig && mobileData.mobileConfig.initData
+        initData: mobileData.mobileConfig && mobileData.mobileConfig.initData,
+        senders: mobileData.senders
     };
 };
 
@@ -307,14 +313,14 @@ export const qrCodeLabel = (
     </div>
 );
 
-export const displayQRCode = (connectionCode, level, size, label, maxSize, marginTop, marginLeft) => {
-    if ((!connectionCode) || size === 0) {
+export const displayQRCode = (codeContent, level, size, label, maxSize, marginTop, marginLeft) => {
+    if ((!codeContent) || size === 0) {
         return null;
     }
     if (size) {
         return (
             <>
-                <QRCode value={connectionCode} level={level} size={size} />
+                <QRCode value={codeContent} level={level} size={size} />
                 {label}
             </>
         );
@@ -322,7 +328,7 @@ export const displayQRCode = (connectionCode, level, size, label, maxSize, margi
     else {
         return (
             <>
-                <ResizeQRCode value={connectionCode} level={level} maxSize={maxSize} marginTop={marginTop} marginLeft={marginLeft} />
+                <ResizeQRCode value={codeContent} level={level} maxSize={maxSize} marginTop={marginTop} marginLeft={marginLeft} />
                 {label}
             </>
         );
