@@ -1,5 +1,5 @@
 import React from 'react';
-import { InitData, FormField, FieldValue, Sender, PermissionRequestMessage } from 'global-input-message';
+import { InitData, FormField, FieldValue, Sender } from 'global-input-message';
 export * from 'global-input-message';
 export function useGlobalInputApp(config: ConfigData | (() => ConfigData)): GlobalInputData;
 
@@ -15,12 +15,11 @@ export interface ConnectOptions {
     apikey?: string;
     url?: string;
     securityGroup?: string;
-    client?: string;
     onRegistered?: (connectionCode: string) => void;
     onRegisterFailed?: () => void;
     onSenderConnected?: (sender: Sender, senders: Sender[]) => void;
     onSenderDisconnected?: (sender: Sender, senders: Sender[]) => void;
-    onInputPermission?: (permissionMessage: PermissionRequestMessage, senders: Sender[], deny: (reason?: string) => void) => void;
+    onInputPermission?: (permissionMessage: PermissionRequestMessage, senders: Sender[], allow: () => void, deny: (reason?: string) => void) => void;
     onError?: (message: string) => void;
 }
 interface FieldChanged {

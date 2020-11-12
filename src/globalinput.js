@@ -203,9 +203,17 @@ const buildMobileConfig = (initData, options, notify) => {
             notify({ type: ACTION_TYPES.SENDER_DISCONNECTED });
 
         },
-        onInputPermission: (permissionMessage, senders, deny) => {
+        onInputPermission: (permissionMessage, senders, allow, deny) => {
             if (options && options.onInputPermission) {
-                options.onInputPermission(permissionMessage, senders, deny);
+                options.onInputPermission(permissionMessage, senders, allow, deny);
+            }
+            else {
+                if (mobileData.sender && mobileData.sender.client !== permissionMessage.client) {
+                    deny(" only one sender (mobile app instance) is allowed for each session. You need to restart the session to allow for a new client to connect. If you are the application developer, you can override this behaviour.");
+                }
+                else {
+                    allow();
+                }
             }
         },
         onError: errorMessage => {
