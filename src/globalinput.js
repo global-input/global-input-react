@@ -14,7 +14,7 @@ const ACTION_TYPES = {
     RECEIVED_FIELD: 8,
     SEND_FIELD: 9,
     CLOSE: 10,
-    CONNECTION_DENIED:11
+    CONNECTION_DENIED: 11
 };
 
 const MobileState = {
@@ -34,7 +34,7 @@ export const initialState = {
     isError: false,
     isDisconnected: false,
     isConnected: false,
-    isConnectionDenied:false,
+    isConnectionDenied: false,
     initData: null,
     connected: []
 };
@@ -62,11 +62,11 @@ const closeConnection = () => {
     if (mobileData.session) {
         mobileData.session.disconnect();
         mobileData.session = null;
-        mobileData.senders=[];
-        mobileData.sender=null;
-        mobileData.fields=[];
-        mobileData.values=[];
-        mobileData.setters=[];
+        mobileData.senders = [];
+        mobileData.sender = null;
+        mobileData.fields = [];
+        mobileData.values = [];
+        mobileData.setters = [];
     }
 };
 export const disconnect = (notify) => {
@@ -215,7 +215,7 @@ const buildMobileConfig = (initData, options, notify) => {
             }
             else {
                 if (mobileData.sender && mobileData.sender.client !== permissionMessage.client) {
-                    deny(" only one sender (mobile app instance) is allowed for each session. You need to restart the session to allow for a new client to connect. If you are the application developer, you can override this behaviour.");
+                    deny(" denied due to the one-app-per-session policy set by the application. ");
                     notify({ type: ACTION_TYPES.CONNECTION_DENIED });
                 }
                 else {

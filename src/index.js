@@ -12,6 +12,7 @@ export const useGlobalInputApp = (config) => {
         isError,
         isDisconnected,
         isConnected,
+        isConnectionDenied,
         initData,
         senders
     }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);
@@ -129,6 +130,7 @@ export const useGlobalInputApp = (config) => {
         isError,
         isDisconnected,
         isConnected,
+        isConnectionDenied,
         initData,
         senders,
         sendValue,

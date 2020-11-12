@@ -3,7 +3,7 @@ import { InitData, FormField, FieldValue, Sender } from 'global-input-message';
 export * from 'global-input-message';
 export function useGlobalInputApp(config: ConfigData | (() => ConfigData)): GlobalInputData;
 
-type OnchangeFunction = (evt: FieldChanged) => void;
+export type OnchangeFunction = (evt: FieldChanged) => void;
 
 export interface ConfigData {
     initData: InitData | (() => InitData);
@@ -22,17 +22,17 @@ export interface ConnectOptions {
     onInputPermission?: (permissionMessage: PermissionRequestMessage, senders: Sender[], allow: () => void, deny: (reason?: string) => void) => void;
     onError?: (message: string) => void;
 }
-interface FieldChanged {
+export interface FieldChanged {
     field: FormField;
     initData: InitData;
     sendInitData: SendInitDataFunction;
     sendValue: SendValueFunction
 }
 
-type SendValueFunction = (fieldId: string, valueToSet: FieldValue, fieldIndex?: number) => void;
-type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
+export type SendValueFunction = (fieldId: string, valueToSet: FieldValue, fieldIndex?: number) => void;
+export type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
 
-type ConnectQRProps = {
+export type ConnectQRProps = {
     size?: number,
     level?: "L" | "M" | "Q" | "H",
     label?: React.ReactNode,
