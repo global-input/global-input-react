@@ -45,10 +45,16 @@ function createWaitForInputMessage(target) {
 
 export function toBeSameInitData(received, expected) {
     if (received.action !== expected.action) {
-        return {
-            pass: false,
-            message: () => `action = "${expected.action}" is expected but received "${received.action}" instead`
-        };
+        if ((!expected.action) && received.action === 'input') {
+            console.log("used the default, that is fine");
+        }
+        else {
+            return {
+                pass: false,
+                message: () => `action = "${expected.action}" is expected but received "${received.action}" instead`
+            };
+        }
+
     }
     if (received.dataType !== expected.dataType) {
         return {

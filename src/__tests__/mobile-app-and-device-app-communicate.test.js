@@ -1,20 +1,18 @@
-import { useGlobalInputApp, createMessageConnector} from '../index';
+import { useGlobalInputApp, createMessageConnector } from '../index';
 import { renderHook } from '@testing-library/react-hooks'
 import * as testUtil from '../testUtil';
 
 /**
  * compare initData to expectedInitData
- * @param {*} initData 
- * @param {*} expectedInitData 
+ * @param {*} initData
+ * @param {*} expectedInitData
  */
-expect.extend({toBeSameInitData:testUtil.toBeSameInitData});
+expect.extend({ toBeSameInitData: testUtil.toBeSameInitData });
 
 it("Device App and Mobile App should be able to communicate", async function () {
 
     const deviceConfig = {
         initData: {
-            action: "input",
-            dataType: "form",
             form: {
                 id: "test@globalinput.co.uk",
                 title: "Global Input App Test",
@@ -29,22 +27,22 @@ it("Device App and Mobile App should be able to communicate", async function () 
         }
     };
     const deviceApp = {
-        receiver: testUtil.createInputReceivers(deviceConfig),//message receivers on the device side      
+        receiver: testUtil.createInputReceivers(deviceConfig),//message receivers on the device side
         ui: deviceConfig.initData,
-        hook:renderHook(() => useGlobalInputApp(deviceConfig)) //calls the hook
-    }    
+        hook: renderHook(() => useGlobalInputApp(deviceConfig)) //calls the hook
+    }
     await deviceApp.hook.waitForNextUpdate();
     expect(deviceApp.hook.result.current.isReady).toBe(true); //deviceApp is ready to accept connection from a mobile app.
 
     //const {findByTestId}=render(<div>{connectionMessage}</div>);  //display QR Code here
     // const {code, level,size}=await getQRCodeValues({findByTestId}); //qrcode.react module is mocked
-    
-    /** Here the device app displays a QR Code that contains the value of connectionCode, which is 
+
+    /** Here the device app displays a QR Code that contains the value of connectionCode, which is
     *  an encrypted string containing information on how to connect to your device app
     **/
 
-    const connectionCode = deviceApp.hook.result.current.connectionCode; 
-    
+    const connectionCode = deviceApp.hook.result.current.connectionCode;
+
     const mobileApp = {
         con: createMessageConnector(), //creates a connector
         receiver: testUtil.createInputReceivers(), //create promise objects inside callbacks to make testing more intuitive.
@@ -111,10 +109,4 @@ it("Device App and Mobile App should be able to communicate", async function () 
     mobileApp.con.disconnect();
     deviceApp.hook.result.current.disconnect();
     deviceApp.hook.unmount();
-},10000);
-
-
-
-
-
-
+}, 10000);

@@ -235,19 +235,24 @@ const buildMobileConfig = (initData, options, notify) => {
 
 export const sendInitData = (initDataConfigured, notify) => {
     const { setters, fields, values, initData } = buildMessageHandlersForInitData(initDataConfigured, notify);
+    if (!initData.action) {
+        initData.action = 'input';
+    }
     setFieldProperties(fields, values, setters);
     mobileData.mobileConfig.initData = initData;
     mobileData.session.sendInitData(initData);
     notify({ type: ACTION_TYPES.SEND_INIT_DATA });
 };
 
-
-export const startConnect = (config, configId, notify) => {
+export const startConnect = (config, notify) => {
     if (!isValidInitData(config.initData)) {
-        console.log(" init-data-use-empty-" + configId);
+        console.log(" init-data-use-empty-");
         return;
     }
     const { setters, fields, values, initData } = buildMessageHandlersForInitData(config.initData, notify);
+    if (!initData.action) {
+        initData.action = 'input';
+    }
     mobileData.mobileConfig = buildMobileConfig(initData, config.options, notify);
     setFieldProperties(fields, values, setters);
     if (mobileData.mobileState === MobileState.MOBILE_CONNECTED) {

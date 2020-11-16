@@ -32,20 +32,17 @@ export const useGlobalInputApp = (config) => {
             attached.current = false;
         }
     }, []);
-
-    if (typeof config === 'function') {
-        config = config();
-    }
-    if (typeof config.initData === 'function') {
-        config.initData = config.initData();
-    }
-
-    const configRef = useRef(config);
-    configRef.current = config;
-    const configId = config.initData && config.initData.id ? config.initData.id : '';
+    const configRef = useRef(null);
     useEffect(() => {
-        globalInput.startConnect(configRef.current, configId, notify);
-    }, [configId]); //You don't need to memoize the input parameter of this hook.
+        if (typeof config === 'function') {
+            config = config();
+        }
+        if (typeof config.initData === 'function') {
+            config.initData = config.initData();
+        }
+        configRef.current = config;
+        globalInput.startConnect(config, notify);
+    }, []); //You don't need to memoize the input parameter of this hook.
 
     const restart = useCallback((config) => {
         if (!attached.current) {
@@ -53,8 +50,8 @@ export const useGlobalInputApp = (config) => {
             return;
         }
         globalInput.disconnect(notify);
-        globalInput.startConnect(config ? config : configRef.current, configId, notify);
-    }, [configId])
+        globalInput.startConnect(config ? config : configRef.current, notify);
+    }, [])
 
 
     const sendInitData = useCallback((initData) => {
