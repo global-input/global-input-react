@@ -1,7 +1,7 @@
 
 import * as globalInput from './globalinput';
 import { useReducer, useRef, useEffect, useCallback } from "react";
-export * from "global-input-message";
+export * from 'global-input-message';
 export const useGlobalInputApp = (config) => {
     const [{
         connectionCode,
