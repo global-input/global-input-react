@@ -305,6 +305,11 @@ export const reducer = (state, action) => {
     };
     return {
         ...state,
+        ...getStateData()
+    };
+};
+export const getStateData = () => {
+    return {
         isLoading: mobileData.mobileState === MobileState.INITIALIZING,
         isReady: mobileData.mobileState === MobileState.WAITING_FOR_MOBILE,
         isError: mobileData.mobileState === MobileState.ERROR,
@@ -312,8 +317,8 @@ export const reducer = (state, action) => {
         isConnected: mobileData.mobileState === MobileState.MOBILE_CONNECTED,
         initData: mobileData.mobileConfig && mobileData.mobileConfig.initData,
         senders: mobileData.senders
-    };
-};
+    }
+}
 
 const styles = {
     label: {
