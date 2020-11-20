@@ -320,6 +320,7 @@ export const getStateData = () => {
     }
 }
 
+export const keepConnection = () => !!mobileData.sender;
 const styles = {
     label: {
         paddingTop: 20,

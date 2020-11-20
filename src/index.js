@@ -2,7 +2,7 @@
 import * as globalInput from './globalinput';
 import { useReducer, useRef, useEffect, useCallback } from "react";
 export * from 'global-input-message';
-export const useGlobalInputApp = (config, autoConnect = true) => {
+export const useGlobalInputApp = (config, connect = true) => {
     const [{
         connectionCode,
         errorMessage,
@@ -33,19 +33,18 @@ export const useGlobalInputApp = (config, autoConnect = true) => {
         }
     }, []);
     const configRef = useRef(null);
+    configRef.current = config;
     useEffect(() => {
-        if (typeof config === 'function') {
-            config = config();
+        if (typeof configRef.current === 'function') {
+            configRef.current = configRef.current();
         }
-        if (typeof config.initData === 'function') {
-            config.initData = config.initData();
+        if (typeof configRef.current.initData === 'function') {
+            configRef.current.initData = configRef.current.initData();
         }
-        configRef.current = config;
-        if (autoConnect) {
-            globalInput.startConnect(config, notify);
+        if (connect || globalInput.keepConnection()) {
+            globalInput.startConnect(configRef.current, notify);
         }
-
-    }, []); //You don't need to memoize the input parameter of this hook.
+    }, [connect]); //You don't need to memoize the input parameter of this hook.
 
     const restart = useCallback((config) => {
         if (!attached.current) {
