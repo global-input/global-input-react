@@ -1,7 +1,7 @@
 import React from 'react';
 import { InitData, FormField, FieldValue, Sender } from 'global-input-message';
 export * from 'global-input-message';
-export function useGlobalInputApp(config: ConfigData | (() => ConfigData), connect?: boolean): GlobalInputData;
+export function useGlobalInputApp(config: ConfigData | (() => ConfigData), canConnect?: boolean): GlobalInputData;
 export function getGlobalInputState(): GlobalInputState;
 
 interface GlobalInputState {
@@ -42,7 +42,7 @@ export interface FieldChanged {
 }
 
 export type SendValueFunction = (fieldId: string, valueToSet: FieldValue, fieldIndex?: number) => void;
-export type SendInitDataFunction = (initData: InitData, options?: ConnectOptions) => void;
+export type SendInitDataFunction = (initData: InitData) => void;
 
 export type ConnectQRProps = {
     size?: number,

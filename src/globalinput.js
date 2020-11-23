@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode.react";
 import { createMessageConnector } from 'global-input-message';
+import './style.css';
 
 const ACTION_TYPES = {
     START_CONNECT: 1,
@@ -326,20 +327,21 @@ const styles = {
         paddingTop: 20,
         color: "#A9C8E6", //#4880ED
     },
+    qrCode: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 5,
+        backgroundColor: "white"
+    }
 };
 
-export const loading = (
-    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-        <path fill="#C779D0" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
-            <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.5s" repeatCount="indefinite" />
-        </path>
-    </svg>
-);
-
+export const loading = (<div className="globalInputQRCodeLoading">...</div>);
 
 export const qrCodeLabel = (
     <div style={styles.label}>
-        Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" rel="noreferrer" target="_blank"> Global Input App</a>
+        Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" rel="noopener noreferrer" target="_blank"> Global Input App</a>
     </div>
 );
 
@@ -349,18 +351,18 @@ export const displayQRCode = (codeContent, level, size, label, maxSize, marginTo
     }
     if (size) {
         return (
-            <>
+            <div style={styles.qrCode}>
                 <QRCode value={codeContent} level={level} size={size} />
                 {label}
-            </>
+            </div>
         );
     }
     else {
         return (
-            <>
+            <div style={styles.qrCode}>
                 <ResizeQRCode value={codeContent} level={level} maxSize={maxSize} marginTop={marginTop} marginLeft={marginLeft} />
                 {label}
-            </>
+            </div>
         );
     }
 }
