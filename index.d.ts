@@ -1,7 +1,7 @@
 import React from 'react';
 import { InitData, FormField, FieldValue, Sender } from 'global-input-message';
 export * from 'global-input-message';
-export function useGlobalInputApp(config: ConfigData | (() => ConfigData), canConnect?: boolean): GlobalInputData;
+export function useGlobalInputApp(config: ConfigData | (() => ConfigData), canConnect?: boolean, configId?: any): GlobalInputData;
 export function getGlobalInputState(): GlobalInputState;
 
 interface GlobalInputState {

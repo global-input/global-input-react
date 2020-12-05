@@ -1,7 +1,7 @@
 import * as globalInput from './globalinput';
 import { useReducer, useRef, useEffect, useCallback } from "react";
 export * from 'global-input-message';
-export const useGlobalInputApp = (config, canConnect = true) => {
+export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
     const [{
         connectionCode,
         errorMessage,
@@ -43,7 +43,8 @@ export const useGlobalInputApp = (config, canConnect = true) => {
         if (canConnect || globalInput.keepConnection()) {
             globalInput.startConnect(configRef.current, notify);
         }
-    }, [canConnect]); //You don't need to memoize the input parameter of this hook.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [canConnect, configId]); //You don't need to memoize the input parameter of this hook.
 
     const restart = useCallback((config) => {
         if (!attached.current) {
