@@ -349,7 +349,7 @@ export const qrCodeLabel = (
     </div>
 );
 
-export const displayQRCode = (codeContent, level, size, label, maxSize, marginTop, marginLeft) => {
+export const displayQRCode = (codeContent, level, size, label, maxSize, vspace, hspace) => {
     if ((!codeContent) || size === 0) {
         return null;
     }
@@ -364,24 +364,24 @@ export const displayQRCode = (codeContent, level, size, label, maxSize, marginTo
     else {
         return (
             <div style={styles.qrCode}>
-                <ResizeQRCode value={codeContent} level={level} maxSize={maxSize} marginTop={marginTop} marginLeft={marginLeft} />
+                <ResizeQRCode value={codeContent} level={level} maxSize={maxSize} vspace={vspace} hspace={hspace} />
                 {label}
             </div>
         );
     }
 }
 
-const ResizeQRCode = ({ value, level, maxSize, marginTop, marginLeft }) => {
+const ResizeQRCode = ({ value, level, maxSize, vspace, hspace }) => {
     const [size, setSize] = useState(0);
     useEffect(() => {
         const handleResize = () => {
             let size = 0;
             if (window && window.innerWidth && window.innerHeight) {
                 if (window.innerWidth < window.innerHeight) {
-                    size = window.innerWidth - marginLeft;
+                    size = window.innerWidth - hspace;
                 }
                 else {
-                    size = window.innerHeight - marginTop;
+                    size = window.innerHeight - vspace;
                 }
             }
             setSize(size > maxSize ? maxSize : size);

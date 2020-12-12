@@ -50,8 +50,8 @@ export type ConnectQRProps = {
     label?: React.ReactNode,
     loading?: React.ReactNode,
     maxSize?: number;
-    marginTop?: number;
-    marginLeft?: number;
+    vspace?: number;
+    hspace?: number;
 };
 export interface GlobalInputData {
     ConnectQR: React.FC<ConnectQRProps>,

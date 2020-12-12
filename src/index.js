@@ -92,7 +92,7 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         }
     }, [field, initData, sendInitData, sendValue]);
 
-    const ConnectQR = useCallback(({ level = 'H', size, label = globalInput.qrCodeLabel, loading = globalInput.loading, maxSize = 400, marginTop = 90, marginLeft = 10 }) => {
+    const ConnectQR = useCallback(({ level = 'H', size, label = globalInput.qrCodeLabel, loading = globalInput.loading, maxSize = 400, vspace = 130, hspace = 50 }) => {
         if (isLoading) {
             return loading;
         }
@@ -102,9 +102,9 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         if ((!connectionCode) || size === 0) {
             return null;
         }
-        return globalInput.displayQRCode(connectionCode, level, size, label, maxSize, marginTop, marginLeft);
+        return globalInput.displayQRCode(connectionCode, level, size, label, maxSize, vspace, hspace);
     }, [connectionCode, isReady, isLoading]);
-    const PairingQR = useCallback(({ level = 'H', size, label = globalInput.qrCodeLabel, loading = globalInput.loading, maxSize = 400, marginTop = 90, marginLeft = 10 }) => {
+    const PairingQR = useCallback(({ level = 'H', size, label = globalInput.qrCodeLabel, loading = globalInput.loading, maxSize = 400, vspace = 130, hspace = 50 }) => {
         if (isLoading) {
             return loading;
         }
@@ -115,7 +115,7 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         if ((!pairingCode) || size === 0) {
             return null;
         }
-        return globalInput.displayQRCode(pairingCode, level, size, label, maxSize, marginTop, marginLeft);
+        return globalInput.displayQRCode(pairingCode, level, size, label, maxSize, vspace, hspace);
     }, [isReady, isLoading]);
 
 
