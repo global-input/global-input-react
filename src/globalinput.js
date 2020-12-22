@@ -1,6 +1,4 @@
 
-import React, { useState, useEffect } from "react";
-import QRCode from "qrcode.react";
 import { createMessageConnector } from 'global-input-message';
 
 const ACTION_TYPES = {
@@ -27,6 +25,7 @@ const MobileState = {
 
 export const initialState = {
     connectionCode: null,
+    pairingCode: null,
     errorMessage: null,
     field: null,
     isLoading: true,
@@ -271,7 +270,7 @@ export const startConnect = (config, notify) => {
     notify({ type: ACTION_TYPES.START_CONNECT });
 };
 
-export const getParingCode = () => {
+const getParingCode = () => {
     return mobileData.session && mobileData.session.buildPairingData();
 };
 
@@ -283,7 +282,7 @@ export const reducer = (state, action) => {
             state = { ...state, errorMessage: '', field: null, isConnectionDenied: false };
             break;
         case ACTION_TYPES.REGISTERED:
-            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode, isConnectionDenied: false };
+            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode, pairingCode: getParingCode(), isConnectionDenied: false };
             break;
         case ACTION_TYPES.RECEIVED_FIELD:
             state = { ...state, field: action.field, isConnectionDenied: false };
@@ -308,7 +307,7 @@ export const reducer = (state, action) => {
         ...getStateData()
     };
 };
-export const getStateData = () => {
+const getStateData = () => {
     return {
         isLoading: mobileData.mobileState === MobileState.INITIALIZING,
         isReady: mobileData.mobileState === MobileState.WAITING_FOR_MOBILE,
@@ -321,77 +320,3 @@ export const getStateData = () => {
 }
 
 export const keepConnection = () => !!mobileData.sender;
-const styles = {
-    label: {
-        paddingTop: 20,
-        color: "#A9C8E6", //#4880ED
-    },
-    qrCode: {
-        display: "flex",
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 5,
-        backgroundColor: "white"
-    }
-};
-
-export const loading = (<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
-    <path fill="#C779D0" d="M25,5A20.14,20.14,0,0,1,45,22.88a2.51,2.51,0,0,0,2.49,2.26h0A2.52,2.52,0,0,0,50,22.33a25.14,25.14,0,0,0-50,0,2.52,2.52,0,0,0,2.5,2.81h0A2.51,2.51,0,0,0,5,22.88,20.14,20.14,0,0,1,25,5Z">
-        <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite" />
-    </path>
-</svg>);
-
-
-export const qrCodeLabel = (
-    <div style={styles.label}>
-        Scan with <a href="https://globalinput.co.uk/global-input-app/get-app" rel="noopener noreferrer" target="_blank"> Global Input App</a>
-    </div>
-);
-
-export const displayQRCode = (codeContent, level, size, label, maxSize, vspace, hspace) => {
-    if ((!codeContent) || size === 0) {
-        return null;
-    }
-    if (size) {
-        return (
-            <div style={styles.qrCode}>
-                <QRCode value={codeContent} level={level} size={size} />
-                {label}
-            </div>
-        );
-    }
-    else {
-        return (
-            <div style={styles.qrCode}>
-                <ResizeQRCode value={codeContent} level={level} maxSize={maxSize} vspace={vspace} hspace={hspace} />
-                {label}
-            </div>
-        );
-    }
-}
-
-const ResizeQRCode = ({ value, level, maxSize, vspace, hspace }) => {
-    const [size, setSize] = useState(0);
-    useEffect(() => {
-        const handleResize = () => {
-            let size = 0;
-            if (window && window.innerWidth && window.innerHeight) {
-                if (window.innerWidth < window.innerHeight) {
-                    size = window.innerWidth - hspace;
-                }
-                else {
-                    size = window.innerHeight - vspace;
-                }
-            }
-            setSize(size > maxSize ? maxSize : size);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => { window.removeEventListener('resize', handleResize) }
-    });
-    if (!size) {
-        return null;
-    }
-    return (<QRCode value={value} level={level} size={size} />);
-};

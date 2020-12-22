@@ -52,11 +52,11 @@ export type ConnectQRProps = {
     maxSize?: number;
     vspace?: number;
     hspace?: number;
+    mobile:GlobalInputData;
 };
 export interface GlobalInputData {
-    ConnectQR: React.FC<ConnectQRProps>,
-    PairingQR: React.FC<ConnectQRProps>,
     connectionCode: string;
+    pairingCode: string;
     field: FormField;
     errorMessage: string;
     isLoading: boolean;
@@ -77,3 +77,5 @@ export interface GlobalInputData {
 export function generateRandomString(length?: number): string;
 export function encrypt(content: string, password: string): string;
 export function decrypt(content: string, password: string): string;
+export  const ConnectQR:React.FC<ConnectQRProps>;
+export  const PairingQR:React.FC<ConnectQRProps>;
