@@ -16,7 +16,7 @@ npm install global-input-react
 ## 📚 Usage
 ```JavaScript
 
-import {useGlobalInputApp} from  'global-input-react';
+import {useGlobalInputApp,ConnectQR} from  'global-input-react';
 
 ```
 Then, ```useGlobalInputApp()``` function (which is a React hook) can be called with a parameter, defining a mobile user interface. For example, the following code displays a login screen on the user's mobile screen when connected to your application:
@@ -51,7 +51,7 @@ The ```initData``` contains a ```form``` with a set of fields: ```usernameField`
 The object returned by ```useGlobalInputApp()``` function is stored into the  ```mobile``` variable. It contains a set of data items and functions for receiving or sending data to the connected mobile app. To begin with, you can place the following code into the rendering part of your code:
 
 ```JavaScript
-<mobile.ConnectQR/>
+<ConnectQR mobile={mobile}/>
 ```
 It displays an encrypted QR Code for mobile apps to scan to connect to your application. It contains the content of ```mobile.connectionCode```, which holds an encrypted string value. When decrypted, it provides information on how to connect to your application, including a one-time-use encryption key for initiating an end-to-end encryption process between your application and a mobile app.
 
@@ -118,7 +118,7 @@ const login = (username,password) => {
 Another way is to place another instance of  ```useGlobalInputApp```  in a React component, then render the component when you need to replace mobile user interface.
 
 
-When  ```useGlobalInputApp``` is invoked for the first time, the module will start to initialize itself. In this phase, ```mobile.isLoading``` is set to true, and ```<mobile.ConnectQR/>``` displays a loading symbol. After the initialization is completed, if the application is ready to accept connection, ```mobile.isReady``` is set to true, and ```<mobile.ConnectQR/>``` displays an encrypted QR Code. When a mobile app has connected to your application, ```mobile.isConnected``` is set to true, and ```<mobile.ConnectQR/>``` displays nothing. Those variables are useful if you would like to control what to display during different phases:
+When  ```mobile=useGlobalInputApp(...)``` is invoked for the first time, the module will start to initialize itself. In this phase, ```mobile.isLoading``` is set to true, and ```<ConnectQR mobile={mobile}/>``` displays a loading symbol. After the initialization is completed, if the application is ready to accept connection, ```mobile.isReady``` is set to true, and ```<ConnectQR mobile={mobile}/>``` displays an encrypted QR Code. When a mobile app has connected to your application, ```mobile.isConnected``` is set to true, and ```<ConnectQR mobile={mobile}/>``` displays nothing. Those variables are useful if you would like to control what to display during different phases:
 ```JavaScript
 {mobile.isConnected && (<>
 <h1>Mobile Connected</h1>
