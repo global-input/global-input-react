@@ -1,6 +1,5 @@
 import * as globalInput from './globalinput';
 import { useReducer, useRef, useEffect, useCallback } from "react";
-export * from 'global-input-message';
 export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
     const [{
         connectionCode,
@@ -51,6 +50,17 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         if (!attached.current) {
             console.log(" -restart-not-attached- ");
             return;
+        }
+        if (config && typeof config.initData === 'function') {
+            config.initData = config.initData();
+        }
+        if (!config) {
+            if (typeof configRef.current === 'function') {
+                configRef.current = configRef.current();
+            }
+            if (typeof configRef.current.initData === 'function') {
+                configRef.current.initData = configRef.current.initData();
+            }
         }
         globalInput.disconnect(notify);
         globalInput.startConnect(config ? config : configRef.current, notify);
