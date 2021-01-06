@@ -1,6 +1,6 @@
 import React from 'react';
-import { InitData, FormField, FieldValue, Sender } from 'global-input-message';
-export * from 'global-input-message';
+import type { InitData, FormField, FieldValue, Sender } from 'global-input-message';
+export type * from 'global-input-message';
 export function useGlobalInputApp(config: ConfigData | (() => ConfigData), canConnect?: boolean, configId?: any): GlobalInputData;
 export function getGlobalInputState(): GlobalInputState;
 
@@ -8,7 +8,7 @@ interface GlobalInputState {
     isLoading: boolean;
     isReady: boolean;
     isError: boolean;
-    isDisconnected: boolean;
+    isClosed: boolean;
     isConnected: boolean;
     isConnectionDenied: boolean;
     initData: InitData;
@@ -62,15 +62,17 @@ export interface GlobalInputData {
     isLoading: boolean;
     isReady: boolean;
     isError: boolean;
-    isDisconnected: boolean;
+    isClosed: boolean;
     isConnected: boolean;
+    isDisconnected:boolean;
     isConnectionDenied: boolean;
     initData: InitData;
     senders: Sender[];
+    sender:Sender;
     sendValue: SendValueFunction;
     sendInitData: SendInitDataFunction;
     setOnchange: (onchange: OnchangeFunction) => void;
-    disconnect: () => void;
+    close: () => void;
     restart: (config?: ConfigData) => void;
 }
 

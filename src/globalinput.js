@@ -17,7 +17,7 @@ const ACTION_TYPES = {
 
 const MobileState = {
     INITIALIZING: 1,
-    DISCONNECTED: 2,
+    CLOSED: 2,
     ERROR: 3,
     WAITING_FOR_MOBILE: 4,
     MOBILE_CONNECTED: 5
@@ -31,9 +31,10 @@ export const initialState = {
     isLoading: true,
     isReady: false,
     isError: false,
-    isDisconnected: false,
+    isClosed: false,
     isConnected: false,
     isConnectionDenied: false,
+    isDisconnected: false,
     initData: null,
     connected: []
 };
@@ -57,7 +58,8 @@ const setFieldProperties = (fields, values, setters) => {
 }
 
 
-const closeConnection = () => {
+
+export const closeConnection = (notify) => {
     if (mobileData.session) {
         mobileData.session.disconnect();
         mobileData.session = null;
@@ -67,10 +69,7 @@ const closeConnection = () => {
         mobileData.values = [];
         mobileData.setters = [];
     }
-};
-export const disconnect = (notify) => {
-    closeConnection();
-    mobileData.mobileState = MobileState.DISCONNECTED;
+    mobileData.mobileState = MobileState.CLOSED;
     if (notify) {
         notify({ type: ACTION_TYPES.CLOSE });
     }
@@ -312,10 +311,12 @@ const getStateData = () => {
         isLoading: mobileData.mobileState === MobileState.INITIALIZING,
         isReady: mobileData.mobileState === MobileState.WAITING_FOR_MOBILE,
         isError: mobileData.mobileState === MobileState.ERROR,
-        isDisconnected: mobileData.mobileState === MobileState.DISCONNECTED,
+        isClosed: mobileData.mobileState === MobileState.CLOSED,
         isConnected: mobileData.mobileState === MobileState.MOBILE_CONNECTED,
+        isDisconnected: (!!mobileData.sender) && (mobileData.mobileState !== MobileState.MOBILE_CONNECTED),
         initData: mobileData.mobileConfig && mobileData.mobileConfig.initData,
-        senders: mobileData.senders
+        senders: mobileData.senders,
+        sender: mobileData.sender
     }
 }
 

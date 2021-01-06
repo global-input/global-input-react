@@ -9,11 +9,13 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         isLoading,
         isReady,
         isError,
-        isDisconnected,
+        isClosed,
         isConnected,
+        isDisconnected,
         isConnectionDenied,
         initData,
-        senders
+        senders,
+        sender
     }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);
 
     const attached = useRef(true);
@@ -62,7 +64,7 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
                 configRef.current.initData = configRef.current.initData();
             }
         }
-        globalInput.disconnect(notify);
+        globalInput.closeConnection(notify);
         globalInput.startConnect(config ? config : configRef.current, notify);
     }, [])
 
@@ -82,8 +84,8 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
     }, []);
 
 
-    const disconnect = useCallback(() => {
-        globalInput.disconnect(notify);
+    const close = useCallback(() => {
+        globalInput.closeConnection(notify);
     }, []);
 
 
@@ -113,15 +115,17 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         isLoading,
         isReady,
         isError,
-        isDisconnected,
+        isClosed,
         isConnected,
+        isDisconnected,
         isConnectionDenied,
         initData,
         senders,
+        sender,
         sendValue,
         sendInitData,
         setOnchange,
-        disconnect,
+        close,
         restart,
     };
 };

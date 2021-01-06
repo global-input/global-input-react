@@ -107,6 +107,6 @@ it("Device App and Mobile App should be able to communicate", async function () 
     expect(deviceApp.message).toEqual(mobileApp.message);
 
     mobileApp.con.disconnect();
-    deviceApp.hook.result.current.disconnect();
+    deviceApp.hook.result.current.close();
     deviceApp.hook.unmount();
 }, 10000);
