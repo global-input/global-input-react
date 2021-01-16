@@ -44,7 +44,7 @@ export const ConnectQR = ({ mobile, level = 'H', size = null, label = qrCodeLabe
             setOptimumSize(oSize > maxSize ? maxSize : oSize);
         };
         if (size === 0 || size) {
-            return null;
+            return undefined;
         }
         handleResize();
         window.addEventListener('resize', handleResize);
