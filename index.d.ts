@@ -22,11 +22,13 @@ export interface ConfigData {
     onchange?: OnchangeFunction;
     options?: ConnectOptions;
     codeAES?: string;
+    initSocket?:(socket:any)=>void;
 }
 export interface ConnectOptions {
     apikey?: string;
     url?: string;
     securityGroup?: string;
+    client?: string;
     onRegistered?: (connectionCode: string) => void;
     onRegisterFailed?: () => void;
     onSenderConnected?: (sender: Sender, senders: Sender[]) => void;

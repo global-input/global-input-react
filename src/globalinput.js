@@ -171,12 +171,14 @@ const buildMessageHandlersForInitData = (initData, notify) => {
 };
 
 
-const buildMobileConfig = (initData, options, notify) => {
+const buildMobileConfig = (initData, config, notify) => {
+    const options = config.options;
     return {
         initData,
         onRegistered: (connectionCode) => {
             mobileData.mobileState = MobileState.WAITING_FOR_MOBILE;
             options && options.onRegistered && options.onRegistered(connectionCode);
+            config && config.initSocket && config.initSocket(mobileData.session.socket);
             notify({ type: ACTION_TYPES.REGISTERED, connectionCode });
         },
         onRegisterFailed: errorMessage => {
@@ -227,8 +229,10 @@ const buildMobileConfig = (initData, options, notify) => {
         },
         url: options && options.url,
         apikey: options && options.apikey,
-        securityGroup: options && options.securityGroup
+        securityGroup: options && options.securityGroup,
+        client: options && options.client
     };
+
 };
 
 export const sendInitData = (initDataConfigured, notify) => {
@@ -251,7 +255,7 @@ export const startConnect = (config, notify) => {
     if (!initData.action) {
         initData.action = 'input';
     }
-    mobileData.mobileConfig = buildMobileConfig(initData, config.options, notify);
+    mobileData.mobileConfig = buildMobileConfig(initData, config, notify);
     setFieldProperties(fields, values, setters);
     if (mobileData.mobileState === MobileState.MOBILE_CONNECTED) {
         mobileData.session.sendInitData(initData);
