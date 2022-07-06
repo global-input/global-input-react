@@ -70,6 +70,6 @@
   },
   "dependencies": {
     "global-input-message": "^2.1.6",
-    "qrcode.react": "^1.0.1"
+    "qrcode.react": "^3.1.0"
   }
 }
