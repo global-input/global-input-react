@@ -573,7 +573,7 @@ const useGlobalInputApp = (config, canConnect = true, configId = "") => {
 };
 
 exports.useGlobalInputApp = useGlobalInputApp;
-},{"./globalinput":1,"react":123}],3:[function(require,module,exports){
+},{"./globalinput":1,"react":104}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -751,7 +751,7 @@ const PairingQR = ({
 };
 
 exports.PairingQR = PairingQR;
-},{"qrcode.react":120,"react":123}],4:[function(require,module,exports){
+},{"qrcode.react":101,"react":104}],4:[function(require,module,exports){
 module.exports = after
 
 function after(count, callback, err_cb) {
@@ -1915,7 +1915,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 module.exports = defaults;
 
 }).call(this,require('_process'))
-},{"./adapters/http":7,"./adapters/xhr":7,"./core/enhanceError":17,"./helpers/normalizeHeaderName":30,"./utils":34,"_process":144}],22:[function(require,module,exports){
+},{"./adapters/http":7,"./adapters/xhr":7,"./core/enhanceError":17,"./helpers/normalizeHeaderName":30,"./utils":34,"_process":125}],22:[function(require,module,exports){
 module.exports = {
   "version": "0.25.0"
 };
@@ -5105,7 +5105,7 @@ module.exports = function(a, b){
 
 }));
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"crypto":141}],44:[function(require,module,exports){
+},{"crypto":122}],44:[function(require,module,exports){
 ;(function (root, factory) {
 	if (typeof exports === "object") {
 		// CommonJS
@@ -10778,7 +10778,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
   return filteredUpgrades;
 };
 
-},{"./transport":79,"./transports/index":80,"component-emitter":39,"debug":86,"engine.io-parser":89,"indexof":97,"parseqs":100,"parseuri":101}],79:[function(require,module,exports){
+},{"./transport":79,"./transports/index":80,"component-emitter":39,"debug":86,"engine.io-parser":89,"indexof":97,"parseqs":99,"parseuri":100}],79:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -11895,7 +11895,7 @@ Polling.prototype.uri = function () {
   return schema + '://' + (ipv6 ? '[' + this.hostname + ']' : this.hostname) + port + this.path + query;
 };
 
-},{"../transport":79,"component-inherit":40,"debug":86,"engine.io-parser":89,"parseqs":100,"xmlhttprequest-ssl":85,"yeast":139}],84:[function(require,module,exports){
+},{"../transport":79,"component-inherit":40,"debug":86,"engine.io-parser":89,"parseqs":99,"xmlhttprequest-ssl":85,"yeast":120}],84:[function(require,module,exports){
 (function (Buffer){
 /**
  * Module dependencies.
@@ -12198,7 +12198,7 @@ WS.prototype.check = function () {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"../transport":79,"buffer":142,"component-inherit":40,"debug":86,"engine.io-parser":89,"parseqs":100,"ws":141,"yeast":139}],85:[function(require,module,exports){
+},{"../transport":79,"buffer":123,"component-inherit":40,"debug":86,"engine.io-parser":89,"parseqs":99,"ws":122,"yeast":120}],85:[function(require,module,exports){
 // browser shim for xmlhttprequest module
 
 var hasCORS = require('has-cors');
@@ -12437,7 +12437,7 @@ function localstorage() {
 }
 
 }).call(this,require('_process'))
-},{"./debug":87,"_process":144}],87:[function(require,module,exports){
+},{"./debug":87,"_process":125}],87:[function(require,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -14459,7 +14459,7 @@ class GlobalInputMessageConnector {
 }
 
 exports.default = GlobalInputMessageConnector;
-},{"./codedataUtil":93,"socket.io-client":124}],93:[function(require,module,exports){
+},{"./codedataUtil":93,"socket.io-client":105}],93:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14782,7 +14782,7 @@ function hasBinary (obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":142,"isarray":98}],96:[function(require,module,exports){
+},{"buffer":123,"isarray":98}],96:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -14820,98 +14820,6 @@ module.exports = Array.isArray || function (arr) {
 };
 
 },{}],99:[function(require,module,exports){
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
-'use strict';
-/* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !==
-				'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-},{}],100:[function(require,module,exports){
 /**
  * Compiles a querystring
  * Returns string representation of the object
@@ -14950,7 +14858,7 @@ exports.decode = function(qs){
   return qry;
 };
 
-},{}],101:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 /**
  * Parses an URI
  *
@@ -15020,2781 +14928,897 @@ function queryKey(uri, query) {
     return data;
 }
 
-},{}],102:[function(require,module,exports){
-(function (process){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-'use strict';
-
-var printWarning = function() {};
-
-if (process.env.NODE_ENV !== 'production') {
-  var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
-  var loggedTypeFailures = {};
-  var has = require('./lib/has');
-
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
+},{}],101:[function(require,module,exports){
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
     }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) { /**/ }
-  };
-}
-
-/**
- * Assert that the values match with the type specs.
- * Error messages are memorized and will only be shown once.
- *
- * @param {object} typeSpecs Map of name to a ReactPropType
- * @param {object} values Runtime values that need to be type-checked
- * @param {string} location e.g. "prop", "context", "child context"
- * @param {string} componentName Name of the component for error messages.
- * @param {?Function} getStack Returns the component stack.
- * @private
- */
-function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if (process.env.NODE_ENV !== 'production') {
-    for (var typeSpecName in typeSpecs) {
-      if (has(typeSpecs, typeSpecName)) {
-        var error;
-        // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error(
-              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
-              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' +
-              'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.'
-            );
-            err.name = 'Invariant Violation';
-            throw err;
-          }
-          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
-        } catch (ex) {
-          error = ex;
-        }
-        if (error && !(error instanceof Error)) {
-          printWarning(
-            (componentName || 'React class') + ': type specification of ' +
-            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
-            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
-            'You may have forgotten to pass an argument to the type checker ' +
-            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
-            'shape all require an argument).'
-          );
-        }
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures[error.message] = true;
-
-          var stack = getStack ? getStack() : '';
-
-          printWarning(
-            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
-          );
-        }
-      }
-    }
-  }
-}
-
-/**
- * Resets warning cache when testing.
- *
- * @private
- */
-checkPropTypes.resetWarningCache = function() {
-  if (process.env.NODE_ENV !== 'production') {
-    loggedTypeFailures = {};
-  }
-}
-
-module.exports = checkPropTypes;
-
-}).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":106,"./lib/has":107,"_process":144}],103:[function(require,module,exports){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-'use strict';
-
-var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
-
-function emptyFunction() {}
-function emptyFunctionWithReset() {}
-emptyFunctionWithReset.resetWarningCache = emptyFunction;
-
-module.exports = function() {
-  function shim(props, propName, componentName, location, propFullName, secret) {
-    if (secret === ReactPropTypesSecret) {
-      // It is still safe when called from React.
-      return;
-    }
-    var err = new Error(
-      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-      'Use PropTypes.checkPropTypes() to call them. ' +
-      'Read more at http://fb.me/use-check-prop-types'
-    );
-    err.name = 'Invariant Violation';
-    throw err;
-  };
-  shim.isRequired = shim;
-  function getShim() {
-    return shim;
-  };
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-  var ReactPropTypes = {
-    array: shim,
-    bigint: shim,
-    bool: shim,
-    func: shim,
-    number: shim,
-    object: shim,
-    string: shim,
-    symbol: shim,
-
-    any: shim,
-    arrayOf: getShim,
-    element: shim,
-    elementType: shim,
-    instanceOf: getShim,
-    node: shim,
-    objectOf: getShim,
-    oneOf: getShim,
-    oneOfType: getShim,
-    shape: getShim,
-    exact: getShim,
-
-    checkPropTypes: emptyFunctionWithReset,
-    resetWarningCache: emptyFunction
-  };
-
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
+  return a;
 };
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-},{"./lib/ReactPropTypesSecret":106}],104:[function(require,module,exports){
-(function (process){
+// src/index.tsx
+var src_exports = {};
+__export(src_exports, {
+  QRCodeCanvas: () => QRCodeCanvas,
+  QRCodeSVG: () => QRCodeSVG,
+  default: () => QRCode
+});
+module.exports = __toCommonJS(src_exports);
+var import_react = __toESM(require("react"));
+
+// src/third-party/qrcodegen/index.ts
 /**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * @license QR Code generator library (TypeScript)
+ * Copyright (c) Project Nayuki.
+ * SPDX-License-Identifier: MIT
  */
-
-'use strict';
-
-var ReactIs = require('react-is');
-var assign = require('object-assign');
-
-var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
-var has = require('./lib/has');
-var checkPropTypes = require('./checkPropTypes');
-
-var printWarning = function() {};
-
-if (process.env.NODE_ENV !== 'production') {
-  printWarning = function(text) {
-    var message = 'Warning: ' + text;
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-}
-
-function emptyFunctionThatReturnsNull() {
-  return null;
-}
-
-module.exports = function(isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-  var ANONYMOUS = '<<anonymous>>';
-
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bigint: createPrimitiveTypeChecker('bigint'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    elementType: createElementTypeTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker,
-  };
-
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-  /*eslint-disable no-self-compare*/
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-  function PropTypeError(message, data) {
-    this.message = message;
-    this.data = data && typeof data === 'object' ? data: {};
-    this.stack = '';
-  }
-  // Make `instanceof Error` still work for returned errors.
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if (process.env.NODE_ENV !== 'production') {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          var err = new Error(
-            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-            'Use `PropTypes.checkPropTypes()` to call them. ' +
-            'Read more at http://fb.me/use-check-prop-types'
-          );
-          err.name = 'Invariant Violation';
-          throw err;
-        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-          if (
-            !manualPropTypeCallCache[cacheKey] &&
-            // Avoid spamming the console because they are often not actionable except for lib authors
-            manualPropTypeWarningCount < 3
-          ) {
-            printWarning(
-              'You are manually calling a React.PropTypes validation ' +
-              'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' +
-              'and will throw in the standalone `prop-types` package. ' +
-              'You may be seeing this warning due to a third-party PropTypes ' +
-              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
-            );
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
+var qrcodegen;
+((qrcodegen2) => {
+  const _QrCode = class {
+    constructor(version, errorCorrectionLevel, dataCodewords, msk) {
+      this.version = version;
+      this.errorCorrectionLevel = errorCorrectionLevel;
+      this.modules = [];
+      this.isFunction = [];
+      if (version < _QrCode.MIN_VERSION || version > _QrCode.MAX_VERSION)
+        throw new RangeError("Version value out of range");
+      if (msk < -1 || msk > 7)
+        throw new RangeError("Mask value out of range");
+      this.size = version * 4 + 17;
+      let row = [];
+      for (let i = 0; i < this.size; i++)
+        row.push(false);
+      for (let i = 0; i < this.size; i++) {
+        this.modules.push(row.slice());
+        this.isFunction.push(row.slice());
+      }
+      this.drawFunctionPatterns();
+      const allCodewords = this.addEccAndInterleave(dataCodewords);
+      this.drawCodewords(allCodewords);
+      if (msk == -1) {
+        let minPenalty = 1e9;
+        for (let i = 0; i < 8; i++) {
+          this.applyMask(i);
+          this.drawFormatBits(i);
+          const penalty = this.getPenaltyScore();
+          if (penalty < minPenalty) {
+            msk = i;
+            minPenalty = penalty;
           }
+          this.applyMask(i);
         }
       }
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+      assert(0 <= msk && msk <= 7);
+      this.mask = msk;
+      this.applyMask(msk);
+      this.drawFormatBits(msk);
+      this.isFunction = [];
+    }
+    static encodeText(text, ecl) {
+      const segs = qrcodegen2.QrSegment.makeSegments(text);
+      return _QrCode.encodeSegments(segs, ecl);
+    }
+    static encodeBinary(data, ecl) {
+      const seg = qrcodegen2.QrSegment.makeBytes(data);
+      return _QrCode.encodeSegments([seg], ecl);
+    }
+    static encodeSegments(segs, ecl, minVersion = 1, maxVersion = 40, mask = -1, boostEcl = true) {
+      if (!(_QrCode.MIN_VERSION <= minVersion && minVersion <= maxVersion && maxVersion <= _QrCode.MAX_VERSION) || mask < -1 || mask > 7)
+        throw new RangeError("Invalid value");
+      let version;
+      let dataUsedBits;
+      for (version = minVersion; ; version++) {
+        const dataCapacityBits2 = _QrCode.getNumDataCodewords(version, ecl) * 8;
+        const usedBits = QrSegment.getTotalBits(segs, version);
+        if (usedBits <= dataCapacityBits2) {
+          dataUsedBits = usedBits;
+          break;
         }
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
+        if (version >= maxVersion)
+          throw new RangeError("Data too long");
+      }
+      for (const newEcl of [_QrCode.Ecc.MEDIUM, _QrCode.Ecc.QUARTILE, _QrCode.Ecc.HIGH]) {
+        if (boostEcl && dataUsedBits <= _QrCode.getNumDataCodewords(version, newEcl) * 8)
+          ecl = newEcl;
+      }
+      let bb = [];
+      for (const seg of segs) {
+        appendBits(seg.mode.modeBits, 4, bb);
+        appendBits(seg.numChars, seg.mode.numCharCountBits(version), bb);
+        for (const b of seg.getData())
+          bb.push(b);
+      }
+      assert(bb.length == dataUsedBits);
+      const dataCapacityBits = _QrCode.getNumDataCodewords(version, ecl) * 8;
+      assert(bb.length <= dataCapacityBits);
+      appendBits(0, Math.min(4, dataCapacityBits - bb.length), bb);
+      appendBits(0, (8 - bb.length % 8) % 8, bb);
+      assert(bb.length % 8 == 0);
+      for (let padByte = 236; bb.length < dataCapacityBits; padByte ^= 236 ^ 17)
+        appendBits(padByte, 8, bb);
+      let dataCodewords = [];
+      while (dataCodewords.length * 8 < bb.length)
+        dataCodewords.push(0);
+      bb.forEach((b, i) => dataCodewords[i >>> 3] |= b << 7 - (i & 7));
+      return new _QrCode(version, ecl, dataCodewords, mask);
+    }
+    getModule(x, y) {
+      return 0 <= x && x < this.size && 0 <= y && y < this.size && this.modules[y][x];
+    }
+    getModules() {
+      return this.modules;
+    }
+    drawFunctionPatterns() {
+      for (let i = 0; i < this.size; i++) {
+        this.setFunctionModule(6, i, i % 2 == 0);
+        this.setFunctionModule(i, 6, i % 2 == 0);
+      }
+      this.drawFinderPattern(3, 3);
+      this.drawFinderPattern(this.size - 4, 3);
+      this.drawFinderPattern(3, this.size - 4);
+      const alignPatPos = this.getAlignmentPatternPositions();
+      const numAlign = alignPatPos.length;
+      for (let i = 0; i < numAlign; i++) {
+        for (let j = 0; j < numAlign; j++) {
+          if (!(i == 0 && j == 0 || i == 0 && j == numAlign - 1 || i == numAlign - 1 && j == 0))
+            this.drawAlignmentPattern(alignPatPos[i], alignPatPos[j]);
+        }
+      }
+      this.drawFormatBits(0);
+      this.drawVersion();
+    }
+    drawFormatBits(mask) {
+      const data = this.errorCorrectionLevel.formatBits << 3 | mask;
+      let rem = data;
+      for (let i = 0; i < 10; i++)
+        rem = rem << 1 ^ (rem >>> 9) * 1335;
+      const bits = (data << 10 | rem) ^ 21522;
+      assert(bits >>> 15 == 0);
+      for (let i = 0; i <= 5; i++)
+        this.setFunctionModule(8, i, getBit(bits, i));
+      this.setFunctionModule(8, 7, getBit(bits, 6));
+      this.setFunctionModule(8, 8, getBit(bits, 7));
+      this.setFunctionModule(7, 8, getBit(bits, 8));
+      for (let i = 9; i < 15; i++)
+        this.setFunctionModule(14 - i, 8, getBit(bits, i));
+      for (let i = 0; i < 8; i++)
+        this.setFunctionModule(this.size - 1 - i, 8, getBit(bits, i));
+      for (let i = 8; i < 15; i++)
+        this.setFunctionModule(8, this.size - 15 + i, getBit(bits, i));
+      this.setFunctionModule(8, this.size - 8, true);
+    }
+    drawVersion() {
+      if (this.version < 7)
+        return;
+      let rem = this.version;
+      for (let i = 0; i < 12; i++)
+        rem = rem << 1 ^ (rem >>> 11) * 7973;
+      const bits = this.version << 12 | rem;
+      assert(bits >>> 18 == 0);
+      for (let i = 0; i < 18; i++) {
+        const color = getBit(bits, i);
+        const a = this.size - 11 + i % 3;
+        const b = Math.floor(i / 3);
+        this.setFunctionModule(a, b, color);
+        this.setFunctionModule(b, a, color);
       }
     }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-
-        return new PropTypeError(
-          'Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'),
-          {expectedType: expectedType}
-        );
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-      var propValue = props[propName];
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
-        if (error instanceof Error) {
-          return error;
+    drawFinderPattern(x, y) {
+      for (let dy = -4; dy <= 4; dy++) {
+        for (let dx = -4; dx <= 4; dx++) {
+          const dist = Math.max(Math.abs(dx), Math.abs(dy));
+          const xx = x + dx;
+          const yy = y + dy;
+          if (0 <= xx && xx < this.size && 0 <= yy && yy < this.size)
+            this.setFunctionModule(xx, yy, dist != 2 && dist != 4);
         }
       }
-      return null;
     }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!ReactIs.isValidElementType(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-      if (process.env.NODE_ENV !== 'production') {
-        if (arguments.length > 1) {
-          printWarning(
-            'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
-            'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
-          );
-        } else {
-          printWarning('Invalid argument supplied to oneOf, expected an array.');
-        }
-      }
-      return emptyFunctionThatReturnsNull;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
-        var type = getPreciseType(value);
-        if (type === 'symbol') {
-          return String(value);
-        }
-        return value;
-      });
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-      for (var key in propValue) {
-        if (has(propValue, key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-      process.env.NODE_ENV !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-      if (typeof checker !== 'function') {
-        printWarning(
-          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
-        );
-        return emptyFunctionThatReturnsNull;
+    drawAlignmentPattern(x, y) {
+      for (let dy = -2; dy <= 2; dy++) {
+        for (let dx = -2; dx <= 2; dx++)
+          this.setFunctionModule(x + dx, y + dy, Math.max(Math.abs(dx), Math.abs(dy)) != 1);
       }
     }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var expectedTypes = [];
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-        var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
-        if (checkerResult == null) {
-          return null;
-        }
-        if (checkerResult.data && has(checkerResult.data, 'expectedType')) {
-          expectedTypes.push(checkerResult.data.expectedType);
-        }
-      }
-      var expectedTypesMessage = (expectedTypes.length > 0) ? ', expected one of type [' + expectedTypes.join(', ') + ']': '';
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`' + expectedTypesMessage + '.'));
+    setFunctionModule(x, y, isDark) {
+      this.modules[y][x] = isDark;
+      this.isFunction[y][x] = true;
     }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+    addEccAndInterleave(data) {
+      const ver = this.version;
+      const ecl = this.errorCorrectionLevel;
+      if (data.length != _QrCode.getNumDataCodewords(ver, ecl))
+        throw new RangeError("Invalid argument");
+      const numBlocks = _QrCode.NUM_ERROR_CORRECTION_BLOCKS[ecl.ordinal][ver];
+      const blockEccLen = _QrCode.ECC_CODEWORDS_PER_BLOCK[ecl.ordinal][ver];
+      const rawCodewords = Math.floor(_QrCode.getNumRawDataModules(ver) / 8);
+      const numShortBlocks = numBlocks - rawCodewords % numBlocks;
+      const shortBlockLen = Math.floor(rawCodewords / numBlocks);
+      let blocks = [];
+      const rsDiv = _QrCode.reedSolomonComputeDivisor(blockEccLen);
+      for (let i = 0, k = 0; i < numBlocks; i++) {
+        let dat = data.slice(k, k + shortBlockLen - blockEccLen + (i < numShortBlocks ? 0 : 1));
+        k += dat.length;
+        const ecc = _QrCode.reedSolomonComputeRemainder(dat, rsDiv);
+        if (i < numShortBlocks)
+          dat.push(0);
+        blocks.push(dat.concat(ecc));
       }
-      return null;
+      let result = [];
+      for (let i = 0; i < blocks[0].length; i++) {
+        blocks.forEach((block, j) => {
+          if (i != shortBlockLen - blockEccLen || j >= numShortBlocks)
+            result.push(block[i]);
+        });
+      }
+      assert(result.length == rawCodewords);
+      return result;
     }
-    return createChainableTypeChecker(validate);
-  }
-
-  function invalidValidatorError(componentName, location, propFullName, key, type) {
-    return new PropTypeError(
-      (componentName || 'React class') + ': ' + location + ' type `' + propFullName + '.' + key + '` is invalid; ' +
-      'it must be a function, usually from the `prop-types` package, but received `' + type + '`.'
-    );
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-        if (typeof checker !== 'function') {
-          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      // We need to check all keys in case some are required but missing from props.
-      var allKeys = assign({}, props[propName], shapeTypes);
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-        if (has(shapeTypes, key) && typeof checker !== 'function') {
-          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
-        }
-        if (!checker) {
-          return new PropTypeError(
-            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
-            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
-            '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  ')
-          );
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-      case 'boolean':
-        return !propValue;
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
+    drawCodewords(data) {
+      if (data.length != Math.floor(_QrCode.getNumRawDataModules(this.version) / 8))
+        throw new RangeError("Invalid argument");
+      let i = 0;
+      for (let right = this.size - 1; right >= 1; right -= 2) {
+        if (right == 6)
+          right = 5;
+        for (let vert = 0; vert < this.size; vert++) {
+          for (let j = 0; j < 2; j++) {
+            const x = right - j;
+            const upward = (right + 1 & 2) == 0;
+            const y = upward ? this.size - 1 - vert : vert;
+            if (!this.isFunction[y][x] && i < data.length * 8) {
+              this.modules[y][x] = getBit(data[i >>> 3], 7 - (i & 7));
+              i++;
             }
+          }
+        }
+      }
+      assert(i == data.length * 8);
+    }
+    applyMask(mask) {
+      if (mask < 0 || mask > 7)
+        throw new RangeError("Mask value out of range");
+      for (let y = 0; y < this.size; y++) {
+        for (let x = 0; x < this.size; x++) {
+          let invert;
+          switch (mask) {
+            case 0:
+              invert = (x + y) % 2 == 0;
+              break;
+            case 1:
+              invert = y % 2 == 0;
+              break;
+            case 2:
+              invert = x % 3 == 0;
+              break;
+            case 3:
+              invert = (x + y) % 3 == 0;
+              break;
+            case 4:
+              invert = (Math.floor(x / 3) + Math.floor(y / 2)) % 2 == 0;
+              break;
+            case 5:
+              invert = x * y % 2 + x * y % 3 == 0;
+              break;
+            case 6:
+              invert = (x * y % 2 + x * y % 3) % 2 == 0;
+              break;
+            case 7:
+              invert = ((x + y) % 2 + x * y % 3) % 2 == 0;
+              break;
+            default:
+              throw new Error("Unreachable");
+          }
+          if (!this.isFunction[y][x] && invert)
+            this.modules[y][x] = !this.modules[y][x];
+        }
+      }
+    }
+    getPenaltyScore() {
+      let result = 0;
+      for (let y = 0; y < this.size; y++) {
+        let runColor = false;
+        let runX = 0;
+        let runHistory = [0, 0, 0, 0, 0, 0, 0];
+        for (let x = 0; x < this.size; x++) {
+          if (this.modules[y][x] == runColor) {
+            runX++;
+            if (runX == 5)
+              result += _QrCode.PENALTY_N1;
+            else if (runX > 5)
+              result++;
           } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
+            this.finderPenaltyAddHistory(runX, runHistory);
+            if (!runColor)
+              result += this.finderPenaltyCountPatterns(runHistory) * _QrCode.PENALTY_N3;
+            runColor = this.modules[y][x];
+            runX = 1;
           }
-        } else {
-          return false;
         }
-
-        return true;
-      default:
-        return false;
+        result += this.finderPenaltyTerminateAndCount(runColor, runX, runHistory) * _QrCode.PENALTY_N3;
+      }
+      for (let x = 0; x < this.size; x++) {
+        let runColor = false;
+        let runY = 0;
+        let runHistory = [0, 0, 0, 0, 0, 0, 0];
+        for (let y = 0; y < this.size; y++) {
+          if (this.modules[y][x] == runColor) {
+            runY++;
+            if (runY == 5)
+              result += _QrCode.PENALTY_N1;
+            else if (runY > 5)
+              result++;
+          } else {
+            this.finderPenaltyAddHistory(runY, runHistory);
+            if (!runColor)
+              result += this.finderPenaltyCountPatterns(runHistory) * _QrCode.PENALTY_N3;
+            runColor = this.modules[y][x];
+            runY = 1;
+          }
+        }
+        result += this.finderPenaltyTerminateAndCount(runColor, runY, runHistory) * _QrCode.PENALTY_N3;
+      }
+      for (let y = 0; y < this.size - 1; y++) {
+        for (let x = 0; x < this.size - 1; x++) {
+          const color = this.modules[y][x];
+          if (color == this.modules[y][x + 1] && color == this.modules[y + 1][x] && color == this.modules[y + 1][x + 1])
+            result += _QrCode.PENALTY_N2;
+        }
+      }
+      let dark = 0;
+      for (const row of this.modules)
+        dark = row.reduce((sum, color) => sum + (color ? 1 : 0), dark);
+      const total = this.size * this.size;
+      const k = Math.ceil(Math.abs(dark * 20 - total * 10) / total) - 1;
+      assert(0 <= k && k <= 9);
+      result += k * _QrCode.PENALTY_N4;
+      assert(0 <= result && result <= 2568888);
+      return result;
     }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    }
-
-    // falsy value can't be a Symbol
-    if (!propValue) {
-      return false;
-    }
-
-    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    }
-
-    // Fallback for non-spec compliant Symbols which are polyfilled.
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  }
-
-  // Equivalent of `typeof` but with special handling for array and regexp.
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-    return propType;
-  }
-
-  // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-    var propType = getPropType(propValue);
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
+    getAlignmentPatternPositions() {
+      if (this.version == 1)
+        return [];
+      else {
+        const numAlign = Math.floor(this.version / 7) + 2;
+        const step = this.version == 32 ? 26 : Math.ceil((this.version * 4 + 4) / (numAlign * 2 - 2)) * 2;
+        let result = [6];
+        for (let pos = this.size - 7; result.length < numAlign; pos -= step)
+          result.splice(1, 0, pos);
+        return result;
       }
     }
-    return propType;
-  }
-
-  // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-      default:
-        return type;
+    static getNumRawDataModules(ver) {
+      if (ver < _QrCode.MIN_VERSION || ver > _QrCode.MAX_VERSION)
+        throw new RangeError("Version number out of range");
+      let result = (16 * ver + 128) * ver + 64;
+      if (ver >= 2) {
+        const numAlign = Math.floor(ver / 7) + 2;
+        result -= (25 * numAlign - 10) * numAlign - 55;
+        if (ver >= 7)
+          result -= 36;
+      }
+      assert(208 <= result && result <= 29648);
+      return result;
     }
-  }
-
-  // Returns class name of the object, if any.
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
+    static getNumDataCodewords(ver, ecl) {
+      return Math.floor(_QrCode.getNumRawDataModules(ver) / 8) - _QrCode.ECC_CODEWORDS_PER_BLOCK[ecl.ordinal][ver] * _QrCode.NUM_ERROR_CORRECTION_BLOCKS[ecl.ordinal][ver];
     }
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes;
-  ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-}).call(this,require('_process'))
-},{"./checkPropTypes":102,"./lib/ReactPropTypesSecret":106,"./lib/has":107,"_process":144,"object-assign":99,"react-is":110}],105:[function(require,module,exports){
-(function (process){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (process.env.NODE_ENV !== 'production') {
-  var ReactIs = require('react-is');
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = require('./factoryWithTypeCheckers')(ReactIs.isElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = require('./factoryWithThrowingShims')();
-}
-
-}).call(this,require('_process'))
-},{"./factoryWithThrowingShims":103,"./factoryWithTypeCheckers":104,"_process":144,"react-is":110}],106:[function(require,module,exports){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-'use strict';
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
-},{}],107:[function(require,module,exports){
-module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
-
-},{}],108:[function(require,module,exports){
-(function (process){
-/** @license React v16.13.1
- * react-is.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-'use strict';
-
-
-
-if (process.env.NODE_ENV !== "production") {
-  (function() {
-'use strict';
-
-// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-// nor polyfill, then a plain number is used for performance.
-var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
-var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
-var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
-var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
-var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
-var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
-var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-// (unstable) APIs that have been removed. Can we remove the symbols?
-
-var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
-var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
-var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
-var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
-var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
-var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
-var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
-var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
-
-function isValidElementType(type) {
-  return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
-}
-
-function typeOf(object) {
-  if (typeof object === 'object' && object !== null) {
-    var $$typeof = object.$$typeof;
-
-    switch ($$typeof) {
-      case REACT_ELEMENT_TYPE:
-        var type = object.type;
-
-        switch (type) {
-          case REACT_ASYNC_MODE_TYPE:
-          case REACT_CONCURRENT_MODE_TYPE:
-          case REACT_FRAGMENT_TYPE:
-          case REACT_PROFILER_TYPE:
-          case REACT_STRICT_MODE_TYPE:
-          case REACT_SUSPENSE_TYPE:
-            return type;
-
-          default:
-            var $$typeofType = type && type.$$typeof;
-
-            switch ($$typeofType) {
-              case REACT_CONTEXT_TYPE:
-              case REACT_FORWARD_REF_TYPE:
-              case REACT_LAZY_TYPE:
-              case REACT_MEMO_TYPE:
-              case REACT_PROVIDER_TYPE:
-                return $$typeofType;
-
-              default:
-                return $$typeof;
-            }
-
+    static reedSolomonComputeDivisor(degree) {
+      if (degree < 1 || degree > 255)
+        throw new RangeError("Degree out of range");
+      let result = [];
+      for (let i = 0; i < degree - 1; i++)
+        result.push(0);
+      result.push(1);
+      let root = 1;
+      for (let i = 0; i < degree; i++) {
+        for (let j = 0; j < result.length; j++) {
+          result[j] = _QrCode.reedSolomonMultiply(result[j], root);
+          if (j + 1 < result.length)
+            result[j] ^= result[j + 1];
         }
-
-      case REACT_PORTAL_TYPE:
-        return $$typeof;
+        root = _QrCode.reedSolomonMultiply(root, 2);
+      }
+      return result;
     }
-  }
-
-  return undefined;
-} // AsyncMode is deprecated along with isAsyncMode
-
-var AsyncMode = REACT_ASYNC_MODE_TYPE;
-var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-var ContextConsumer = REACT_CONTEXT_TYPE;
-var ContextProvider = REACT_PROVIDER_TYPE;
-var Element = REACT_ELEMENT_TYPE;
-var ForwardRef = REACT_FORWARD_REF_TYPE;
-var Fragment = REACT_FRAGMENT_TYPE;
-var Lazy = REACT_LAZY_TYPE;
-var Memo = REACT_MEMO_TYPE;
-var Portal = REACT_PORTAL_TYPE;
-var Profiler = REACT_PROFILER_TYPE;
-var StrictMode = REACT_STRICT_MODE_TYPE;
-var Suspense = REACT_SUSPENSE_TYPE;
-var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
-
-function isAsyncMode(object) {
-  {
-    if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-      hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
-
-      console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+    static reedSolomonComputeRemainder(data, divisor) {
+      let result = divisor.map((_) => 0);
+      for (const b of data) {
+        const factor = b ^ result.shift();
+        result.push(0);
+        divisor.forEach((coef, i) => result[i] ^= _QrCode.reedSolomonMultiply(coef, factor));
+      }
+      return result;
     }
+    static reedSolomonMultiply(x, y) {
+      if (x >>> 8 != 0 || y >>> 8 != 0)
+        throw new RangeError("Byte out of range");
+      let z = 0;
+      for (let i = 7; i >= 0; i--) {
+        z = z << 1 ^ (z >>> 7) * 285;
+        z ^= (y >>> i & 1) * x;
+      }
+      assert(z >>> 8 == 0);
+      return z;
+    }
+    finderPenaltyCountPatterns(runHistory) {
+      const n = runHistory[1];
+      assert(n <= this.size * 3);
+      const core = n > 0 && runHistory[2] == n && runHistory[3] == n * 3 && runHistory[4] == n && runHistory[5] == n;
+      return (core && runHistory[0] >= n * 4 && runHistory[6] >= n ? 1 : 0) + (core && runHistory[6] >= n * 4 && runHistory[0] >= n ? 1 : 0);
+    }
+    finderPenaltyTerminateAndCount(currentRunColor, currentRunLength, runHistory) {
+      if (currentRunColor) {
+        this.finderPenaltyAddHistory(currentRunLength, runHistory);
+        currentRunLength = 0;
+      }
+      currentRunLength += this.size;
+      this.finderPenaltyAddHistory(currentRunLength, runHistory);
+      return this.finderPenaltyCountPatterns(runHistory);
+    }
+    finderPenaltyAddHistory(currentRunLength, runHistory) {
+      if (runHistory[0] == 0)
+        currentRunLength += this.size;
+      runHistory.pop();
+      runHistory.unshift(currentRunLength);
+    }
+  };
+  let QrCode = _QrCode;
+  QrCode.MIN_VERSION = 1;
+  QrCode.MAX_VERSION = 40;
+  QrCode.PENALTY_N1 = 3;
+  QrCode.PENALTY_N2 = 3;
+  QrCode.PENALTY_N3 = 40;
+  QrCode.PENALTY_N4 = 10;
+  QrCode.ECC_CODEWORDS_PER_BLOCK = [
+    [-1, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+    [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28],
+    [-1, 13, 22, 18, 26, 18, 24, 18, 22, 20, 24, 28, 26, 24, 20, 30, 24, 28, 28, 26, 30, 28, 30, 30, 30, 30, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
+    [-1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
+  ];
+  QrCode.NUM_ERROR_CORRECTION_BLOCKS = [
+    [-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 7, 8, 8, 9, 9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25],
+    [-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49],
+    [-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8, 8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 45, 48, 51, 53, 56, 59, 62, 65, 68],
+    [-1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81]
+  ];
+  qrcodegen2.QrCode = QrCode;
+  function appendBits(val, len, bb) {
+    if (len < 0 || len > 31 || val >>> len != 0)
+      throw new RangeError("Value out of range");
+    for (let i = len - 1; i >= 0; i--)
+      bb.push(val >>> i & 1);
   }
+  function getBit(x, i) {
+    return (x >>> i & 1) != 0;
+  }
+  function assert(cond) {
+    if (!cond)
+      throw new Error("Assertion error");
+  }
+  const _QrSegment = class {
+    constructor(mode, numChars, bitData) {
+      this.mode = mode;
+      this.numChars = numChars;
+      this.bitData = bitData;
+      if (numChars < 0)
+        throw new RangeError("Invalid argument");
+      this.bitData = bitData.slice();
+    }
+    static makeBytes(data) {
+      let bb = [];
+      for (const b of data)
+        appendBits(b, 8, bb);
+      return new _QrSegment(_QrSegment.Mode.BYTE, data.length, bb);
+    }
+    static makeNumeric(digits) {
+      if (!_QrSegment.isNumeric(digits))
+        throw new RangeError("String contains non-numeric characters");
+      let bb = [];
+      for (let i = 0; i < digits.length; ) {
+        const n = Math.min(digits.length - i, 3);
+        appendBits(parseInt(digits.substr(i, n), 10), n * 3 + 1, bb);
+        i += n;
+      }
+      return new _QrSegment(_QrSegment.Mode.NUMERIC, digits.length, bb);
+    }
+    static makeAlphanumeric(text) {
+      if (!_QrSegment.isAlphanumeric(text))
+        throw new RangeError("String contains unencodable characters in alphanumeric mode");
+      let bb = [];
+      let i;
+      for (i = 0; i + 2 <= text.length; i += 2) {
+        let temp = _QrSegment.ALPHANUMERIC_CHARSET.indexOf(text.charAt(i)) * 45;
+        temp += _QrSegment.ALPHANUMERIC_CHARSET.indexOf(text.charAt(i + 1));
+        appendBits(temp, 11, bb);
+      }
+      if (i < text.length)
+        appendBits(_QrSegment.ALPHANUMERIC_CHARSET.indexOf(text.charAt(i)), 6, bb);
+      return new _QrSegment(_QrSegment.Mode.ALPHANUMERIC, text.length, bb);
+    }
+    static makeSegments(text) {
+      if (text == "")
+        return [];
+      else if (_QrSegment.isNumeric(text))
+        return [_QrSegment.makeNumeric(text)];
+      else if (_QrSegment.isAlphanumeric(text))
+        return [_QrSegment.makeAlphanumeric(text)];
+      else
+        return [_QrSegment.makeBytes(_QrSegment.toUtf8ByteArray(text))];
+    }
+    static makeEci(assignVal) {
+      let bb = [];
+      if (assignVal < 0)
+        throw new RangeError("ECI assignment value out of range");
+      else if (assignVal < 1 << 7)
+        appendBits(assignVal, 8, bb);
+      else if (assignVal < 1 << 14) {
+        appendBits(2, 2, bb);
+        appendBits(assignVal, 14, bb);
+      } else if (assignVal < 1e6) {
+        appendBits(6, 3, bb);
+        appendBits(assignVal, 21, bb);
+      } else
+        throw new RangeError("ECI assignment value out of range");
+      return new _QrSegment(_QrSegment.Mode.ECI, 0, bb);
+    }
+    static isNumeric(text) {
+      return _QrSegment.NUMERIC_REGEX.test(text);
+    }
+    static isAlphanumeric(text) {
+      return _QrSegment.ALPHANUMERIC_REGEX.test(text);
+    }
+    getData() {
+      return this.bitData.slice();
+    }
+    static getTotalBits(segs, version) {
+      let result = 0;
+      for (const seg of segs) {
+        const ccbits = seg.mode.numCharCountBits(version);
+        if (seg.numChars >= 1 << ccbits)
+          return Infinity;
+        result += 4 + ccbits + seg.bitData.length;
+      }
+      return result;
+    }
+    static toUtf8ByteArray(str) {
+      str = encodeURI(str);
+      let result = [];
+      for (let i = 0; i < str.length; i++) {
+        if (str.charAt(i) != "%")
+          result.push(str.charCodeAt(i));
+        else {
+          result.push(parseInt(str.substr(i + 1, 2), 16));
+          i += 2;
+        }
+      }
+      return result;
+    }
+  };
+  let QrSegment = _QrSegment;
+  QrSegment.NUMERIC_REGEX = /^[0-9]*$/;
+  QrSegment.ALPHANUMERIC_REGEX = /^[A-Z0-9 $%*+.\/:-]*$/;
+  QrSegment.ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:";
+  qrcodegen2.QrSegment = QrSegment;
+})(qrcodegen || (qrcodegen = {}));
+((qrcodegen2) => {
+  let QrCode;
+  ((QrCode2) => {
+    const _Ecc = class {
+      constructor(ordinal, formatBits) {
+        this.ordinal = ordinal;
+        this.formatBits = formatBits;
+      }
+    };
+    let Ecc = _Ecc;
+    Ecc.LOW = new _Ecc(0, 1);
+    Ecc.MEDIUM = new _Ecc(1, 0);
+    Ecc.QUARTILE = new _Ecc(2, 3);
+    Ecc.HIGH = new _Ecc(3, 2);
+    QrCode2.Ecc = Ecc;
+  })(QrCode = qrcodegen2.QrCode || (qrcodegen2.QrCode = {}));
+})(qrcodegen || (qrcodegen = {}));
+((qrcodegen2) => {
+  let QrSegment;
+  ((QrSegment2) => {
+    const _Mode = class {
+      constructor(modeBits, numBitsCharCount) {
+        this.modeBits = modeBits;
+        this.numBitsCharCount = numBitsCharCount;
+      }
+      numCharCountBits(ver) {
+        return this.numBitsCharCount[Math.floor((ver + 7) / 17)];
+      }
+    };
+    let Mode = _Mode;
+    Mode.NUMERIC = new _Mode(1, [10, 12, 14]);
+    Mode.ALPHANUMERIC = new _Mode(2, [9, 11, 13]);
+    Mode.BYTE = new _Mode(4, [8, 16, 16]);
+    Mode.KANJI = new _Mode(8, [8, 10, 12]);
+    Mode.ECI = new _Mode(7, [0, 0, 0]);
+    QrSegment2.Mode = Mode;
+  })(QrSegment = qrcodegen2.QrSegment || (qrcodegen2.QrSegment = {}));
+})(qrcodegen || (qrcodegen = {}));
+var qrcodegen_default = qrcodegen;
 
-  return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-}
-function isConcurrentMode(object) {
-  return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-}
-function isContextConsumer(object) {
-  return typeOf(object) === REACT_CONTEXT_TYPE;
-}
-function isContextProvider(object) {
-  return typeOf(object) === REACT_PROVIDER_TYPE;
-}
-function isElement(object) {
-  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-}
-function isForwardRef(object) {
-  return typeOf(object) === REACT_FORWARD_REF_TYPE;
-}
-function isFragment(object) {
-  return typeOf(object) === REACT_FRAGMENT_TYPE;
-}
-function isLazy(object) {
-  return typeOf(object) === REACT_LAZY_TYPE;
-}
-function isMemo(object) {
-  return typeOf(object) === REACT_MEMO_TYPE;
-}
-function isPortal(object) {
-  return typeOf(object) === REACT_PORTAL_TYPE;
-}
-function isProfiler(object) {
-  return typeOf(object) === REACT_PROFILER_TYPE;
-}
-function isStrictMode(object) {
-  return typeOf(object) === REACT_STRICT_MODE_TYPE;
-}
-function isSuspense(object) {
-  return typeOf(object) === REACT_SUSPENSE_TYPE;
-}
-
-exports.AsyncMode = AsyncMode;
-exports.ConcurrentMode = ConcurrentMode;
-exports.ContextConsumer = ContextConsumer;
-exports.ContextProvider = ContextProvider;
-exports.Element = Element;
-exports.ForwardRef = ForwardRef;
-exports.Fragment = Fragment;
-exports.Lazy = Lazy;
-exports.Memo = Memo;
-exports.Portal = Portal;
-exports.Profiler = Profiler;
-exports.StrictMode = StrictMode;
-exports.Suspense = Suspense;
-exports.isAsyncMode = isAsyncMode;
-exports.isConcurrentMode = isConcurrentMode;
-exports.isContextConsumer = isContextConsumer;
-exports.isContextProvider = isContextProvider;
-exports.isElement = isElement;
-exports.isForwardRef = isForwardRef;
-exports.isFragment = isFragment;
-exports.isLazy = isLazy;
-exports.isMemo = isMemo;
-exports.isPortal = isPortal;
-exports.isProfiler = isProfiler;
-exports.isStrictMode = isStrictMode;
-exports.isSuspense = isSuspense;
-exports.isValidElementType = isValidElementType;
-exports.typeOf = typeOf;
-  })();
-}
-
-}).call(this,require('_process'))
-},{"_process":144}],109:[function(require,module,exports){
-/** @license React v16.13.1
- * react-is.production.min.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+// src/index.tsx
+/**
+ * @license qrcode.react
+ * Copyright (c) Paul O'Shannessy
+ * SPDX-License-Identifier: ISC
  */
-
-'use strict';var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?
-Symbol.for("react.suspense_list"):60120,r=b?Symbol.for("react.memo"):60115,t=b?Symbol.for("react.lazy"):60116,v=b?Symbol.for("react.block"):60121,w=b?Symbol.for("react.fundamental"):60117,x=b?Symbol.for("react.responder"):60118,y=b?Symbol.for("react.scope"):60119;
-function z(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case t:case r:case h:return a;default:return u}}case d:return u}}}function A(a){return z(a)===m}exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;exports.Fragment=e;exports.Lazy=t;exports.Memo=r;exports.Portal=d;
-exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isAsyncMode=function(a){return A(a)||z(a)===l};exports.isConcurrentMode=A;exports.isContextConsumer=function(a){return z(a)===k};exports.isContextProvider=function(a){return z(a)===h};exports.isElement=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return z(a)===n};exports.isFragment=function(a){return z(a)===e};exports.isLazy=function(a){return z(a)===t};
-exports.isMemo=function(a){return z(a)===r};exports.isPortal=function(a){return z(a)===d};exports.isProfiler=function(a){return z(a)===g};exports.isStrictMode=function(a){return z(a)===f};exports.isSuspense=function(a){return z(a)===p};
-exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===w||a.$$typeof===x||a.$$typeof===y||a.$$typeof===v)};exports.typeOf=z;
-
-},{}],110:[function(require,module,exports){
-(function (process){
-'use strict';
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./cjs/react-is.production.min.js');
-} else {
-  module.exports = require('./cjs/react-is.development.js');
-}
-
-}).call(this,require('_process'))
-},{"./cjs/react-is.development.js":108,"./cjs/react-is.production.min.js":109,"_process":144}],111:[function(require,module,exports){
-var mode = require('./mode');
-
-function QR8bitByte(data) {
-	this.mode = mode.MODE_8BIT_BYTE;
-	this.data = data;
-}
-
-QR8bitByte.prototype = {
-
-	getLength : function(buffer) {
-		return this.data.length;
-	},
-	
-	write : function(buffer) {
-		for (var i = 0; i < this.data.length; i++) {
-			// not JIS ...
-			buffer.put(this.data.charCodeAt(i), 8);
-		}
-	}
+var ERROR_LEVEL_MAP = {
+  L: qrcodegen_default.QrCode.Ecc.LOW,
+  M: qrcodegen_default.QrCode.Ecc.MEDIUM,
+  Q: qrcodegen_default.QrCode.Ecc.QUARTILE,
+  H: qrcodegen_default.QrCode.Ecc.HIGH
 };
-
-module.exports = QR8bitByte;
-
-
-},{"./mode":118}],112:[function(require,module,exports){
-function QRBitBuffer() {
-	this.buffer = new Array();
-	this.length = 0;
-}
-
-QRBitBuffer.prototype = {
-
-	get : function(index) {
-		var bufIndex = Math.floor(index / 8);
-		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
-	},
-	
-	put : function(num, length) {
-		for (var i = 0; i < length; i++) {
-			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
-		}
-	},
-	
-	getLengthInBits : function() {
-		return this.length;
-	},
-	
-	putBit : function(bit) {
-	
-		var bufIndex = Math.floor(this.length / 8);
-		if (this.buffer.length <= bufIndex) {
-			this.buffer.push(0);
-		}
-	
-		if (bit) {
-			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
-		}
-	
-		this.length++;
-	}
-};
-
-module.exports = QRBitBuffer;
-
-},{}],113:[function(require,module,exports){
-module.exports = {
-	L : 1,
-	M : 0,
-	Q : 3,
-	H : 2
-};
-
-
-},{}],114:[function(require,module,exports){
-var math = require('./math');
-
-function QRPolynomial(num, shift) {
-
-	if (num.length == undefined) {
-		throw new Error(num.length + "/" + shift);
-	}
-
-	var offset = 0;
-
-	while (offset < num.length && num[offset] == 0) {
-		offset++;
-	}
-
-	this.num = new Array(num.length - offset + shift);
-	for (var i = 0; i < num.length - offset; i++) {
-		this.num[i] = num[i + offset];
-	}
-}
-
-QRPolynomial.prototype = {
-
-	get : function(index) {
-		return this.num[index];
-	},
-	
-	getLength : function() {
-		return this.num.length;
-	},
-	
-	multiply : function(e) {
-	
-		var num = new Array(this.getLength() + e.getLength() - 1);
-	
-		for (var i = 0; i < this.getLength(); i++) {
-			for (var j = 0; j < e.getLength(); j++) {
-				num[i + j] ^= math.gexp(math.glog(this.get(i) ) + math.glog(e.get(j) ) );
-			}
-		}
-	
-		return new QRPolynomial(num, 0);
-	},
-	
-	mod : function(e) {
-	
-		if (this.getLength() - e.getLength() < 0) {
-			return this;
-		}
-	
-		var ratio = math.glog(this.get(0) ) - math.glog(e.get(0) );
-	
-		var num = new Array(this.getLength() );
-		
-		for (var i = 0; i < this.getLength(); i++) {
-			num[i] = this.get(i);
-		}
-		
-		for (var i = 0; i < e.getLength(); i++) {
-			num[i] ^= math.gexp(math.glog(e.get(i) ) + ratio);
-		}
-	
-		// recursive call
-		return new QRPolynomial(num, 0).mod(e);
-	}
-};
-
-module.exports = QRPolynomial;
-
-},{"./math":117}],115:[function(require,module,exports){
-var BitByte = require('./8BitByte');
-var RSBlock = require('./RSBlock');
-var BitBuffer = require('./BitBuffer');
-var util = require('./util');
-var Polynomial = require('./Polynomial');
-
-function QRCode(typeNumber, errorCorrectLevel) {
-	this.typeNumber = typeNumber;
-	this.errorCorrectLevel = errorCorrectLevel;
-	this.modules = null;
-	this.moduleCount = 0;
-	this.dataCache = null;
-	this.dataList = [];
-}
-
-// for client side minification
-var proto = QRCode.prototype;
-
-proto.addData = function(data) {
-	var newData = new BitByte(data);
-	this.dataList.push(newData);
-	this.dataCache = null;
-};
-
-proto.isDark = function(row, col) {
-	if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
-		throw new Error(row + "," + col);
-	}
-	return this.modules[row][col];
-};
-
-proto.getModuleCount = function() {
-	return this.moduleCount;
-};
-
-proto.make = function() {
-	// Calculate automatically typeNumber if provided is < 1
-	if (this.typeNumber < 1 ){
-		var typeNumber = 1;
-		for (typeNumber = 1; typeNumber < 40; typeNumber++) {
-			var rsBlocks = RSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
-
-			var buffer = new BitBuffer();
-			var totalDataCount = 0;
-			for (var i = 0; i < rsBlocks.length; i++) {
-				totalDataCount += rsBlocks[i].dataCount;
-			}
-
-			for (var i = 0; i < this.dataList.length; i++) {
-				var data = this.dataList[i];
-				buffer.put(data.mode, 4);
-				buffer.put(data.getLength(), util.getLengthInBits(data.mode, typeNumber) );
-				data.write(buffer);
-			}
-			if (buffer.getLengthInBits() <= totalDataCount * 8)
-				break;
-		}
-		this.typeNumber = typeNumber;
-	}
-	this.makeImpl(false, this.getBestMaskPattern() );
-};
-
-proto.makeImpl = function(test, maskPattern) {
-	
-	this.moduleCount = this.typeNumber * 4 + 17;
-	this.modules = new Array(this.moduleCount);
-	
-	for (var row = 0; row < this.moduleCount; row++) {
-		
-		this.modules[row] = new Array(this.moduleCount);
-		
-		for (var col = 0; col < this.moduleCount; col++) {
-			this.modules[row][col] = null;//(col + row) % 3;
-		}
-	}
-
-	this.setupPositionProbePattern(0, 0);
-	this.setupPositionProbePattern(this.moduleCount - 7, 0);
-	this.setupPositionProbePattern(0, this.moduleCount - 7);
-	this.setupPositionAdjustPattern();
-	this.setupTimingPattern();
-	this.setupTypeInfo(test, maskPattern);
-	
-	if (this.typeNumber >= 7) {
-		this.setupTypeNumber(test);
-	}
-
-	if (this.dataCache == null) {
-		this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
-	}
-
-	this.mapData(this.dataCache, maskPattern);
-};
-
-proto.setupPositionProbePattern = function(row, col)  {
-	
-	for (var r = -1; r <= 7; r++) {
-		
-		if (row + r <= -1 || this.moduleCount <= row + r) continue;
-		
-		for (var c = -1; c <= 7; c++) {
-			
-			if (col + c <= -1 || this.moduleCount <= col + c) continue;
-			
-			if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
-					|| (0 <= c && c <= 6 && (r == 0 || r == 6) )
-					|| (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
-				this.modules[row + r][col + c] = true;
-			} else {
-				this.modules[row + r][col + c] = false;
-			}
-		}		
-	}		
-};
-
-proto.getBestMaskPattern = function() {
-
-	var minLostPoint = 0;
-	var pattern = 0;
-
-	for (var i = 0; i < 8; i++) {
-		
-		this.makeImpl(true, i);
-
-		var lostPoint = util.getLostPoint(this);
-
-		if (i == 0 || minLostPoint >  lostPoint) {
-			minLostPoint = lostPoint;
-			pattern = i;
-		}
-	}
-
-	return pattern;
-};
-
-proto.createMovieClip = function(target_mc, instance_name, depth) {
-
-	var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
-	var cs = 1;
-
-	this.make();
-
-	for (var row = 0; row < this.modules.length; row++) {
-		
-		var y = row * cs;
-		
-		for (var col = 0; col < this.modules[row].length; col++) {
-
-			var x = col * cs;
-			var dark = this.modules[row][col];
-		
-			if (dark) {
-				qr_mc.beginFill(0, 100);
-				qr_mc.moveTo(x, y);
-				qr_mc.lineTo(x + cs, y);
-				qr_mc.lineTo(x + cs, y + cs);
-				qr_mc.lineTo(x, y + cs);
-				qr_mc.endFill();
-			}
-		}
-	}
-	
-	return qr_mc;
-};
-
-proto.setupTimingPattern = function() {
-	
-	for (var r = 8; r < this.moduleCount - 8; r++) {
-		if (this.modules[r][6] != null) {
-			continue;
-		}
-		this.modules[r][6] = (r % 2 == 0);
-	}
-
-	for (var c = 8; c < this.moduleCount - 8; c++) {
-		if (this.modules[6][c] != null) {
-			continue;
-		}
-		this.modules[6][c] = (c % 2 == 0);
-	}
-};
-
-proto.setupPositionAdjustPattern = function() {
-
-	var pos = util.getPatternPosition(this.typeNumber);
-	
-	for (var i = 0; i < pos.length; i++) {
-	
-		for (var j = 0; j < pos.length; j++) {
-		
-			var row = pos[i];
-			var col = pos[j];
-			
-			if (this.modules[row][col] != null) {
-				continue;
-			}
-			
-			for (var r = -2; r <= 2; r++) {
-			
-				for (var c = -2; c <= 2; c++) {
-				
-					if (r == -2 || r == 2 || c == -2 || c == 2
-							|| (r == 0 && c == 0) ) {
-						this.modules[row + r][col + c] = true;
-					} else {
-						this.modules[row + r][col + c] = false;
-					}
-				}
-			}
-		}
-	}
-};
-
-proto.setupTypeNumber = function(test) {
-
-	var bits = util.getBCHTypeNumber(this.typeNumber);
-
-	for (var i = 0; i < 18; i++) {
-		var mod = (!test && ( (bits >> i) & 1) == 1);
-		this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
-	}
-
-	for (var i = 0; i < 18; i++) {
-		var mod = (!test && ( (bits >> i) & 1) == 1);
-		this.modules[i % 3 + this.moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
-	}
-};
-
-proto.setupTypeInfo = function(test, maskPattern) {
-
-	var data = (this.errorCorrectLevel << 3) | maskPattern;
-	var bits = util.getBCHTypeInfo(data);
-
-	// vertical		
-	for (var i = 0; i < 15; i++) {
-
-		var mod = (!test && ( (bits >> i) & 1) == 1);
-
-		if (i < 6) {
-			this.modules[i][8] = mod;
-		} else if (i < 8) {
-			this.modules[i + 1][8] = mod;
-		} else {
-			this.modules[this.moduleCount - 15 + i][8] = mod;
-		}
-	}
-
-	// horizontal
-	for (var i = 0; i < 15; i++) {
-
-		var mod = (!test && ( (bits >> i) & 1) == 1);
-		
-		if (i < 8) {
-			this.modules[8][this.moduleCount - i - 1] = mod;
-		} else if (i < 9) {
-			this.modules[8][15 - i - 1 + 1] = mod;
-		} else {
-			this.modules[8][15 - i - 1] = mod;
-		}
-	}
-
-	// fixed module
-	this.modules[this.moduleCount - 8][8] = (!test);
-};
-
-proto.mapData = function(data, maskPattern) {
-	
-	var inc = -1;
-	var row = this.moduleCount - 1;
-	var bitIndex = 7;
-	var byteIndex = 0;
-	
-	for (var col = this.moduleCount - 1; col > 0; col -= 2) {
-
-		if (col == 6) col--;
-
-		while (true) {
-
-			for (var c = 0; c < 2; c++) {
-				
-				if (this.modules[row][col - c] == null) {
-					
-					var dark = false;
-
-					if (byteIndex < data.length) {
-						dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
-					}
-
-					var mask = util.getMask(maskPattern, row, col - c);
-
-					if (mask) {
-						dark = !dark;
-					}
-					
-					this.modules[row][col - c] = dark;
-					bitIndex--;
-
-					if (bitIndex == -1) {
-						byteIndex++;
-						bitIndex = 7;
-					}
-				}
-			}
-							
-			row += inc;
-
-			if (row < 0 || this.moduleCount <= row) {
-				row -= inc;
-				inc = -inc;
-				break;
-			}
-		}
-	}
-};
-
-QRCode.PAD0 = 0xEC;
-QRCode.PAD1 = 0x11;
-
-QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
-	
-	var rsBlocks = RSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
-	
-	var buffer = new BitBuffer();
-	
-	for (var i = 0; i < dataList.length; i++) {
-		var data = dataList[i];
-		buffer.put(data.mode, 4);
-		buffer.put(data.getLength(), util.getLengthInBits(data.mode, typeNumber) );
-		data.write(buffer);
-	}
-
-	// calc num max data.
-	var totalDataCount = 0;
-	for (var i = 0; i < rsBlocks.length; i++) {
-		totalDataCount += rsBlocks[i].dataCount;
-	}
-
-	if (buffer.getLengthInBits() > totalDataCount * 8) {
-		throw new Error("code length overflow. ("
-			+ buffer.getLengthInBits()
-			+ ">"
-			+  totalDataCount * 8
-			+ ")");
-	}
-
-	// end code
-	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
-		buffer.put(0, 4);
-	}
-
-	// padding
-	while (buffer.getLengthInBits() % 8 != 0) {
-		buffer.putBit(false);
-	}
-
-	// padding
-	while (true) {
-		
-		if (buffer.getLengthInBits() >= totalDataCount * 8) {
-			break;
-		}
-		buffer.put(QRCode.PAD0, 8);
-		
-		if (buffer.getLengthInBits() >= totalDataCount * 8) {
-			break;
-		}
-		buffer.put(QRCode.PAD1, 8);
-	}
-
-	return QRCode.createBytes(buffer, rsBlocks);
-};
-
-QRCode.createBytes = function(buffer, rsBlocks) {
-
-	var offset = 0;
-	
-	var maxDcCount = 0;
-	var maxEcCount = 0;
-	
-	var dcdata = new Array(rsBlocks.length);
-	var ecdata = new Array(rsBlocks.length);
-	
-	for (var r = 0; r < rsBlocks.length; r++) {
-
-		var dcCount = rsBlocks[r].dataCount;
-		var ecCount = rsBlocks[r].totalCount - dcCount;
-
-		maxDcCount = Math.max(maxDcCount, dcCount);
-		maxEcCount = Math.max(maxEcCount, ecCount);
-		
-		dcdata[r] = new Array(dcCount);
-		
-		for (var i = 0; i < dcdata[r].length; i++) {
-			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
-		}
-		offset += dcCount;
-		
-		var rsPoly = util.getErrorCorrectPolynomial(ecCount);
-		var rawPoly = new Polynomial(dcdata[r], rsPoly.getLength() - 1);
-
-		var modPoly = rawPoly.mod(rsPoly);
-		ecdata[r] = new Array(rsPoly.getLength() - 1);
-		for (var i = 0; i < ecdata[r].length; i++) {
-            var modIndex = i + modPoly.getLength() - ecdata[r].length;
-			ecdata[r][i] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
-		}
-
-	}
-	
-	var totalCodeCount = 0;
-	for (var i = 0; i < rsBlocks.length; i++) {
-		totalCodeCount += rsBlocks[i].totalCount;
-	}
-
-	var data = new Array(totalCodeCount);
-	var index = 0;
-
-	for (var i = 0; i < maxDcCount; i++) {
-		for (var r = 0; r < rsBlocks.length; r++) {
-			if (i < dcdata[r].length) {
-				data[index++] = dcdata[r][i];
-			}
-		}
-	}
-
-	for (var i = 0; i < maxEcCount; i++) {
-		for (var r = 0; r < rsBlocks.length; r++) {
-			if (i < ecdata[r].length) {
-				data[index++] = ecdata[r][i];
-			}
-		}
-	}
-
-	return data;
-};
-
-module.exports = QRCode;
-
-
-},{"./8BitByte":111,"./BitBuffer":112,"./Polynomial":114,"./RSBlock":116,"./util":119}],116:[function(require,module,exports){
-// ErrorCorrectLevel
-var ECL = require('./ErrorCorrectLevel');
-
-function QRRSBlock(totalCount, dataCount) {
-	this.totalCount = totalCount;
-	this.dataCount  = dataCount;
-}
-
-QRRSBlock.RS_BLOCK_TABLE = [
-
-	// L
-	// M
-	// Q
-	// H
-
-	// 1
-	[1, 26, 19],
-	[1, 26, 16],
-	[1, 26, 13],
-	[1, 26, 9],
-	
-	// 2
-	[1, 44, 34],
-	[1, 44, 28],
-	[1, 44, 22],
-	[1, 44, 16],
-
-	// 3
-	[1, 70, 55],
-	[1, 70, 44],
-	[2, 35, 17],
-	[2, 35, 13],
-
-	// 4		
-	[1, 100, 80],
-	[2, 50, 32],
-	[2, 50, 24],
-	[4, 25, 9],
-	
-	// 5
-	[1, 134, 108],
-	[2, 67, 43],
-	[2, 33, 15, 2, 34, 16],
-	[2, 33, 11, 2, 34, 12],
-	
-	// 6
-	[2, 86, 68],
-	[4, 43, 27],
-	[4, 43, 19],
-	[4, 43, 15],
-	
-	// 7		
-	[2, 98, 78],
-	[4, 49, 31],
-	[2, 32, 14, 4, 33, 15],
-	[4, 39, 13, 1, 40, 14],
-	
-	// 8
-	[2, 121, 97],
-	[2, 60, 38, 2, 61, 39],
-	[4, 40, 18, 2, 41, 19],
-	[4, 40, 14, 2, 41, 15],
-	
-	// 9
-	[2, 146, 116],
-	[3, 58, 36, 2, 59, 37],
-	[4, 36, 16, 4, 37, 17],
-	[4, 36, 12, 4, 37, 13],
-	
-	// 10		
-	[2, 86, 68, 2, 87, 69],
-	[4, 69, 43, 1, 70, 44],
-	[6, 43, 19, 2, 44, 20],
-	[6, 43, 15, 2, 44, 16],
-
-	// 11
-	[4, 101, 81],
-	[1, 80, 50, 4, 81, 51],
-	[4, 50, 22, 4, 51, 23],
-	[3, 36, 12, 8, 37, 13],
-
-	// 12
-	[2, 116, 92, 2, 117, 93],
-	[6, 58, 36, 2, 59, 37],
-	[4, 46, 20, 6, 47, 21],
-	[7, 42, 14, 4, 43, 15],
-
-	// 13
-	[4, 133, 107],
-	[8, 59, 37, 1, 60, 38],
-	[8, 44, 20, 4, 45, 21],
-	[12, 33, 11, 4, 34, 12],
-
-	// 14
-	[3, 145, 115, 1, 146, 116],
-	[4, 64, 40, 5, 65, 41],
-	[11, 36, 16, 5, 37, 17],
-	[11, 36, 12, 5, 37, 13],
-
-	// 15
-	[5, 109, 87, 1, 110, 88],
-	[5, 65, 41, 5, 66, 42],
-	[5, 54, 24, 7, 55, 25],
-	[11, 36, 12],
-
-	// 16
-	[5, 122, 98, 1, 123, 99],
-	[7, 73, 45, 3, 74, 46],
-	[15, 43, 19, 2, 44, 20],
-	[3, 45, 15, 13, 46, 16],
-
-	// 17
-	[1, 135, 107, 5, 136, 108],
-	[10, 74, 46, 1, 75, 47],
-	[1, 50, 22, 15, 51, 23],
-	[2, 42, 14, 17, 43, 15],
-
-	// 18
-	[5, 150, 120, 1, 151, 121],
-	[9, 69, 43, 4, 70, 44],
-	[17, 50, 22, 1, 51, 23],
-	[2, 42, 14, 19, 43, 15],
-
-	// 19
-	[3, 141, 113, 4, 142, 114],
-	[3, 70, 44, 11, 71, 45],
-	[17, 47, 21, 4, 48, 22],
-	[9, 39, 13, 16, 40, 14],
-
-	// 20
-	[3, 135, 107, 5, 136, 108],
-	[3, 67, 41, 13, 68, 42],
-	[15, 54, 24, 5, 55, 25],
-	[15, 43, 15, 10, 44, 16],
-
-	// 21
-	[4, 144, 116, 4, 145, 117],
-	[17, 68, 42],
-	[17, 50, 22, 6, 51, 23],
-	[19, 46, 16, 6, 47, 17],
-
-	// 22
-	[2, 139, 111, 7, 140, 112],
-	[17, 74, 46],
-	[7, 54, 24, 16, 55, 25],
-	[34, 37, 13],
-
-	// 23
-	[4, 151, 121, 5, 152, 122],
-	[4, 75, 47, 14, 76, 48],
-	[11, 54, 24, 14, 55, 25],
-	[16, 45, 15, 14, 46, 16],
-
-	// 24
-	[6, 147, 117, 4, 148, 118],
-	[6, 73, 45, 14, 74, 46],
-	[11, 54, 24, 16, 55, 25],
-	[30, 46, 16, 2, 47, 17],
-
-	// 25
-	[8, 132, 106, 4, 133, 107],
-	[8, 75, 47, 13, 76, 48],
-	[7, 54, 24, 22, 55, 25],
-	[22, 45, 15, 13, 46, 16],
-
-	// 26
-	[10, 142, 114, 2, 143, 115],
-	[19, 74, 46, 4, 75, 47],
-	[28, 50, 22, 6, 51, 23],
-	[33, 46, 16, 4, 47, 17],
-
-	// 27
-	[8, 152, 122, 4, 153, 123],
-	[22, 73, 45, 3, 74, 46],
-	[8, 53, 23, 26, 54, 24],
-	[12, 45, 15, 28, 46, 16],
-
-	// 28
-	[3, 147, 117, 10, 148, 118],
-	[3, 73, 45, 23, 74, 46],
-	[4, 54, 24, 31, 55, 25],
-	[11, 45, 15, 31, 46, 16],
-
-	// 29
-	[7, 146, 116, 7, 147, 117],
-	[21, 73, 45, 7, 74, 46],
-	[1, 53, 23, 37, 54, 24],
-	[19, 45, 15, 26, 46, 16],
-
-	// 30
-	[5, 145, 115, 10, 146, 116],
-	[19, 75, 47, 10, 76, 48],
-	[15, 54, 24, 25, 55, 25],
-	[23, 45, 15, 25, 46, 16],
-
-	// 31
-	[13, 145, 115, 3, 146, 116],
-	[2, 74, 46, 29, 75, 47],
-	[42, 54, 24, 1, 55, 25],
-	[23, 45, 15, 28, 46, 16],
-
-	// 32
-	[17, 145, 115],
-	[10, 74, 46, 23, 75, 47],
-	[10, 54, 24, 35, 55, 25],
-	[19, 45, 15, 35, 46, 16],
-
-	// 33
-	[17, 145, 115, 1, 146, 116],
-	[14, 74, 46, 21, 75, 47],
-	[29, 54, 24, 19, 55, 25],
-	[11, 45, 15, 46, 46, 16],
-
-	// 34
-	[13, 145, 115, 6, 146, 116],
-	[14, 74, 46, 23, 75, 47],
-	[44, 54, 24, 7, 55, 25],
-	[59, 46, 16, 1, 47, 17],
-
-	// 35
-	[12, 151, 121, 7, 152, 122],
-	[12, 75, 47, 26, 76, 48],
-	[39, 54, 24, 14, 55, 25],
-	[22, 45, 15, 41, 46, 16],
-
-	// 36
-	[6, 151, 121, 14, 152, 122],
-	[6, 75, 47, 34, 76, 48],
-	[46, 54, 24, 10, 55, 25],
-	[2, 45, 15, 64, 46, 16],
-
-	// 37
-	[17, 152, 122, 4, 153, 123],
-	[29, 74, 46, 14, 75, 47],
-	[49, 54, 24, 10, 55, 25],
-	[24, 45, 15, 46, 46, 16],
-
-	// 38
-	[4, 152, 122, 18, 153, 123],
-	[13, 74, 46, 32, 75, 47],
-	[48, 54, 24, 14, 55, 25],
-	[42, 45, 15, 32, 46, 16],
-
-	// 39
-	[20, 147, 117, 4, 148, 118],
-	[40, 75, 47, 7, 76, 48],
-	[43, 54, 24, 22, 55, 25],
-	[10, 45, 15, 67, 46, 16],
-
-	// 40
-	[19, 148, 118, 6, 149, 119],
-	[18, 75, 47, 31, 76, 48],
-	[34, 54, 24, 34, 55, 25],
-	[20, 45, 15, 61, 46, 16]
-];
-
-QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
-	
-	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
-	
-	if (rsBlock == undefined) {
-		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
-	}
-
-	var length = rsBlock.length / 3;
-	
-	var list = new Array();
-	
-	for (var i = 0; i < length; i++) {
-
-		var count = rsBlock[i * 3 + 0];
-		var totalCount = rsBlock[i * 3 + 1];
-		var dataCount  = rsBlock[i * 3 + 2];
-
-		for (var j = 0; j < count; j++) {
-			list.push(new QRRSBlock(totalCount, dataCount) );	
-		}
-	}
-	
-	return list;
-}
-
-QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
-
-	switch(errorCorrectLevel) {
-	case ECL.L :
-		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
-	case ECL.M :
-		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
-	case ECL.Q :
-		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
-	case ECL.H :
-		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
-	default :
-		return undefined;
-	}
-}
-
-module.exports = QRRSBlock;
-
-},{"./ErrorCorrectLevel":113}],117:[function(require,module,exports){
-var QRMath = {
-
-	glog : function(n) {
-	
-		if (n < 1) {
-			throw new Error("glog(" + n + ")");
-		}
-		
-		return QRMath.LOG_TABLE[n];
-	},
-	
-	gexp : function(n) {
-	
-		while (n < 0) {
-			n += 255;
-		}
-	
-		while (n >= 256) {
-			n -= 255;
-		}
-	
-		return QRMath.EXP_TABLE[n];
-	},
-	
-	EXP_TABLE : new Array(256),
-	
-	LOG_TABLE : new Array(256)
-
-};
-	
-for (var i = 0; i < 8; i++) {
-	QRMath.EXP_TABLE[i] = 1 << i;
-}
-for (var i = 8; i < 256; i++) {
-	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
-		^ QRMath.EXP_TABLE[i - 5]
-		^ QRMath.EXP_TABLE[i - 6]
-		^ QRMath.EXP_TABLE[i - 8];
-}
-for (var i = 0; i < 255; i++) {
-	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
-}
-
-module.exports = QRMath;
-
-},{}],118:[function(require,module,exports){
-module.exports = {
-	MODE_NUMBER :		1 << 0,
-	MODE_ALPHA_NUM : 	1 << 1,
-	MODE_8BIT_BYTE : 	1 << 2,
-	MODE_KANJI :		1 << 3
-};
-
-},{}],119:[function(require,module,exports){
-var Mode = require('./mode');
-var Polynomial = require('./Polynomial');
-var math = require('./math');
-
-var QRMaskPattern = {
-	PATTERN000 : 0,
-	PATTERN001 : 1,
-	PATTERN010 : 2,
-	PATTERN011 : 3,
-	PATTERN100 : 4,
-	PATTERN101 : 5,
-	PATTERN110 : 6,
-	PATTERN111 : 7
-};
-
-var QRUtil = {
-
-    PATTERN_POSITION_TABLE : [
-	    [],
-	    [6, 18],
-	    [6, 22],
-	    [6, 26],
-	    [6, 30],
-	    [6, 34],
-	    [6, 22, 38],
-	    [6, 24, 42],
-	    [6, 26, 46],
-	    [6, 28, 50],
-	    [6, 30, 54],		
-	    [6, 32, 58],
-	    [6, 34, 62],
-	    [6, 26, 46, 66],
-	    [6, 26, 48, 70],
-	    [6, 26, 50, 74],
-	    [6, 30, 54, 78],
-	    [6, 30, 56, 82],
-	    [6, 30, 58, 86],
-	    [6, 34, 62, 90],
-	    [6, 28, 50, 72, 94],
-	    [6, 26, 50, 74, 98],
-	    [6, 30, 54, 78, 102],
-	    [6, 28, 54, 80, 106],
-	    [6, 32, 58, 84, 110],
-	    [6, 30, 58, 86, 114],
-	    [6, 34, 62, 90, 118],
-	    [6, 26, 50, 74, 98, 122],
-	    [6, 30, 54, 78, 102, 126],
-	    [6, 26, 52, 78, 104, 130],
-	    [6, 30, 56, 82, 108, 134],
-	    [6, 34, 60, 86, 112, 138],
-	    [6, 30, 58, 86, 114, 142],
-	    [6, 34, 62, 90, 118, 146],
-	    [6, 30, 54, 78, 102, 126, 150],
-	    [6, 24, 50, 76, 102, 128, 154],
-	    [6, 28, 54, 80, 106, 132, 158],
-	    [6, 32, 58, 84, 110, 136, 162],
-	    [6, 26, 54, 82, 110, 138, 166],
-	    [6, 30, 58, 86, 114, 142, 170]
-    ],
-
-    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
-    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
-    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)	| (1 << 4) | (1 << 1),
-
-    getBCHTypeInfo : function(data) {
-	    var d = data << 10;
-	    while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
-		    d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) ); 	
-	    }
-	    return ( (data << 10) | d) ^ QRUtil.G15_MASK;
-    },
-
-    getBCHTypeNumber : function(data) {
-	    var d = data << 12;
-	    while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
-		    d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) ); 	
-	    }
-	    return (data << 12) | d;
-    },
-
-    getBCHDigit : function(data) {
-
-	    var digit = 0;
-
-	    while (data != 0) {
-		    digit++;
-		    data >>>= 1;
-	    }
-
-	    return digit;
-    },
-
-    getPatternPosition : function(typeNumber) {
-	    return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
-    },
-
-    getMask : function(maskPattern, i, j) {
-	    
-	    switch (maskPattern) {
-		    
-	    case QRMaskPattern.PATTERN000 : return (i + j) % 2 == 0;
-	    case QRMaskPattern.PATTERN001 : return i % 2 == 0;
-	    case QRMaskPattern.PATTERN010 : return j % 3 == 0;
-	    case QRMaskPattern.PATTERN011 : return (i + j) % 3 == 0;
-	    case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0;
-	    case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 == 0;
-	    case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 == 0;
-	    case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 == 0;
-
-	    default :
-		    throw new Error("bad maskPattern:" + maskPattern);
-	    }
-    },
-
-    getErrorCorrectPolynomial : function(errorCorrectLength) {
-
-	    var a = new Polynomial([1], 0);
-
-	    for (var i = 0; i < errorCorrectLength; i++) {
-		    a = a.multiply(new Polynomial([1, math.gexp(i)], 0) );
-	    }
-
-	    return a;
-    },
-
-    getLengthInBits : function(mode, type) {
-
-	    if (1 <= type && type < 10) {
-
-		    // 1 - 9
-
-		    switch(mode) {
-		    case Mode.MODE_NUMBER 	: return 10;
-		    case Mode.MODE_ALPHA_NUM 	: return 9;
-		    case Mode.MODE_8BIT_BYTE	: return 8;
-		    case Mode.MODE_KANJI  	: return 8;
-		    default :
-			    throw new Error("mode:" + mode);
-		    }
-
-	    } else if (type < 27) {
-
-		    // 10 - 26
-
-		    switch(mode) {
-		    case Mode.MODE_NUMBER 	: return 12;
-		    case Mode.MODE_ALPHA_NUM 	: return 11;
-		    case Mode.MODE_8BIT_BYTE	: return 16;
-		    case Mode.MODE_KANJI  	: return 10;
-		    default :
-			    throw new Error("mode:" + mode);
-		    }
-
-	    } else if (type < 41) {
-
-		    // 27 - 40
-
-		    switch(mode) {
-		    case Mode.MODE_NUMBER 	: return 14;
-		    case Mode.MODE_ALPHA_NUM	: return 13;
-		    case Mode.MODE_8BIT_BYTE	: return 16;
-		    case Mode.MODE_KANJI  	: return 12;
-		    default :
-			    throw new Error("mode:" + mode);
-		    }
-
-	    } else {
-		    throw new Error("type:" + type);
-	    }
-    },
-
-    getLostPoint : function(qrCode) {
-	    
-	    var moduleCount = qrCode.getModuleCount();
-	    
-	    var lostPoint = 0;
-	    
-	    // LEVEL1
-	    
-	    for (var row = 0; row < moduleCount; row++) {
-
-		    for (var col = 0; col < moduleCount; col++) {
-
-			    var sameCount = 0;
-			    var dark = qrCode.isDark(row, col);
-
-				for (var r = -1; r <= 1; r++) {
-
-				    if (row + r < 0 || moduleCount <= row + r) {
-					    continue;
-				    }
-
-				    for (var c = -1; c <= 1; c++) {
-
-					    if (col + c < 0 || moduleCount <= col + c) {
-						    continue;
-					    }
-
-					    if (r == 0 && c == 0) {
-						    continue;
-					    }
-
-					    if (dark == qrCode.isDark(row + r, col + c) ) {
-						    sameCount++;
-					    }
-				    }
-			    }
-
-			    if (sameCount > 5) {
-				    lostPoint += (3 + sameCount - 5);
-			    }
-		    }
-	    }
-
-	    // LEVEL2
-
-	    for (var row = 0; row < moduleCount - 1; row++) {
-		    for (var col = 0; col < moduleCount - 1; col++) {
-			    var count = 0;
-			    if (qrCode.isDark(row,     col    ) ) count++;
-			    if (qrCode.isDark(row + 1, col    ) ) count++;
-			    if (qrCode.isDark(row,     col + 1) ) count++;
-			    if (qrCode.isDark(row + 1, col + 1) ) count++;
-			    if (count == 0 || count == 4) {
-				    lostPoint += 3;
-			    }
-		    }
-	    }
-
-	    // LEVEL3
-
-	    for (var row = 0; row < moduleCount; row++) {
-		    for (var col = 0; col < moduleCount - 6; col++) {
-			    if (qrCode.isDark(row, col)
-					    && !qrCode.isDark(row, col + 1)
-					    &&  qrCode.isDark(row, col + 2)
-					    &&  qrCode.isDark(row, col + 3)
-					    &&  qrCode.isDark(row, col + 4)
-					    && !qrCode.isDark(row, col + 5)
-					    &&  qrCode.isDark(row, col + 6) ) {
-				    lostPoint += 40;
-			    }
-		    }
-	    }
-
-	    for (var col = 0; col < moduleCount; col++) {
-		    for (var row = 0; row < moduleCount - 6; row++) {
-			    if (qrCode.isDark(row, col)
-					    && !qrCode.isDark(row + 1, col)
-					    &&  qrCode.isDark(row + 2, col)
-					    &&  qrCode.isDark(row + 3, col)
-					    &&  qrCode.isDark(row + 4, col)
-					    && !qrCode.isDark(row + 5, col)
-					    &&  qrCode.isDark(row + 6, col) ) {
-				    lostPoint += 40;
-			    }
-		    }
-	    }
-
-	    // LEVEL4
-	    
-	    var darkCount = 0;
-
-	    for (var col = 0; col < moduleCount; col++) {
-		    for (var row = 0; row < moduleCount; row++) {
-			    if (qrCode.isDark(row, col) ) {
-				    darkCount++;
-			    }
-		    }
-	    }
-	    
-	    var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
-	    lostPoint += ratio * 10;
-
-	    return lostPoint;		
-    }
-};
-
-module.exports = QRUtil;
-
-},{"./Polynomial":114,"./math":117,"./mode":118}],120:[function(require,module,exports){
-(function (process){
-'use strict';
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var React = require('react');
-
-var PropTypes = require('prop-types'); // qr.js doesn't handle error level of zero (M) so we need to do it right,
-// thus the deep require.
-
-
-var QRCodeImpl = require('qr.js/lib/QRCode');
-
-var ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel'); // TODO: pull this off of the QRCode class type so it matches.
-
-
-// Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
-// This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
-// detection and not resort to byte-mode if possible, but we're trading off
-// a smaller library for a smaller amount of data we can potentially encode.
-// Based on http://jonisalonen.com/2012/from-utf-16-to-utf-8-in-javascript/
-function convertStr(str) {
-  var out = '';
-
-  for (var i = 0; i < str.length; i++) {
-    var charcode = str.charCodeAt(i);
-
-    if (charcode < 0x0080) {
-      out += String.fromCharCode(charcode);
-    } else if (charcode < 0x0800) {
-      out += String.fromCharCode(0xc0 | charcode >> 6);
-      out += String.fromCharCode(0x80 | charcode & 0x3f);
-    } else if (charcode < 0xd800 || charcode >= 0xe000) {
-      out += String.fromCharCode(0xe0 | charcode >> 12);
-      out += String.fromCharCode(0x80 | charcode >> 6 & 0x3f);
-      out += String.fromCharCode(0x80 | charcode & 0x3f);
-    } else {
-      // This is a surrogate pair, so we'll reconsitute the pieces and work
-      // from that
-      i++;
-      charcode = 0x10000 + ((charcode & 0x3ff) << 10 | str.charCodeAt(i) & 0x3ff);
-      out += String.fromCharCode(0xf0 | charcode >> 18);
-      out += String.fromCharCode(0x80 | charcode >> 12 & 0x3f);
-      out += String.fromCharCode(0x80 | charcode >> 6 & 0x3f);
-      out += String.fromCharCode(0x80 | charcode & 0x3f);
-    }
-  }
-
-  return out;
-}
-
-var DEFAULT_PROPS = {
-  size: 128,
-  level: 'L',
-  bgColor: '#FFFFFF',
-  fgColor: '#000000',
-  includeMargin: false
-};
-var PROP_TYPES = process.env.NODE_ENV !== 'production' ? {
-  value: PropTypes.string.isRequired,
-  size: PropTypes.number,
-  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  bgColor: PropTypes.string,
-  fgColor: PropTypes.string,
-  includeMargin: PropTypes.bool,
-  imageSettings: PropTypes.shape({
-    src: PropTypes.string.isRequired,
-    height: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    excavate: PropTypes.bool,
-    x: PropTypes.number,
-    y: PropTypes.number
-  })
-} : {};
-var MARGIN_SIZE = 4; // This is *very* rough estimate of max amount of QRCode allowed to be covered.
-// It is "wrong" in a lot of ways (area is a terrible way to estimate, it
-// really should be number of modules covered), but if for some reason we don't
-// get an explicit height or width, I'd rather default to something than throw.
-
+var DEFAULT_SIZE = 128;
+var DEFAULT_LEVEL = "L";
+var DEFAULT_BGCOLOR = "#FFFFFF";
+var DEFAULT_FGCOLOR = "#000000";
+var DEFAULT_INCLUDEMARGIN = false;
+var MARGIN_SIZE = 4;
 var DEFAULT_IMG_SCALE = 0.1;
-
-function generatePath(modules) {
-  var margin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var ops = [];
-  modules.forEach(function (row, y) {
-    var start = null;
-    row.forEach(function (cell, x) {
+function generatePath(modules, margin = 0) {
+  const ops = [];
+  modules.forEach(function(row, y) {
+    let start = null;
+    row.forEach(function(cell, x) {
       if (!cell && start !== null) {
-        // M0 0h7v1H0z injects the space with the move and drops the comma,
-        // saving a char per operation
-        ops.push("M".concat(start + margin, " ").concat(y + margin, "h").concat(x - start, "v1H").concat(start + margin, "z"));
+        ops.push(`M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`);
         start = null;
         return;
-      } // end of row, clean up or skip
-
-
+      }
       if (x === row.length - 1) {
         if (!cell) {
-          // We would have closed the op above already so this can only mean
-          // 2+ light modules in a row.
           return;
         }
-
         if (start === null) {
-          // Just a single dark module.
-          ops.push("M".concat(x + margin, ",").concat(y + margin, " h1v1H").concat(x + margin, "z"));
+          ops.push(`M${x + margin},${y + margin} h1v1H${x + margin}z`);
         } else {
-          // Otherwise finish the current line.
-          ops.push("M".concat(start + margin, ",").concat(y + margin, " h").concat(x + 1 - start, "v1H").concat(start + margin, "z"));
+          ops.push(`M${start + margin},${y + margin} h${x + 1 - start}v1H${start + margin}z`);
         }
-
         return;
       }
-
       if (cell && start === null) {
         start = x;
       }
     });
   });
-  return ops.join('');
-} // We could just do this in generatePath, except that we want to support
-// non-Path2D canvas, so we need to keep it an explicit step.
-
-
+  return ops.join("");
+}
 function excavateModules(modules, excavation) {
-  return modules.slice().map(function (row, y) {
+  return modules.slice().map((row, y) => {
     if (y < excavation.y || y >= excavation.y + excavation.h) {
       return row;
     }
-
-    return row.map(function (cell, x) {
+    return row.map((cell, x) => {
       if (x < excavation.x || x >= excavation.x + excavation.w) {
         return cell;
       }
-
       return false;
     });
   });
 }
-
-function getImageSettings(props, cells) {
-  var imageSettings = props.imageSettings,
-      size = props.size,
-      includeMargin = props.includeMargin;
-
+function getImageSettings(cells, size, includeMargin, imageSettings) {
   if (imageSettings == null) {
     return null;
   }
-
-  var margin = includeMargin ? MARGIN_SIZE : 0;
-  var numCells = cells.length + margin * 2;
-  var defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
-  var scale = numCells / size;
-  var w = (imageSettings.width || defaultSize) * scale;
-  var h = (imageSettings.height || defaultSize) * scale;
-  var x = imageSettings.x == null ? cells.length / 2 - w / 2 : imageSettings.x * scale;
-  var y = imageSettings.y == null ? cells.length / 2 - h / 2 : imageSettings.y * scale;
-  var excavation = null;
-
+  const margin = includeMargin ? MARGIN_SIZE : 0;
+  const numCells = cells.length + margin * 2;
+  const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
+  const scale = numCells / size;
+  const w = (imageSettings.width || defaultSize) * scale;
+  const h = (imageSettings.height || defaultSize) * scale;
+  const x = imageSettings.x == null ? cells.length / 2 - w / 2 : imageSettings.x * scale;
+  const y = imageSettings.y == null ? cells.length / 2 - h / 2 : imageSettings.y * scale;
+  let excavation = null;
   if (imageSettings.excavate) {
-    var floorX = Math.floor(x);
-    var floorY = Math.floor(y);
-    var ceilW = Math.ceil(w + x - floorX);
-    var ceilH = Math.ceil(h + y - floorY);
-    excavation = {
-      x: floorX,
-      y: floorY,
-      w: ceilW,
-      h: ceilH
-    };
+    let floorX = Math.floor(x);
+    let floorY = Math.floor(y);
+    let ceilW = Math.ceil(w + x - floorX);
+    let ceilH = Math.ceil(h + y - floorY);
+    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH };
   }
-
-  return {
-    x: x,
-    y: y,
-    h: h,
-    w: w,
-    excavation: excavation
-  };
-} // For canvas we're going to switch our drawing mode based on whether or not
-// the environment supports Path2D. We only need the constructor to be
-// supported, but Edge doesn't actually support the path (string) type
-// argument. Luckily it also doesn't support the addPath() method. We can
-// treat that as the same thing.
-
-
-var SUPPORTS_PATH2D = function () {
+  return { x, y, h, w, excavation };
+}
+var SUPPORTS_PATH2D = function() {
   try {
     new Path2D().addPath(new Path2D());
   } catch (e) {
     return false;
   }
-
   return true;
 }();
-
-var QRCodeCanvas =
-/*#__PURE__*/
-function (_React$PureComponent) {
-  _inherits(QRCodeCanvas, _React$PureComponent);
-
-  function QRCodeCanvas() {
-    var _getPrototypeOf2;
-
-    var _this;
-
-    _classCallCheck(this, QRCodeCanvas);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(QRCodeCanvas)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _defineProperty(_assertThisInitialized(_this), "_canvas", void 0);
-
-    _defineProperty(_assertThisInitialized(_this), "_image", void 0);
-
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      imgLoaded: false
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "handleImageLoad", function () {
-      _this.setState({
-        imgLoaded: true
-      });
-    });
-
-    return _this;
-  }
-
-  _createClass(QRCodeCanvas, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      if (this._image && this._image.complete) {
-        this.handleImageLoad();
+function QRCodeCanvas(props) {
+  const _a = props, {
+    value,
+    size = DEFAULT_SIZE,
+    level = DEFAULT_LEVEL,
+    bgColor = DEFAULT_BGCOLOR,
+    fgColor = DEFAULT_FGCOLOR,
+    includeMargin = DEFAULT_INCLUDEMARGIN,
+    style,
+    imageSettings
+  } = _a, otherProps = __objRest(_a, [
+    "value",
+    "size",
+    "level",
+    "bgColor",
+    "fgColor",
+    "includeMargin",
+    "style",
+    "imageSettings"
+  ]);
+  const imgSrc = imageSettings == null ? void 0 : imageSettings.src;
+  const _canvas = (0, import_react.useRef)(null);
+  const _image = (0, import_react.useRef)(null);
+  const [isImgLoaded, setIsImageLoaded] = (0, import_react.useState)(false);
+  (0, import_react.useEffect)(() => {
+    if (_canvas.current != null) {
+      const canvas = _canvas.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        return;
       }
-
-      this.update();
-    }
-  }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(nextProps) {
-      var _this$props$imageSett, _nextProps$imageSetti;
-
-      var currentSrc = (_this$props$imageSett = this.props.imageSettings) === null || _this$props$imageSett === void 0 ? void 0 : _this$props$imageSett.src;
-      var nextSrc = (_nextProps$imageSetti = nextProps.imageSettings) === null || _nextProps$imageSetti === void 0 ? void 0 : _nextProps$imageSetti.src;
-
-      if (currentSrc !== nextSrc) {
-        this.setState({
-          imgLoaded: false
-        });
-      }
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      this.update();
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      var _this$props = this.props,
-          value = _this$props.value,
-          size = _this$props.size,
-          level = _this$props.level,
-          bgColor = _this$props.bgColor,
-          fgColor = _this$props.fgColor,
-          includeMargin = _this$props.includeMargin,
-          imageSettings = _this$props.imageSettings; // We'll use type===-1 to force QRCode to automatically pick the best type
-
-      var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
-      qrcode.addData(convertStr(value));
-      qrcode.make();
-
-      if (this._canvas != null) {
-        var canvas = this._canvas;
-        var ctx = canvas.getContext('2d');
-
-        if (!ctx) {
-          return;
-        }
-
-        var cells = qrcode.modules;
-
-        if (cells === null) {
-          return;
-        }
-
-        var margin = includeMargin ? MARGIN_SIZE : 0;
-        var numCells = cells.length + margin * 2;
-        var calculatedImageSettings = getImageSettings(this.props, cells);
-
-        if (imageSettings != null && calculatedImageSettings != null) {
-          if (calculatedImageSettings.excavation != null) {
-            cells = excavateModules(cells, calculatedImageSettings.excavation);
-          }
-        } // We're going to scale this so that the number of drawable units
-        // matches the number of cells. This avoids rounding issues, but does
-        // result in some potentially unwanted single pixel issues between
-        // blocks, only in environments that don't support Path2D.
-
-
-        var pixelRatio = window.devicePixelRatio || 1;
-        canvas.height = canvas.width = size * pixelRatio;
-        var scale = size / numCells * pixelRatio;
-        ctx.scale(scale, scale); // Draw solid background, only paint dark modules.
-
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, numCells, numCells);
-        ctx.fillStyle = fgColor;
-
-        if (SUPPORTS_PATH2D) {
-          // $FlowFixMe: Path2D c'tor doesn't support args yet.
-          ctx.fill(new Path2D(generatePath(cells, margin)));
-        } else {
-          cells.forEach(function (row, rdx) {
-            row.forEach(function (cell, cdx) {
-              if (cell) {
-                ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
-              }
-            });
-          });
-        }
-
-        if (this.state.imgLoaded && this._image && calculatedImageSettings != null) {
-          ctx.drawImage(this._image, calculatedImageSettings.x + margin, calculatedImageSettings.y + margin, calculatedImageSettings.w, calculatedImageSettings.h);
-        }
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var _this$props2 = this.props,
-          value = _this$props2.value,
-          size = _this$props2.size,
-          level = _this$props2.level,
-          bgColor = _this$props2.bgColor,
-          fgColor = _this$props2.fgColor,
-          style = _this$props2.style,
-          includeMargin = _this$props2.includeMargin,
-          imageSettings = _this$props2.imageSettings,
-          otherProps = _objectWithoutProperties(_this$props2, ["value", "size", "level", "bgColor", "fgColor", "style", "includeMargin", "imageSettings"]);
-
-      var canvasStyle = _objectSpread({
-        height: size,
-        width: size
-      }, style);
-
-      var img = null;
-      var imgSrc = imageSettings && imageSettings.src;
-
-      if (imageSettings != null && imgSrc != null) {
-        img = React.createElement("img", {
-          src: imgSrc,
-          style: {
-            display: 'none'
-          },
-          onLoad: this.handleImageLoad,
-          ref: function ref(_ref) {
-            return _this2._image = _ref;
-          }
-        });
-      }
-
-      return React.createElement(React.Fragment, null, React.createElement("canvas", _extends({
-        style: canvasStyle,
-        height: size,
-        width: size,
-        ref: function ref(_ref2) {
-          return _this2._canvas = _ref2;
-        }
-      }, otherProps)), img);
-    }
-  }]);
-
-  return QRCodeCanvas;
-}(React.PureComponent);
-
-_defineProperty(QRCodeCanvas, "defaultProps", DEFAULT_PROPS);
-
-if (process.env.NODE_ENV !== 'production') {
-  QRCodeCanvas.propTypes = PROP_TYPES;
-}
-
-var QRCodeSVG =
-/*#__PURE__*/
-function (_React$PureComponent2) {
-  _inherits(QRCodeSVG, _React$PureComponent2);
-
-  function QRCodeSVG() {
-    _classCallCheck(this, QRCodeSVG);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(QRCodeSVG).apply(this, arguments));
-  }
-
-  _createClass(QRCodeSVG, [{
-    key: "render",
-    value: function render() {
-      var _this$props3 = this.props,
-          value = _this$props3.value,
-          size = _this$props3.size,
-          level = _this$props3.level,
-          bgColor = _this$props3.bgColor,
-          fgColor = _this$props3.fgColor,
-          includeMargin = _this$props3.includeMargin,
-          imageSettings = _this$props3.imageSettings,
-          otherProps = _objectWithoutProperties(_this$props3, ["value", "size", "level", "bgColor", "fgColor", "includeMargin", "imageSettings"]); // We'll use type===-1 to force QRCode to automatically pick the best type
-
-
-      var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
-      qrcode.addData(convertStr(value));
-      qrcode.make();
-      var cells = qrcode.modules;
-
-      if (cells === null) {
-        return null;
-      }
-
-      var margin = includeMargin ? MARGIN_SIZE : 0;
-      var numCells = cells.length + margin * 2;
-      var calculatedImageSettings = getImageSettings(this.props, cells);
-      var image = null;
-
-      if (imageSettings != null && calculatedImageSettings != null) {
+      let cells = qrcodegen_default.QrCode.encodeText(value, ERROR_LEVEL_MAP[level]).getModules();
+      const margin = includeMargin ? MARGIN_SIZE : 0;
+      const numCells = cells.length + margin * 2;
+      const calculatedImageSettings = getImageSettings(cells, size, includeMargin, imageSettings);
+      const image = _image.current;
+      const haveImageToRender = calculatedImageSettings != null && image !== null && image.complete && image.naturalHeight !== 0 && image.naturalWidth !== 0;
+      if (haveImageToRender) {
         if (calculatedImageSettings.excavation != null) {
           cells = excavateModules(cells, calculatedImageSettings.excavation);
         }
-
-        image = React.createElement("image", {
-          xlinkHref: imageSettings.src,
-          height: calculatedImageSettings.h,
-          width: calculatedImageSettings.w,
-          x: calculatedImageSettings.x + margin,
-          y: calculatedImageSettings.y + margin,
-          preserveAspectRatio: "none"
+      }
+      const pixelRatio = window.devicePixelRatio || 1;
+      canvas.height = canvas.width = size * pixelRatio;
+      const scale = size / numCells * pixelRatio;
+      ctx.scale(scale, scale);
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, numCells, numCells);
+      ctx.fillStyle = fgColor;
+      if (SUPPORTS_PATH2D) {
+        ctx.fill(new Path2D(generatePath(cells, margin)));
+      } else {
+        cells.forEach(function(row, rdx) {
+          row.forEach(function(cell, cdx) {
+            if (cell) {
+              ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
+            }
+          });
         });
-      } // Drawing strategy: instead of a rect per module, we're going to create a
-      // single path for the dark modules and layer that on top of a light rect,
-      // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
-      // way faster than DOM ops.
-      // For level 1, 441 nodes -> 2
-      // For level 40, 31329 -> 2
-
-
-      var fgPath = generatePath(cells, margin);
-      return React.createElement("svg", _extends({
-        shapeRendering: "crispEdges",
-        height: size,
-        width: size,
-        viewBox: "0 0 ".concat(numCells, " ").concat(numCells)
-      }, otherProps), React.createElement("path", {
-        fill: bgColor,
-        d: "M0,0 h".concat(numCells, "v").concat(numCells, "H0z")
-      }), React.createElement("path", {
-        fill: fgColor,
-        d: fgPath
-      }), image);
+      }
+      if (haveImageToRender) {
+        ctx.drawImage(image, calculatedImageSettings.x + margin, calculatedImageSettings.y + margin, calculatedImageSettings.w, calculatedImageSettings.h);
+      }
     }
-  }]);
-
-  return QRCodeSVG;
-}(React.PureComponent);
-
-_defineProperty(QRCodeSVG, "defaultProps", DEFAULT_PROPS);
-
-if (process.env.NODE_ENV !== 'production') {
-  QRCodeSVG.propTypes = PROP_TYPES;
+  });
+  (0, import_react.useEffect)(() => {
+    setIsImageLoaded(false);
+  }, [imgSrc]);
+  const canvasStyle = __spreadValues({ height: size, width: size }, style);
+  let img = null;
+  if (imgSrc != null) {
+    img = /* @__PURE__ */ import_react.default.createElement("img", {
+      src: imgSrc,
+      key: imgSrc,
+      style: { display: "none" },
+      onLoad: () => {
+        setIsImageLoaded(true);
+      },
+      ref: _image
+    });
+  }
+  return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("canvas", __spreadValues({
+    style: canvasStyle,
+    height: size,
+    width: size,
+    ref: _canvas
+  }, otherProps)), img);
 }
-
-var QRCode = function QRCode(props) {
-  var renderAs = props.renderAs,
-      otherProps = _objectWithoutProperties(props, ["renderAs"]);
-
-  var Component = renderAs === 'svg' ? QRCodeSVG : QRCodeCanvas;
-  return React.createElement(Component, otherProps);
+function QRCodeSVG(props) {
+  const _a = props, {
+    value,
+    size = DEFAULT_SIZE,
+    level = DEFAULT_LEVEL,
+    bgColor = DEFAULT_BGCOLOR,
+    fgColor = DEFAULT_FGCOLOR,
+    includeMargin = DEFAULT_INCLUDEMARGIN,
+    imageSettings
+  } = _a, otherProps = __objRest(_a, [
+    "value",
+    "size",
+    "level",
+    "bgColor",
+    "fgColor",
+    "includeMargin",
+    "imageSettings"
+  ]);
+  let cells = qrcodegen_default.QrCode.encodeText(value, ERROR_LEVEL_MAP[level]).getModules();
+  const margin = includeMargin ? MARGIN_SIZE : 0;
+  const numCells = cells.length + margin * 2;
+  const calculatedImageSettings = getImageSettings(cells, size, includeMargin, imageSettings);
+  let image = null;
+  if (imageSettings != null && calculatedImageSettings != null) {
+    if (calculatedImageSettings.excavation != null) {
+      cells = excavateModules(cells, calculatedImageSettings.excavation);
+    }
+    image = /* @__PURE__ */ import_react.default.createElement("image", {
+      xlinkHref: imageSettings.src,
+      height: calculatedImageSettings.h,
+      width: calculatedImageSettings.w,
+      x: calculatedImageSettings.x + margin,
+      y: calculatedImageSettings.y + margin,
+      preserveAspectRatio: "none"
+    });
+  }
+  const fgPath = generatePath(cells, margin);
+  return /* @__PURE__ */ import_react.default.createElement("svg", __spreadValues({
+    height: size,
+    width: size,
+    viewBox: `0 0 ${numCells} ${numCells}`
+  }, otherProps), /* @__PURE__ */ import_react.default.createElement("path", {
+    fill: bgColor,
+    d: `M0,0 h${numCells}v${numCells}H0z`,
+    shapeRendering: "crispEdges"
+  }), /* @__PURE__ */ import_react.default.createElement("path", {
+    fill: fgColor,
+    d: fgPath,
+    shapeRendering: "crispEdges"
+  }), image);
+}
+var QRCode = (props) => {
+  const _a = props, { renderAs } = _a, otherProps = __objRest(_a, ["renderAs"]);
+  if (renderAs === "svg") {
+    return /* @__PURE__ */ import_react.default.createElement(QRCodeSVG, __spreadValues({}, otherProps));
+  }
+  return /* @__PURE__ */ import_react.default.createElement(QRCodeCanvas, __spreadValues({}, otherProps));
 };
 
-QRCode.defaultProps = _objectSpread({
-  renderAs: 'canvas'
-}, DEFAULT_PROPS);
-module.exports = QRCode;
-}).call(this,require('_process'))
-},{"_process":144,"prop-types":105,"qr.js/lib/ErrorCorrectLevel":113,"qr.js/lib/QRCode":115,"react":123}],121:[function(require,module,exports){
+},{"react":104}],102:[function(require,module,exports){
 (function (process){
 /**
  * @license React
@@ -20537,7 +18561,7 @@ if (
 }
 
 }).call(this,require('_process'))
-},{"_process":144}],122:[function(require,module,exports){
+},{"_process":125}],103:[function(require,module,exports){
 /**
  * @license React
  * react.production.min.js
@@ -20565,7 +18589,7 @@ exports.useCallback=function(a,b){return U.current.useCallback(a,b)};exports.use
 exports.useInsertionEffect=function(a,b){return U.current.useInsertionEffect(a,b)};exports.useLayoutEffect=function(a,b){return U.current.useLayoutEffect(a,b)};exports.useMemo=function(a,b){return U.current.useMemo(a,b)};exports.useReducer=function(a,b,e){return U.current.useReducer(a,b,e)};exports.useRef=function(a){return U.current.useRef(a)};exports.useState=function(a){return U.current.useState(a)};exports.useSyncExternalStore=function(a,b,e){return U.current.useSyncExternalStore(a,b,e)};
 exports.useTransition=function(){return U.current.useTransition()};exports.version="18.2.0";
 
-},{}],123:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -20576,7 +18600,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":121,"./cjs/react.production.min.js":122,"_process":144}],124:[function(require,module,exports){
+},{"./cjs/react.development.js":102,"./cjs/react.production.min.js":103,"_process":125}],105:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -20672,7 +18696,7 @@ exports.connect = lookup;
 exports.Manager = require('./manager');
 exports.Socket = require('./socket');
 
-},{"./manager":125,"./socket":127,"./url":128,"debug":129,"socket.io-parser":133}],125:[function(require,module,exports){
+},{"./manager":106,"./socket":108,"./url":109,"debug":110,"socket.io-parser":114}],106:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -21251,7 +19275,7 @@ Manager.prototype.onreconnect = function () {
   this.emitAll('reconnect', attempt);
 };
 
-},{"./on":126,"./socket":127,"backo2":35,"component-bind":38,"component-emitter":39,"debug":129,"engine.io-client":77,"indexof":97,"socket.io-parser":133}],126:[function(require,module,exports){
+},{"./on":107,"./socket":108,"backo2":35,"component-bind":38,"component-emitter":39,"debug":110,"engine.io-client":77,"indexof":97,"socket.io-parser":114}],107:[function(require,module,exports){
 
 /**
  * Module exports.
@@ -21277,7 +19301,7 @@ function on (obj, ev, fn) {
   };
 }
 
-},{}],127:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -21717,7 +19741,7 @@ Socket.prototype.binary = function (binary) {
   return this;
 };
 
-},{"./on":126,"component-bind":38,"component-emitter":39,"debug":129,"has-binary2":95,"parseqs":100,"socket.io-parser":133,"to-array":138}],128:[function(require,module,exports){
+},{"./on":107,"component-bind":38,"component-emitter":39,"debug":110,"has-binary2":95,"parseqs":99,"socket.io-parser":114,"to-array":119}],109:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -21794,13 +19818,13 @@ function url (uri, loc) {
   return obj;
 }
 
-},{"debug":129,"parseuri":101}],129:[function(require,module,exports){
+},{"debug":110,"parseuri":100}],110:[function(require,module,exports){
 arguments[4][86][0].apply(exports,arguments)
-},{"./debug":130,"_process":144,"dup":86}],130:[function(require,module,exports){
+},{"./debug":111,"_process":125,"dup":86}],111:[function(require,module,exports){
 arguments[4][87][0].apply(exports,arguments)
-},{"dup":87,"ms":131}],131:[function(require,module,exports){
+},{"dup":87,"ms":112}],112:[function(require,module,exports){
 arguments[4][88][0].apply(exports,arguments)
-},{"dup":88}],132:[function(require,module,exports){
+},{"dup":88}],113:[function(require,module,exports){
 /*global Blob,File*/
 
 /**
@@ -21943,7 +19967,7 @@ exports.removeBlobs = function(data, callback) {
   }
 };
 
-},{"./is-buffer":134,"isarray":98}],133:[function(require,module,exports){
+},{"./is-buffer":115,"isarray":98}],114:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -22357,7 +20381,7 @@ function error(msg) {
   };
 }
 
-},{"./binary":132,"./is-buffer":134,"component-emitter":39,"debug":135,"isarray":98}],134:[function(require,module,exports){
+},{"./binary":113,"./is-buffer":115,"component-emitter":39,"debug":116,"isarray":98}],115:[function(require,module,exports){
 (function (Buffer){
 
 module.exports = isBuf;
@@ -22381,13 +20405,13 @@ function isBuf(obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":142}],135:[function(require,module,exports){
+},{"buffer":123}],116:[function(require,module,exports){
 arguments[4][86][0].apply(exports,arguments)
-},{"./debug":136,"_process":144,"dup":86}],136:[function(require,module,exports){
+},{"./debug":117,"_process":125,"dup":86}],117:[function(require,module,exports){
 arguments[4][87][0].apply(exports,arguments)
-},{"dup":87,"ms":137}],137:[function(require,module,exports){
+},{"dup":87,"ms":118}],118:[function(require,module,exports){
 arguments[4][88][0].apply(exports,arguments)
-},{"dup":88}],138:[function(require,module,exports){
+},{"dup":88}],119:[function(require,module,exports){
 module.exports = toArray
 
 function toArray(list, index) {
@@ -22402,7 +20426,7 @@ function toArray(list, index) {
     return array
 }
 
-},{}],139:[function(require,module,exports){
+},{}],120:[function(require,module,exports){
 'use strict';
 
 var alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_'.split('')
@@ -22472,7 +20496,7 @@ yeast.encode = encode;
 yeast.decode = decode;
 module.exports = yeast;
 
-},{}],140:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -22626,9 +20650,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],141:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 
-},{}],142:[function(require,module,exports){
+},{}],123:[function(require,module,exports){
 (function (Buffer){
 /*!
  * The buffer module from node.js, for the browser.
@@ -24422,7 +22446,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"base64-js":140,"buffer":142,"ieee754":143}],143:[function(require,module,exports){
+},{"base64-js":121,"buffer":123,"ieee754":124}],124:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -24508,7 +22532,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],144:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
