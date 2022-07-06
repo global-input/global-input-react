@@ -31,7 +31,9 @@ it("Device App and Mobile App should be able to communicate", async function () 
         ui: deviceConfig.initData,
         hook: renderHook(() => useGlobalInputApp(deviceConfig)) //calls the hook
     }
+    
     await deviceApp.hook.waitForNextUpdate();
+    
     expect(deviceApp.hook.result.current.isReady).toBe(true); //deviceApp is ready to accept connection from a mobile app.
 
     //const {findByTestId}=render(<div>{connectionMessage}</div>);  //display QR Code here
