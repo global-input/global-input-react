@@ -4,6 +4,10 @@ export * from 'global-input-message';
 export function useGlobalInputApp(config: ConfigData | (() => ConfigData), canConnect?: boolean, configId?: any): GlobalInputData;
 export function getGlobalInputState(): GlobalInputState;
 
+interface RegisteredInfo {
+    session: string;
+    url: string;
+}
 interface GlobalInputState {
     isLoading: boolean;
     isReady: boolean;
@@ -13,6 +17,7 @@ interface GlobalInputState {
     isConnectionDenied: boolean;
     initData: InitData;
     senders: Sender[];
+    registeredInfo?: RegisteredInfo|null;
 }
 
 export type OnchangeFunction = (evt: FieldChanged) => void;
@@ -56,8 +61,11 @@ export type ConnectQRProps = {
     hspace?: number;
     mobile:GlobalInputData;
 };
+
+
 export interface GlobalInputData {
     connectionCode: string;
+    registeredInfo?: RegisteredInfo;
     pairingCode: string;
     field: FormField;
     errorMessage: string;
@@ -76,6 +84,7 @@ export interface GlobalInputData {
     setOnchange: (onchange: OnchangeFunction) => void;
     close: () => void;
     restart: (config?: ConfigData) => void;
+    setClientAppLaunched: (listener:(data:any)=>void ) => void;
 }
 
 export function generateRandomString(length?: number): string;

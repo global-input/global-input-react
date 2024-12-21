@@ -15,7 +15,8 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         isConnectionDenied,
         initData,
         senders,
-        sender
+        sender,
+        registeredInfo
     }, dispatch] = useReducer(globalInput.reducer, globalInput.initialState);
 
     const attached = useRef(true);
@@ -127,5 +128,7 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         setOnchange,
         close,
         restart,
+        registeredInfo,
+        setClientAppLaunched: globalInput.setClientAppLaunched,
     };
 };

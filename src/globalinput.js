@@ -36,7 +36,9 @@ export const initialState = {
     isConnectionDenied: false,
     isDisconnected: false,
     initData: null,
-    connected: []
+    connected: [],
+    registeredInfo: null
+
 };
 
 
@@ -170,16 +172,22 @@ const buildMessageHandlersForInitData = (initData, notify) => {
     };
 };
 
-
+let onClientAppLaunched = null;
+export const  setClientAppLaunched = (clientAppLaunched) => {
+    onClientAppLaunched=clientAppLaunched;
+}
 const buildMobileConfig = (initData, config, notify) => {
     const options = config.options;
     return {
         initData,
-        onRegistered: (connectionCode) => {
+        onClientAppLaunched: (data) => {
+            onClientAppLaunched && onClientAppLaunched(data);
+        },
+        onRegistered: (connectionCode, registeredInfo) => {            
             mobileData.mobileState = MobileState.WAITING_FOR_MOBILE;
             options && options.onRegistered && options.onRegistered(connectionCode);
             config && config.initSocket && config.initSocket(mobileData.session.socket);
-            notify({ type: ACTION_TYPES.REGISTERED, connectionCode });
+            notify({ type: ACTION_TYPES.REGISTERED, connectionCode, registeredInfo });
         },
         onRegisterFailed: errorMessage => {
             mobileData.mobileState = MobileState.ERROR;
@@ -285,7 +293,7 @@ export const reducer = (state, action) => {
             state = { ...state, errorMessage: '', field: null, isConnectionDenied: false };
             break;
         case ACTION_TYPES.REGISTERED:
-            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode, pairingCode: getParingCode(), isConnectionDenied: false };
+            state = { ...state, errorMessage: '', field: null, connectionCode: action.connectionCode, pairingCode: getParingCode(), isConnectionDenied: false, registeredInfo: action.registeredInfo };
             break;
         case ACTION_TYPES.RECEIVED_FIELD:
             state = { ...state, field: action.field, isConnectionDenied: false };

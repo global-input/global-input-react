@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import QRCode from "qrcode.react";
+import {QRCodeSVG} from "qrcode.react";
 
 const styles = {
     label: {
@@ -63,7 +63,7 @@ export const ConnectQR = ({ mobile, level = 'H', size = null, label = qrCodeLabe
     }
     return (
         <div style={styles.qrCode}>
-            <QRCode value={mobile.connectionCode} level={level} size={size ? size : optimumSize} />
+            <QRCodeSVG value={mobile.connectionCode} level={level} size={size ? size : optimumSize} />
             {label}
         </div>
     );
@@ -105,7 +105,7 @@ export const PairingQR = ({ mobile, level = 'H', size = null, label = qrCodeLabe
     }
     return (
         <div style={styles.qrCode}>
-            <QRCode value={mobile.pairingCode} level={level} size={size ? size : optimumSize} />
+            <QRCodeSVG value={mobile.pairingCode} level={level} size={size ? size : optimumSize} />
             {label}
         </div>
     );
