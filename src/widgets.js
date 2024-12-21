@@ -27,6 +27,7 @@ const loadingSVG = (<svg xmlns="http://www.w3.org/2000/svg" width="50" height="5
     </path>
 </svg>);
 
+const developmentMode = false;
 
 export const ConnectQR = ({ mobile, level = 'H', size = null, label = qrCodeLabel, loading = loadingSVG, maxSize = 400, vspace = 130, hspace = 50 }) => {
     const [optimumSize, setOptimumSize] = useState(0);
@@ -61,6 +62,19 @@ export const ConnectQR = ({ mobile, level = 'H', size = null, label = qrCodeLabe
     if ((!mobile.connectionCode) || size === 0) {
         return null;
     }
+    if(developmentMode && window.location.hostname==='localhost' && navigator.clipboard && navigator.clipboard.writeText){
+
+        return (
+            <div style={styles.qrCode} onClick={() => {
+                navigator.clipboard.writeText(mobile.connectionCode);
+            }}>
+                <QRCodeSVG value={mobile.connectionCode} level={level} size={size ? size : optimumSize} />
+                {label}
+            </div>
+        );
+        
+    }
+
     return (
         <div style={styles.qrCode}>
             <QRCodeSVG value={mobile.connectionCode} level={level} size={size ? size : optimumSize} />
