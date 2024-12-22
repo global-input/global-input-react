@@ -60,6 +60,7 @@ export type ConnectQRProps = {
     vspace?: number;
     hspace?: number;
     mobile:GlobalInputData;
+    onClickCode?: (code: string) => void;
 };
 
 
