@@ -98,6 +98,45 @@ export const sendValue = (fieldId, valueToSet, fieldIndex = -1) => {
         }
     }
 };
+
+
+function compareField(field1, field2) {
+    // First check if either field is null/undefined
+    if (!field1 || !field2) {
+        return field1 === field2; // true only if both are null/undefined
+    }
+
+    // Array of properties to compare
+    const properties = ['id', 'type', 'label', 'value', 'nLines'];
+
+    // Check each property
+    for (const prop of properties) {
+        // Handle cases where the property might not exist
+        const value1 = field1[prop];
+        const value2 = field2[prop];
+        
+        if (value1 !== value2) {
+            return false;
+        }
+    }
+
+    return true; // All properties match
+}
+//compare two arrays of fields
+function compareFields(fields1, fields2) {
+    if (fields1.length !== fields2.length) {
+        return false;
+    }
+    for(let i=0;i<fields1.length;i++) {
+        if (!compareField(fields1[i], fields2[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+
 export const isValidInitData = initData => initData && initData.form && initData.form.fields && initData.form.fields.length;
 
 const buildMessageHandlersForInitData = (initData, notify) => {
@@ -113,7 +152,7 @@ const buildMessageHandlersForInitData = (initData, notify) => {
         fields.push(field);
         values.push(f.value);
         const s = (value) => {
-            if (mobileData.fields !== fields) {
+            if(!compareFields(mobileData.fields, fields)) {            
                 console.error(" set-field-discarded-fields-replaced ");
                 return;
             }
@@ -146,6 +185,7 @@ const buildMessageHandlersForInitData = (initData, notify) => {
                         console.error(' on-input-message-discarded-not-connected ');
                         return;
                     }
+                    
                     if (mobileData.fields !== fields) {
                         console.error(' on-input-message-discarded-fields-replaced ');
                         return;
