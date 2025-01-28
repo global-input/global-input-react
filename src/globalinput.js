@@ -154,15 +154,15 @@ const buildMessageHandlersForInitData = (initData, notify) => {
         const s = (value) => {
             if(mobileData.fields !== fields) {
                 if(compareFields(mobileData.fields, fields)) {            
-                    console.error("set-field-discarded-fields-replaced-future-fix");                    
+                    console.error(" send-value-discarded-fields-replaced-future-fix");                    
                 }
                 else{
-                    console.error("set-field-discarded-fields-replaced");
+                    console.error(" send-value-discarded-fields-replaced");
                     return;
                 }
             }
             if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-                console.error(" set-field-discarded-state-not-connected ");
+                console.error(" send-value-discarded-state-not-connected ");
                 return;
             }
             values[index] = value;
@@ -187,13 +187,20 @@ const buildMessageHandlersForInitData = (initData, notify) => {
             operations: {
                 onInput: value => {
                     if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
-                        console.error(' on-input-message-discarded-not-connected ');
+                        console.error(' received-message-discarded-not-connected ');
                         return;
                     }
                     
                     if (mobileData.fields !== fields) {
-                        console.error(' on-input-message-discarded-fields-replaced ');
-                        return;
+                        if(compareFields(mobileData.fields, fields)) {            
+                            console.error(" receive-message-discarded-fields-replaced-future-fix ");                    
+                        }
+                        else{
+                            console.error(' receive-message-discarded-fields-replaced ');
+                            return;
+
+                        }
+                        
                     }
                     values[index] = value;
                     fields[index].value = value;
