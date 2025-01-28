@@ -152,9 +152,14 @@ const buildMessageHandlersForInitData = (initData, notify) => {
         fields.push(field);
         values.push(f.value);
         const s = (value) => {
-            if(!compareFields(mobileData.fields, fields)) {            
-                console.error(" set-field-discarded-fields-replaced ");
-                return;
+            if(mobileData.fields !== fields) {
+                if(compareFields(mobileData.fields, fields)) {            
+                    console.error("set-field-discarded-fields-replaced-future-fix");                    
+                }
+                else{
+                    console.error("set-field-discarded-fields-replaced");
+                    return;
+                }
             }
             if (mobileData.mobileState !== MobileState.MOBILE_CONNECTED) {
                 console.error(" set-field-discarded-state-not-connected ");
