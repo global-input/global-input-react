@@ -325,12 +325,49 @@ export const startConnect = (config, notify) => {
     mobileData.mobileState = MobileState.INITIALIZING;
     if (!mobileData.session) {
         mobileData.session = createMessageConnector();
+        resumeSession(config.session);
     }
     if (config.codeAES) {
         mobileData.session.setCodeAES(config.codeAES);
     }
     mobileData.session.connect(mobileData.mobileConfig);
     notify({ type: ACTION_TYPES.START_CONNECT });
+};
+
+const isFilled = value => typeof value === 'string' && value.length > 0;
+
+// Optional (config.session): connect with a session saved earlier by getSessionData() instead
+// of a new random one, so a phone that saved it (in the app's History) can join it again.
+// `sender` is the phone the session is bound to: only that phone is allowed back (the
+// one-app-per-session rule) and isDisconnected is true until it returns.
+const resumeSession = (saved) => {
+    if (!saved || !isFilled(saved.session) || !isFilled(saved.aes) || !isFilled(saved.client)) {
+        return;
+    }
+    mobileData.session.session = saved.session;
+    mobileData.session.aes = saved.aes;
+    mobileData.session.client = saved.client;
+    if (saved.sender && isFilled(saved.sender.client)) {
+        mobileData.sender = { ...saved.sender };
+        mobileData.senders = [];
+    }
+};
+
+// The values needed to resume the current session later (see resumeSession); null when there is
+// no session. `url` is the relay node the session is registered on, `sender` the phone it is
+// bound to (null before any phone has connected). Contains the session key: keep it private.
+export const getSessionData = () => {
+    const connector = mobileData.session;
+    if (!connector) {
+        return null;
+    }
+    return {
+        session: connector.session,
+        aes: connector.aes,
+        client: connector.client,
+        url: connector.url,
+        sender: mobileData.sender ? { client: mobileData.sender.client, session: mobileData.sender.session } : null
+    };
 };
 
 const getParingCode = () => {

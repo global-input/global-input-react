@@ -28,6 +28,19 @@ export interface ConfigData {
     options?: ConnectOptions;
     codeAES?: string;
     initSocket?:(socket:any)=>void;
+    /** Resume a session saved earlier with getSessionData(), instead of starting a new one.
+     *  Used by the hook's first connect only; restart() always starts a new session. */
+    session?: SessionData | null;
+}
+/** What is needed to resume a session. Contains the session key: keep it private. */
+export interface SessionData {
+    session: string;
+    aes: string;
+    client: string;
+    /** The relay node the session is registered on (read only; resuming connects as configured). */
+    url?: string;
+    /** The phone the session is bound to; only that phone may join it again. */
+    sender?: { client: string; session?: string } | null;
 }
 export interface ConnectOptions {
     apikey?: string;
@@ -86,6 +99,8 @@ export interface GlobalInputData {
     close: () => void;
     restart: (config?: ConfigData) => void;
     setClientAppLaunched: (listener:(data:any)=>void ) => void;
+    /** The current session, to save and resume later (config.session); null before connecting. */
+    getSessionData: () => SessionData | null;
 }
 
 export function generateRandomString(length?: number): string;

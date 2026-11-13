@@ -1,5 +1,7 @@
 import * as globalInput from './globalinput';
 import { useReducer, useRef, useEffect, useCallback } from "react";
+
+const withoutSession = config => (config && config.session ? { ...config, session: undefined } : config);
 export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
     const [{
         connectionCode,
@@ -35,6 +37,7 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         }
     }, []);
     const configRef = useRef(null);
+    const sessionUsed = useRef(false);
     configRef.current = config;
     useEffect(() => {
         if (typeof configRef.current === 'function') {
@@ -44,7 +47,11 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
             configRef.current.initData = configRef.current.initData();
         }
         if (canConnect || globalInput.keepConnection()) {
-            globalInput.startConnect(configRef.current, notify);
+            // config.session (resume a saved session) is used by the first connect only: a later
+            // connect with a changed configId keeps the current session, restart() starts a new one.
+            const resume = !sessionUsed.current;
+            sessionUsed.current = true;
+            globalInput.startConnect(resume ? configRef.current : withoutSession(configRef.current), notify);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [canConnect, configId]); //You don't need to memoize the input parameter of this hook.
@@ -65,8 +72,9 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
                 configRef.current.initData = configRef.current.initData();
             }
         }
+        sessionUsed.current = true;
         globalInput.closeConnection(notify);
-        globalInput.startConnect(config ? config : configRef.current, notify);
+        globalInput.startConnect(withoutSession(config ? config : configRef.current), notify);
     }, [])
 
 
@@ -129,6 +137,7 @@ export const useGlobalInputApp = (config, canConnect = true, configId = "") => {
         close,
         restart,
         registeredInfo,
+        getSessionData: globalInput.getSessionData,
         setClientAppLaunched: globalInput.setClientAppLaunched,
     };
 };
